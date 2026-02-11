@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logga in - Träningsplattform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🏃 Träningsplattform</h1>
+                <p>Logga in för att fortsätta</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="auth-form">
+                <div class="form-group">
+                    <label for="email">E-post</label>
+                    <input type="email" id="email" name="email" required
+                           placeholder="din@email.se"
+                           value="{{ request.form.get('email', '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Lösenord</label>
+                    <input type="password" id="password" name="password" required
+                           placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Logga in
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Har du inget konto? <a href="{{ url_for('register') }}">Registrera dig</a></p>
+            </div>
+
+            <div class="demo-credentials">
+                <p><strong>Demo-konton:</strong></p>
+                <p>Coach: <code>coach@demo.se</code> / <code>demo123</code></p>
+                <p>Idrottare: <code>emma@demo.se</code> / <code>demo123</code></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

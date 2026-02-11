@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Skadestatus - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="injuries-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+    </div>
+
+    <div class="page-header">
+        <div>
+            <h1>Skadestatus & Frånvaro</h1>
+            <p class="subtitle">{{ athlete.name }} · {{ athlete.discipline }}</p>
+        </div>
+        {% if user.is_coach() or user.id == athlete.id %}
+        <a href="{{ url_for('add_injury', athlete_id=athlete.id) }}" class="btn btn-primary">+ Rapportera ny</a>
+        {% endif %}
+    </div>
+
+    <!-- Aktiva skador/sjukdomar -->
+    {% if active_injuries %}
+    <div class="active-injuries-section">
+        <h2>🚨 Aktiva</h2>
+        <div class="injury-cards">
+            {% for injury in active_injuries %}
+            <div class="injury-card injury-{{ injury.severity }}">
+                <div class="injury-header">
+                    <span class="injury-type-icon">
+                        {% if injury.injury_type == 'skada' %}🤕
+                        {% elif injury.injury_type == 'sjukdom' %}🤒
+                        {% else %}⚠️{% endif %}
+                    </span>
+                    <div class="injury-title">
+                        <h3>{{ injury.body_part|capitalize }}</h3>
+                        <span class="injury-type-badge">{{ injury.injury_type|capitalize }}</span>
+                    </div>
+                    <span class="severity-badge severity-{{ injury.severity }}">{{ injury.severity|capitalize }}</span>
+                </div>
+
+                <div class="injury-details">
+                    <p class="injury-description">{{ injury.description }}</p>
+
+                    <div class="injury-meta">
+                        <span class="injury-date">📅 Sedan {{ injury.start_date.strftime('%d/%m/%Y') }}</span>
+                        <span class="injury-duration">
+                            {{ (today - injury.start_date).days }} dagar
+                        </span>
+                    </div>
+
+                    {% if injury.treatment %}
+                    <div class="injury-treatment">
+                        <strong>Behandling:</strong> {{ injury.treatment }}
+                    </div>
+                    {% endif %}
+
+                    {% if injury.training_modifications %}
+                    <div class="injury-modifications">
+                        <strong>Träningsanpassning:</strong> {{ injury.training_modifications }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if user.is_coach() %}
+                <div class="injury-actions">
+                    <form method="POST" action="{{ url_for('close_injury', athlete_id=athlete.id, injury_id=injury.id) }}" class="inline-form">
+                        <button type="submit" class="btn btn-small btn-success">✓ Markera som avslutad</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="status-good">
+        <span class="status-icon">✅</span>
+        <div class="status-text">
+            <h3>Inga aktiva skador eller sjukdomar</h3>
+            <p>{{ athlete.name }} är redo för full träning!</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Historik -->
+    <div class="injury-history-section">
+        <h2>Historik</h2>
+
+        {% if past_injuries %}
+        <table class="injury-table">
+            <thead>
+                <tr>
+                    <th>Period</th>
+                    <th>Typ</th>
+                    <th>Område</th>
+                    <th>Allvarlighet</th>
+                    <th>Dagar borta</th>
+                    <th>Beskrivning</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for injury in past_injuries %}
+                <tr>
+                    <td>
+                        {{ injury.start_date.strftime('%d/%m') }} -
+                        {{ injury.end_date.strftime('%d/%m/%Y') if injury.end_date else 'Pågående' }}
+                    </td>
+                    <td>
+                        {% if injury.injury_type == 'skada' %}🤕
+                        {% elif injury.injury_type == 'sjukdom' %}🤒
+                        {% else %}⚠️{% endif %}
+                        {{ injury.injury_type|capitalize }}
+                    </td>
+                    <td>{{ injury.body_part|capitalize }}</td>
+                    <td><span class="severity-badge severity-{{ injury.severity }}">{{ injury.severity|capitalize }}</span></td>
+                    <td>
+                        {% if injury.end_date %}
+                        {{ (injury.end_date - injury.start_date).days }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>{{ injury.description[:50] }}{% if injury.description|length > 50 %}...{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-history">
+            <p>Ingen skadehistorik registrerad.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Statistik -->
+    <div class="injury-stats-section">
+        <h2>Statistik (senaste 12 månaderna)</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value">{{ total_injuries }}</span>
+                <span class="stat-label">Totalt antal skador/sjukdomar</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ total_days_lost }}</span>
+                <span class="stat-label">Förlorade träningsdagar</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{{ active_injuries|length }}</span>
+                <span class="stat-label">Aktiva just nu</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

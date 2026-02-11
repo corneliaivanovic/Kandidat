@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Planera pass - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="plan-session-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+    </div>
+
+    <h1>Planera träningspass</h1>
+    <p class="subtitle">{{ athlete.name }} · {{ athlete.discipline }}</p>
+
+    <!-- Readiness info -->
+    <div class="readiness-summary readiness-{{ readiness.level }}">
+        <div class="readiness-info">
+            <span class="readiness-score-small">{{ readiness.score }}</span>
+            <span class="readiness-text">{{ readiness.message }}</span>
+        </div>
+        <div class="readiness-rec">
+            <strong>Rekommendation:</strong> {{ readiness.recommendation }}
+        </div>
+    </div>
+
+    <!-- Välj typ av planering -->
+    <div class="plan-type-selector">
+        <button type="button" class="plan-type-btn active" data-type="template">
+            <span class="plan-type-icon">📋</span>
+            <span class="plan-type-label">Välj från mall</span>
+            <span class="plan-type-desc">Använd färdiga passmallar</span>
+        </button>
+        <button type="button" class="plan-type-btn" data-type="custom">
+            <span class="plan-type-icon">✏️</span>
+            <span class="plan-type-label">Skapa eget pass</span>
+            <span class="plan-type-desc">Skriv in allt själv</span>
+        </button>
+    </div>
+
+    <!-- MALL-BASERAT PASS -->
+    <form method="POST" class="plan-form" id="template-form">
+        <input type="hidden" name="plan_type" value="template">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="date">Datum</label>
+                <input type="date" id="date" name="date" value="{{ today }}" required>
+            </div>
+            <div class="form-group">
+                <label for="template_id">Välj passtyp</label>
+                <select id="template_id" name="template_id" required>
+                    <option value="">-- Välj mall --</option>
+                    {% for id, template in templates.items() %}
+                    <option value="{{ id }}"
+                            data-category="{{ template.category }}"
+                            data-duration="{{ template.total_duration }}"
+                            data-intensity="{{ template.intensity }}">
+                        {{ template.name }} ({{ template.total_duration }} min, {{ template.intensity }})
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="template-preview" id="template-preview" style="display: none;">
+            <h3>Passdetaljer</h3>
+            <div class="preview-content">
+                <p><strong>Kategori:</strong> <span id="preview-category"></span></p>
+                <p><strong>Varaktighet:</strong> <span id="preview-duration"></span> min</p>
+                <p><strong>Intensitet:</strong> <span id="preview-intensity"></span></p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="coach_notes">Anteckningar till idrottaren (valfritt)</label>
+            <textarea id="coach_notes" name="coach_notes" rows="3"
+                      placeholder="T.ex. fokusområden, saker att tänka på, anpassningar..."></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Lägg till i plan</button>
+            <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}" class="btn btn-secondary btn-large">Avbryt</a>
+        </div>
+    </form>
+
+    <!-- EGET PASS (dold som standard) -->
+    <form method="POST" class="plan-form" id="custom-form" style="display: none;">
+        <input type="hidden" name="plan_type" value="custom">
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="custom_date">Datum</label>
+                <input type="date" id="custom_date" name="date" value="{{ today }}" required>
+            </div>
+            <div class="form-group">
+                <label for="custom_name">Passnamn</label>
+                <input type="text" id="custom_name" name="session_name"
+                       placeholder="T.ex. Tekniklöpning, Styrka överkropp..." required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="custom_type">Passtyp</label>
+                <select id="custom_type" name="session_type" required>
+                    <option value="uthållighet">Uthållighet</option>
+                    <option value="styrka">Styrka</option>
+                    <option value="teknik">Teknik</option>
+                    <option value="snabbhet">Snabbhet</option>
+                    <option value="rörlighet">Rörlighet</option>
+                    <option value="kombinerat">Kombinerat</option>
+                    <option value="tävling">Tävling</option>
+                    <option value="annat">Annat</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="custom_duration">Varaktighet (minuter)</label>
+                <input type="number" id="custom_duration" name="duration"
+                       min="10" max="300" value="60" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="custom_intensity">Intensitet</label>
+            <div class="intensity-selector">
+                <label class="intensity-option">
+                    <input type="radio" name="intensity" value="låg" checked>
+                    <span class="intensity-card intensity-låg">
+                        <span class="intensity-name">Låg</span>
+                        <span class="intensity-desc">Återhämtning, lugnt tempo</span>
+                    </span>
+                </label>
+                <label class="intensity-option">
+                    <input type="radio" name="intensity" value="medel">
+                    <span class="intensity-card intensity-medel">
+                        <span class="intensity-name">Medel</span>
+                        <span class="intensity-desc">Måttlig ansträngning</span>
+                    </span>
+                </label>
+                <label class="intensity-option">
+                    <input type="radio" name="intensity" value="hög">
+                    <span class="intensity-card intensity-hög">
+                        <span class="intensity-name">Hög</span>
+                        <span class="intensity-desc">Maximal ansträngning</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="custom_description">Passbeskrivning</label>
+            <textarea id="custom_description" name="description" rows="4"
+                      placeholder="Beskriv passet i detalj: uppvärmning, huvuddel, nedvarvning..."></textarea>
+            <span class="form-hint">Tips: Var tydlig med rep, set, distanser, tider etc.</span>
+        </div>
+
+        <!-- Dynamisk övningslista -->
+        <div class="form-group">
+            <label>Övningar (valfritt)</label>
+            <div class="exercises-builder" id="exercises-builder">
+                <div class="exercise-row" data-index="0">
+                    <input type="text" name="exercises[0][name]" placeholder="Övningsnamn" class="exercise-name">
+                    <input type="text" name="exercises[0][details]" placeholder="T.ex. 3x10, 5 min, 4x100m" class="exercise-details">
+                    <button type="button" class="btn-icon remove-exercise" title="Ta bort">×</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-small btn-outline" id="add-exercise">+ Lägg till övning</button>
+        </div>
+
+        <div class="form-group">
+            <label for="custom_notes">Anteckningar till idrottaren</label>
+            <textarea id="custom_notes" name="coach_notes" rows="3"
+                      placeholder="Extra instruktioner, tips, saker att tänka på..."></textarea>
+        </div>
+
+        <!-- Spara till träningsbanken -->
+        <div class="save-to-library-section">
+            <label class="checkbox-label">
+                <input type="checkbox" name="save_to_library" id="save_to_library" value="1">
+                <span class="checkbox-text">
+                    <strong>📚 Spara till träningsbanken</strong>
+                    <span class="checkbox-hint">Gör detta pass tillgängligt för återanvändning</span>
+                </span>
+            </label>
+            <div class="library-options" id="library-options" style="display: none;">
+                <label class="checkbox-label sub-option">
+                    <input type="checkbox" name="is_public" value="1" checked>
+                    <span class="checkbox-text">
+                        Synligt för idrottare
+                        <span class="checkbox-hint">Idrottare kan se passet i sin passbank</span>
+                    </span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Lägg till i plan</button>
+            <button type="submit" name="only_save_library" value="1" class="btn btn-secondary btn-large" id="only-save-btn" style="display: none;">
+                📚 Spara endast till banken
+            </button>
+            <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}" class="btn btn-secondary btn-large">Avbryt</a>
+        </div>
+    </form>
+
+    <!-- Snabblänkar för veckodagar -->
+    <div class="quick-plan-section">
+        <h3>Snabbplanera veckan</h3>
+        <p class="hint">Klicka på en dag för att snabbt lägga till pass</p>
+        <div class="week-quick-plan">
+            {% for i in range(7) %}
+            {% set day = monday + timedelta(days=i) %}
+            <div class="quick-day {% if day == today %}is-today{% endif %} {% if day < today %}is-past{% endif %}">
+                <span class="day-name">{{ day|weekday_sv }}</span>
+                <span class="day-date">{{ day.strftime('%d/%m') }}</span>
+                {% if day >= today %}
+                <a href="{{ url_for('plan_session', athlete_id=athlete.id) }}?date={{ day.isoformat() }}" class="btn btn-small btn-outline">+</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+// Växla mellan mall och eget pass
+document.querySelectorAll('.plan-type-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.plan-type-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const type = this.dataset.type;
+        if (type === 'template') {
+            document.getElementById('template-form').style.display = 'block';
+            document.getElementById('custom-form').style.display = 'none';
+        } else {
+            document.getElementById('template-form').style.display = 'none';
+            document.getElementById('custom-form').style.display = 'block';
+        }
+    });
+});
+
+// Mall-preview
+document.getElementById('template_id').addEventListener('change', function() {
+    const selected = this.options[this.selectedIndex];
+    const preview = document.getElementById('template-preview');
+
+    if (this.value) {
+        document.getElementById('preview-category').textContent = selected.dataset.category;
+        document.getElementById('preview-duration').textContent = selected.dataset.duration;
+        document.getElementById('preview-intensity').textContent = selected.dataset.intensity;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+});
+
+// Lägg till övning
+let exerciseIndex = 1;
+document.getElementById('add-exercise').addEventListener('click', function() {
+    const builder = document.getElementById('exercises-builder');
+    const row = document.createElement('div');
+    row.className = 'exercise-row';
+    row.dataset.index = exerciseIndex;
+    row.innerHTML = `
+        <input type="text" name="exercises[${exerciseIndex}][name]" placeholder="Övningsnamn" class="exercise-name">
+        <input type="text" name="exercises[${exerciseIndex}][details]" placeholder="T.ex. 3x10, 5 min, 4x100m" class="exercise-details">
+        <button type="button" class="btn-icon remove-exercise" title="Ta bort">×</button>
+    `;
+    builder.appendChild(row);
+    exerciseIndex++;
+});
+
+// Ta bort övning
+document.getElementById('exercises-builder').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-exercise')) {
+        const rows = this.querySelectorAll('.exercise-row');
+        if (rows.length > 1) {
+            e.target.closest('.exercise-row').remove();
+        }
+    }
+});
+
+// Sätt datum från URL om det finns
+const urlParams = new URLSearchParams(window.location.search);
+const dateParam = urlParams.get('date');
+if (dateParam) {
+    document.getElementById('date').value = dateParam;
+    document.getElementById('custom_date').value = dateParam;
+}
+
+// Visa/dölj biblioteksalternativ
+document.getElementById('save_to_library').addEventListener('change', function() {
+    const options = document.getElementById('library-options');
+    const onlySaveBtn = document.getElementById('only-save-btn');
+    if (this.checked) {
+        options.style.display = 'block';
+        onlySaveBtn.style.display = 'inline-flex';
+    } else {
+        options.style.display = 'none';
+        onlySaveBtn.style.display = 'none';
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Veckoplan - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="week-plan-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+    </div>
+
+    <div class="week-header">
+        <h1>Veckoplan</h1>
+        <p class="subtitle">{{ athlete.name }} · Vecka {{ week_start.isocalendar()[1] }}</p>
+    </div>
+
+    <!-- Navigering mellan veckor -->
+    <div class="week-navigation">
+        <a href="{{ url_for('week_plan', athlete_id=athlete.id, week=prev_week.isoformat()) }}" class="btn btn-small btn-outline">
+            ← Förra veckan
+        </a>
+        <span class="week-range">
+            {{ week_start.strftime('%d %b') }} - {{ week_end.strftime('%d %b %Y') }}
+        </span>
+        <a href="{{ url_for('week_plan', athlete_id=athlete.id, week=next_week.isoformat()) }}" class="btn btn-small btn-outline">
+            Nästa vecka →
+        </a>
+    </div>
+
+    <!-- Veckoöversikt -->
+    <div class="week-summary-bar">
+        <div class="summary-item">
+            <span class="summary-value">{{ planned_sessions|length }}</span>
+            <span class="summary-label">planerade pass</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ total_planned_duration }}</span>
+            <span class="summary-label">min totalt</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-value">{{ completed_sessions }}</span>
+            <span class="summary-label">genomförda</span>
+        </div>
+    </div>
+
+    <!-- Veckovy -->
+    <div class="week-grid">
+        {% for i in range(7) %}
+        {% set day = week_start + timedelta(days=i) %}
+        {% set day_sessions = planned_sessions|selectattr('date', 'equalto', day)|list %}
+        {% set day_logs = logs_this_week|selectattr('date', 'equalto', day)|list %}
+        
+        <div class="week-day {% if day == today %}is-today{% endif %} {% if day < today %}is-past{% endif %}">
+            <div class="day-header">
+                <span class="day-name">{{ day|weekday_sv }}</span>
+                <span class="day-number">{{ day.strftime('%d') }}</span>
+            </div>
+
+            <div class="day-content">
+                {% if day_sessions %}
+                    {% for session in day_sessions %}
+                    <div class="planned-session-card {% if session.completed %}is-completed{% endif %}">
+                        <div class="session-header">
+                            <span class="session-name">{{ session.session_name }}</span>
+                            <span class="session-intensity intensity-{{ session.planned_intensity }}">
+                                {{ session.planned_intensity }}
+                            </span>
+                        </div>
+                        <div class="session-meta">
+                            {{ session.planned_duration }} min · {{ session.session_type }}
+                        </div>
+                        <div class="session-actions">
+                            {% if session.completed %}
+                                <div class="session-completed-badge">✓ Genomfört</div>
+                            {% elif day == today %}
+                                <a href="{{ url_for('add_log', athlete_id=athlete.id, planned=session.id) }}"
+                                   class="btn btn-small btn-primary">Logga</a>
+                            {% endif %}
+                            {% if is_coach and not session.completed %}
+                            <form method="POST" action="{{ url_for('delete_planned_session', session_id=session.id) }}"
+                                  class="inline-form" onsubmit="return confirm('Ta bort detta pass?')">
+                                <input type="hidden" name="redirect_url" value="{{ request.url }}">
+                                <button type="submit" class="btn btn-small btn-icon btn-danger" title="Ta bort">🗑️</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% elif day_logs %}
+                    {% for log in day_logs %}
+                    <div class="logged-session-card">
+                        <div class="session-name">{{ log.session_type }}</div>
+                        <div class="session-meta">{{ log.duration_minutes }} min · RPE {{ log.rpe }}</div>
+                        <div class="session-load">{{ log.load }} load</div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-day">
+                        {% if day >= today and is_coach %}
+                        <a href="{{ url_for('plan_session', athlete_id=athlete.id) }}?date={{ day.isoformat() }}" 
+                           class="add-session-btn">+ Lägg till pass</a>
+                        {% else %}
+                        <span class="no-session">Ingen aktivitet</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_coach %}
+    <div class="week-actions">
+        <a href="{{ url_for('plan_session', athlete_id=athlete.id) }}" class="btn btn-primary">
+            + Planera nytt pass
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+
+{% block title %}AI-assistent - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="ai-chat-container">
+    <div class="chat-header">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}" class="back-link">← Tillbaka till profil</a>
+        <h1>🤖 AI-assistent</h1>
+        <p class="chat-subtitle">Träningsrådgivning för <strong>{{ athlete.name }}</strong></p>
+    </div>
+
+    <!-- Idrottarens status-panel -->
+    <div class="athlete-status-panel">
+        <div class="status-item">
+            <span class="status-label">Disciplin</span>
+            <span class="status-value">{{ athlete.discipline|capitalize }}</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">ACWR</span>
+            <span class="status-value {% if acwr > 1.5 %}status-warning{% elif acwr < 0.8 %}status-low{% else %}status-ok{% endif %}">
+                {{ "%.2f"|format(acwr) if acwr else "—" }}
+            </span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">Veckobelastning</span>
+            <span class="status-value">{{ weekly_load }}</span>
+        </div>
+        <div class="status-item">
+            <span class="status-label">Skador</span>
+            <span class="status-value {% if injuries %}status-warning{% endif %}">
+                {{ injuries|length if injuries else "Inga" }}
+            </span>
+        </div>
+    </div>
+
+    {% if not api_configured %}
+    <div class="api-notice">
+        <h3>💡 API-nyckel saknas</h3>
+        <p>Just nu ser du regelbaserade svar. För AI-genererade personliga svar:</p>
+        <ol>
+            <li>Skapa konto på <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a></li>
+            <li>Skapa en API-nyckel</li>
+            <li>Lägg till nyckeln i systemets konfiguration</li>
+        </ol>
+        <p class="api-cost">💰 Kostnad: ~0.01-0.05 kr per meddelande</p>
+    </div>
+    {% endif %}
+
+    <!-- Chattfönster -->
+    <div class="chat-window" id="chatWindow">
+        {% if chat_history %}
+            {% for message in chat_history %}
+            <div class="chat-message {{ message.role }}">
+                <div class="message-header">
+                    {% if message.role == 'user' %}
+                        <span class="message-author">👤 Coach</span>
+                    {% else %}
+                        <span class="message-author">🤖 AI-assistent</span>
+                    {% endif %}
+                    <span class="message-time">{{ message.timestamp }}</span>
+                </div>
+                <div class="message-content">{{ message.content|safe }}</div>
+                {% if message.warnings %}
+                <div class="message-warnings">
+                    {% for warning in message.warnings %}
+                    <span class="warning-badge">{{ warning }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="chat-welcome">
+                <h3>👋 Välkommen!</h3>
+                <p>Jag är din AI-assistent för träningsplanering. Ställ frågor om:</p>
+                <ul>
+                    <li>📅 Träningsplanering och periodisering</li>
+                    <li>🏃 Passförslag och övningar</li>
+                    <li>🤕 Anpassningar vid skador</li>
+                    <li>🍎 Kost och återhämtning</li>
+                    <li>📊 Belastningsanalys</li>
+                </ul>
+                <div class="quick-questions">
+                    <p><strong>Snabbfrågor:</strong></p>
+                    <button type="button" class="quick-question-btn" onclick="askQuestion('Vad bör {{ athlete.name }} träna denna vecka?')">
+                        Veckans träning?
+                    </button>
+                    <button type="button" class="quick-question-btn" onclick="askQuestion('Är träningsbelastningen rimlig just nu?')">
+                        Belastningsanalys
+                    </button>
+                    <button type="button" class="quick-question-btn" onclick="askQuestion('Föreslå ett teknikpass')">
+                        Föreslå pass
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Inmatningsfält -->
+    <form method="POST" class="chat-input-form" id="chatForm">
+        <div class="input-wrapper">
+            <textarea
+                name="message"
+                id="messageInput"
+                placeholder="Skriv din fråga här... (t.ex. 'Vad bör {{ athlete.name }} träna imorgon?')"
+                rows="2"
+                required
+            ></textarea>
+            <button type="submit" class="send-btn" id="sendBtn">
+                <span class="send-icon">➤</span>
+                <span class="send-text">Skicka</span>
+            </button>
+        </div>
+        <div class="input-hints">
+            <span>💡 Tips: Var specifik för bättre svar</span>
+            <button type="button" class="clear-chat-btn" onclick="confirmClearChat()">🗑️ Rensa chatt</button>
+        </div>
+    </form>
+</div>
+
+<style>
+.ai-chat-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.chat-header {
+    margin-bottom: 20px;
+}
+
+.back-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.back-link:hover {
+    color: #2563eb;
+}
+
+.chat-header h1 {
+    margin: 10px 0 5px 0;
+    font-size: 1.8em;
+}
+
+.chat-subtitle {
+    color: #666;
+    margin: 0;
+}
+
+/* Status-panel */
+.athlete-status-panel {
+    display: flex;
+    gap: 20px;
+    background: #f8fafc;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.status-label {
+    font-size: 0.75em;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-value {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.status-ok { color: #16a34a; }
+.status-warning { color: #dc2626; }
+.status-low { color: #f59e0b; }
+
+/* API-notice */
+.api-notice {
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+}
+
+.api-notice h3 {
+    margin: 0 0 10px 0;
+    font-size: 1em;
+}
+
+.api-notice ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.api-notice a {
+    color: #2563eb;
+}
+
+.api-cost {
+    font-size: 0.85em;
+    color: #666;
+    margin: 10px 0 0 0;
+}
+
+/* Chattfönster */
+.chat-window {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    min-height: 400px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.chat-welcome {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.chat-welcome h3 {
+    color: #333;
+}
+
+.chat-welcome ul {
+    list-style: none;
+    padding: 0;
+    display: inline-block;
+    text-align: left;
+}
+
+.chat-welcome li {
+    padding: 5px 0;
+}
+
+.quick-questions {
+    margin-top: 20px;
+}
+
+.quick-question-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s;
+}
+
+.quick-question-btn:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+/* Meddelanden */
+.chat-message {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.chat-message.user {
+    background: #eff6ff;
+    border-left: 3px solid #2563eb;
+}
+
+.chat-message.assistant {
+    background: #f0fdf4;
+    border-left: 3px solid #16a34a;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.85em;
+}
+
+.message-author {
+    font-weight: 600;
+}
+
+.message-time {
+    color: #666;
+}
+
+.message-content {
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.message-content h2 {
+    font-size: 1.1em;
+    margin: 15px 0 10px 0;
+}
+
+.message-content ul, .message-content ol {
+    padding-left: 20px;
+}
+
+.message-warnings {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.warning-badge {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+    margin: 2px;
+}
+
+/* Inmatningsfält */
+.chat-input-form {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.input-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+#messageInput {
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1em;
+    resize: none;
+    font-family: inherit;
+}
+
+#messageInput:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+.send-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1em;
+    transition: background 0.2s;
+}
+
+.send-btn:hover {
+    background: #1d4ed8;
+}
+
+.send-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.input-hints {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.clear-chat-btn {
+    background: none;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.clear-chat-btn:hover {
+    text-decoration: underline;
+}
+
+/* Loading state */
+.loading .send-btn {
+    background: #9ca3af;
+}
+
+.loading .send-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Responsiv design */
+@media (max-width: 600px) {
+    .athlete-status-panel {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-wrapper {
+        flex-direction: column;
+    }
+
+    .send-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .quick-question-btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+</style>
+
+<script>
+// Auto-scroll till botten av chatten
+function scrollToBottom() {
+    const chatWindow = document.getElementById('chatWindow');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+// Kör vid sidladdning
+document.addEventListener('DOMContentLoaded', scrollToBottom);
+
+// Snabbfrågor
+function askQuestion(question) {
+    document.getElementById('messageInput').value = question;
+    document.getElementById('chatForm').submit();
+}
+
+// Rensa chatt
+function confirmClearChat() {
+    if (confirm('Vill du rensa hela chatthistoriken?')) {
+        window.location.href = '{{ url_for("ai_chat_clear", athlete_id=athlete.id) }}';
+    }
+}
+
+// Hantera Enter för att skicka (Shift+Enter för ny rad)
+document.getElementById('messageInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('chatForm').submit();
+    }
+});
+
+// Visa loading-state när formuläret skickas
+document.getElementById('chatForm').addEventListener('submit', function() {
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = true;
+    btn.querySelector('.send-text').textContent = 'Tänker...';
+    document.querySelector('.ai-chat-container').classList.add('loading');
+});
+</script>
+{% endblock %}

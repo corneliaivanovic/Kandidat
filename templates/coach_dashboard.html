@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coach Dashboard - Träningsplattform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">🏃 Träningsplattform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}" class="active">Dashboard</a>
+            <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+            <a href="{{ url_for('coach_settings') }}">Inställningar</a>
+        </div>
+        <div class="nav-user">
+            <span class="user-badge coach">📋 Coach</span>
+            <span>{{ user.name }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logga ut</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <header class="page-header">
+            <h1>Välkommen, {{ user.name }}!</h1>
+            <p class="subtitle">{{ today.strftime('%A %d %B') }} · Din coach-kod: <code class="coach-code">{{ user.coach_code }}</code></p>
+        </header>
+
+        <!-- Action Items - Vad behöver din uppmärksamhet? -->
+        {% if action_items %}
+        <section class="action-items-section">
+            <h2>⚡ Att göra idag</h2>
+            <div class="action-items-list">
+                {% for item in action_items %}
+                <div class="action-item priority-{{ item.priority }}">
+                    <div class="action-priority">
+                        {% if item.priority == 'hög' %}🔴{% elif item.priority == 'medium' %}🟡{% else %}🟢{% endif %}
+                    </div>
+                    <div class="action-content">
+                        <div class="action-main">{{ item.action }}</div>
+                        <div class="action-reason">{{ item.reason }}</div>
+                    </div>
+                    <a href="{{ url_for('athlete_detail', athlete_id=item.athlete.id) }}" class="btn btn-small btn-secondary">
+                        Se detaljer →
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Snabböversikt -->
+        <section class="quick-stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ athletes|length }}</span>
+                <span class="stat-text">idrottare</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ attention_needed|length }}</span>
+                <span class="stat-text">behöver uppmärksamhet</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ athletes|selectattr('todays_session')|list|length }}</span>
+                <span class="stat-text">har pass idag</span>
+            </div>
+        </section>
+
+        <!-- Snabbåtgärder -->
+        <section class="quick-actions">
+            <a href="{{ url_for('mass_plan') }}" class="quick-action-btn">
+                <span class="action-icon">👥</span>
+                <span class="action-text">Massplanera pass</span>
+            </a>
+            <a href="{{ url_for('session_library') }}" class="quick-action-btn">
+                <span class="action-icon">📚</span>
+                <span class="action-text">Träningsbanken</span>
+            </a>
+            <a href="{{ url_for('create_template') }}" class="quick-action-btn">
+                <span class="action-icon">➕</span>
+                <span class="action-text">Skapa ny mall</span>
+            </a>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="section-header">
+                <h2>Dina idrottare</h2>
+                <div class="section-filter">
+                    <span class="filter-label">Visar:</span>
+                    <span class="filter-badge">Prioriterade först</span>
+                </div>
+            </div>
+
+            {% if athletes %}
+                <div class="athletes-grid">
+                    {% for data in athletes %}
+                        <a href="{{ url_for('athlete_detail', athlete_id=data.athlete.id) }}" class="athlete-card {% if data.needs_attention %}needs-attention{% endif %}">
+
+                            {% if data.needs_attention %}
+                            <div class="attention-badge">
+                                {{ data.attention_reason }}
+                            </div>
+                            {% endif %}
+
+                            <div class="athlete-header">
+                                <div>
+                                    <h3>{{ data.athlete.name }}</h3>
+                                    <span class="discipline-badge">{{ data.athlete.discipline }}</span>
+                                </div>
+                            </div>
+
+                            <div class="readiness-display readiness-{{ data.readiness.level }}">
+                                <span class="readiness-score">{{ data.readiness.score }}</span>
+                                <span class="readiness-label">Dagsform</span>
+                            </div>
+
+                            <div class="athlete-stats">
+                                <div class="stat">
+                                    <span class="stat-value">{{ data.logs_7d }}</span>
+                                    <span class="stat-label">pass / 7d</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">{{ data.readiness.acwr }}</span>
+                                    <span class="stat-label">ACWR</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">{{ data.upcoming_sessions }}</span>
+                                    <span class="stat-label">kommande</span>
+                                </div>
+                            </div>
+
+                            {% if data.todays_session %}
+                            <div class="todays-session">
+                                <span class="session-indicator">📅 Idag:</span>
+                                <span class="session-name">{{ data.todays_session.session_name }}</span>
+                            </div>
+                            {% endif %}
+
+                            <p class="readiness-message">{{ data.readiness.message }}</p>
+
+                            <div class="card-actions">
+                                <span class="action-link">Visa detaljer →</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">👥</div>
+                    <h3>Du har inga idrottare ännu</h3>
+                    <p>Dela din coach-kod med dina idrottare så de kan registrera sig och koppla sig till dig.</p>
+                    <div class="coach-code-large">{{ user.coach_code }}</div>
+                    <p class="hint">Koden kan delas via SMS, e-post eller i person</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>Prototyp - Kandidatarbete Svensk Friidrott</p>
+    </footer>
+</body>
+</html>

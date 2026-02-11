@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Träningspass {{ log.date.strftime('%d/%m') }} - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="view-log-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+    </div>
+
+    <div class="log-detail-card">
+        <div class="log-header">
+            <div>
+                <h1>{{ log.session_type|capitalize }}</h1>
+                <p class="log-date">{{ log.date.strftime('%A %d %B %Y') }}</p>
+            </div>
+            <div class="log-load-badge">
+                <span class="load-value">{{ log.load }}</span>
+                <span class="load-label">load</span>
+            </div>
+        </div>
+
+        <div class="log-stats">
+            <div class="stat-item">
+                <span class="stat-icon">⏱️</span>
+                <span class="stat-value">{{ log.duration_minutes }} min</span>
+                <span class="stat-label">Varaktighet</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">💪</span>
+                <span class="stat-value rpe-{{ log.rpe }}">RPE {{ log.rpe }}</span>
+                <span class="stat-label">Ansträngning</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">📊</span>
+                <span class="stat-value">{{ log.load }}</span>
+                <span class="stat-label">Belastning</span>
+            </div>
+        </div>
+
+        {% if log.comment %}
+        <div class="log-athlete-comment">
+            <h3>Idrottarens kommentar</h3>
+            <p>{{ log.comment }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Kommentarssektion -->
+    <div class="comments-section">
+        <h2>Konversation ({{ comments|length }})</h2>
+
+        {% if comments %}
+        <div class="comments-list">
+            {% for comment in comments %}
+            <div class="comment-item comment-{{ comment.author_role }}">
+                <div class="comment-header">
+                    <span class="comment-author">
+                        {% if comment.author_role == 'coach' %}🎯{% else %}🏃{% endif %}
+                        {{ comment.author_name }}
+                    </span>
+                    <span class="comment-role-badge {{ comment.author_role }}">{{ 'Coach' if comment.author_role == 'coach' else 'Idrottare' }}</span>
+                    <span class="comment-time">{{ comment.created_at.strftime('%d/%m %H:%M') }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.content }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-comments">
+            <p>Inga kommentarer ännu. Starta en konversation!</p>
+        </div>
+        {% endif %}
+
+        <!-- Lägg till kommentar -->
+        <form method="POST" action="{{ url_for('add_comment', log_id=log.id) }}" class="comment-form">
+            <div class="form-group">
+                <label for="content">Skriv en kommentar</label>
+                <textarea id="content" name="content" rows="3"
+                          placeholder="{% if user.is_coach() %}T.ex. 'Bra jobbat!', 'Hur kändes det efteråt?'{% else %}T.ex. 'Tack!', 'Jag kände mig pigg idag'{% endif %}"></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Skicka kommentar</button>
+            </div>
+        </form>
+
+        <!-- Snabbkommentarer för coacher -->
+        {% if user.is_coach() %}
+        <div class="quick-comments">
+            <p class="hint">Snabbkommentarer:</p>
+            <div class="quick-comment-buttons">
+                <button type="button" class="quick-comment-btn" data-text="Bra jobbat! 💪">Bra jobbat! 💪</button>
+                <button type="button" class="quick-comment-btn" data-text="Hur kändes det efteråt?">Hur kändes det?</button>
+                <button type="button" class="quick-comment-btn" data-text="Tänk på att vila ordentligt inför nästa pass.">Vila innan nästa</button>
+                <button type="button" class="quick-comment-btn" data-text="Perfekt intensitet!">Perfekt intensitet!</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+// Snabbkommentarer
+document.querySelectorAll('.quick-comment-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.getElementById('content').value = this.dataset.text;
+        document.getElementById('content').focus();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Träningsplattform{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">🏃 Träningsplattform</div>
+        <div class="nav-links">
+            {% if current_user %}
+                {% if current_user.is_coach() %}
+                    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                    <a href="{{ url_for('session_library') }}">📚 Träningsbanken</a>
+                    <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+                    <a href="{{ url_for('coach_settings') }}">Inställningar</a>
+                {% else %}
+                    <a href="{{ url_for('dashboard') }}">Min träning</a>
+                    <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+                    <a href="{{ url_for('strava_settings') }}">🔗 Strava</a>
+                    <a href="{{ url_for('connect_coach') }}">Min coach</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="nav-user">
+            {% if current_user %}
+                {% if current_user.is_coach() %}
+                    <span class="user-badge coach">📋 Coach</span>
+                {% else %}
+                    <span class="user-badge athlete">🏃 Idrottare</span>
+                {% endif %}
+                <span>{{ current_user.name }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-small">Logga ut</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>Prototyp - Kandidatarbete Svensk Friidrott</p>
+    </footer>
+</body>
+</html>

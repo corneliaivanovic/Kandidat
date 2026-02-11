@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrera - Träningsplattform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🏃 Träningsplattform</h1>
+                <p>Skapa ditt konto</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" class="auth-form" id="registerForm">
+                <div class="form-group">
+                    <label for="name">Namn</label>
+                    <input type="text" id="name" name="name" required
+                           placeholder="Ditt namn"
+                           value="{{ request.form.get('name', '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-post</label>
+                    <input type="email" id="email" name="email" required
+                           placeholder="din@email.se"
+                           value="{{ request.form.get('email', '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Lösenord</label>
+                    <input type="password" id="password" name="password" required
+                           placeholder="Minst 6 tecken" minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label>Jag är...</label>
+                    <div class="role-selector">
+                        <label class="role-option">
+                            <input type="radio" name="role" value="athlete" checked>
+                            <div class="role-card">
+                                <span class="role-icon">🏃</span>
+                                <span class="role-title">Idrottare</span>
+                                <span class="role-desc">Logga träning och se din utveckling</span>
+                            </div>
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="coach">
+                            <div class="role-card">
+                                <span class="role-icon">📋</span>
+                                <span class="role-title">Coach</span>
+                                <span class="role-desc">Hantera dina idrottare och planera träning</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Fält för idrottare -->
+                <div id="athleteFields">
+                    <div class="form-group">
+                        <label for="birth_year">Födelseår</label>
+                        <input type="number" id="birth_year" name="birth_year"
+                               placeholder="2005" min="1950" max="2020"
+                               value="{{ request.form.get('birth_year', '') }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discipline">Gren</label>
+                        <select id="discipline" name="discipline">
+                            <option value="sprint">Sprint</option>
+                            <option value="medel">Medeldistans</option>
+                            <option value="distans">Långdistans</option>
+                            <option value="hopp">Hopp</option>
+                            <option value="kast">Kast</option>
+                            <option value="mangkamp">Mångkamp</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="coach_code">Coach-kod (valfritt)</label>
+                        <input type="text" id="coach_code" name="coach_code"
+                               placeholder="T.ex. ABCD"
+                               value="{{ request.form.get('coach_code', '') }}">
+                        <small class="form-hint">Fråga din coach om koden för att kopplas till dem</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    Skapa konto
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Har du redan ett konto? <a href="{{ url_for('login') }}">Logga in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Visa/dölj idrottarfält baserat på roll
+        const roleInputs = document.querySelectorAll('input[name="role"]');
+        const athleteFields = document.getElementById('athleteFields');
+
+        function updateFields() {
+            const selectedRole = document.querySelector('input[name="role"]:checked').value;
+            athleteFields.style.display = selectedRole === 'athlete' ? 'block' : 'none';
+        }
+
+        roleInputs.forEach(input => {
+            input.addEventListener('change', updateFields);
+        });
+
+        updateFields();
+    </script>
+</body>
+</html>

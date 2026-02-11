@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}{{ athlete.name }} - Träningsplattform{% endblock %}
+
+{% block content %}
+<div class="athlete-detail">
+    <div class="back-link">
+        <a href="{{ url_for('dashboard') }}">← Tillbaka till dashboard</a>
+    </div>
+
+    <div class="athlete-header-detail">
+        <div>
+            <h1>{{ athlete.name }}</h1>
+            <p>{{ athlete.discipline | capitalize }} • Född {{ athlete.birth_year }}</p>
+        </div>
+        <div class="header-actions">
+            {% if current_user and current_user.is_athlete() and athlete.user_id == current_user.id %}
+            <a href="{{ url_for('add_log', athlete_id=athlete.id) }}" class="btn btn-primary">
+                + Logga pass
+            </a>
+            {% endif %}
+            {% if current_user and current_user.is_coach() %}
+            <a href="{{ url_for('plan_session', athlete_id=athlete.id) }}" class="btn btn-primary">
+                + Planera pass
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Quick navigation -->
+    <div class="athlete-quick-nav">
+        <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="quick-nav-link">
+            <span class="nav-icon">📅</span>
+            <span>Veckoplan</span>
+        </a>
+        <a href="{{ url_for('athlete_tests', athlete_id=athlete.id) }}" class="quick-nav-link">
+            <span class="nav-icon">📊</span>
+            <span>Testresultat</span>
+        </a>
+        <a href="{{ url_for('athlete_injuries', athlete_id=athlete.id) }}" class="quick-nav-link {% if athlete.has_active_injury() %}has-alert{% endif %}">
+            <span class="nav-icon">🩹</span>
+            <span>Skadestatus</span>
+            {% if athlete.has_active_injury() %}
+            <span class="alert-dot"></span>
+            {% endif %}
+        </a>
+        {% if current_user and current_user.is_coach() %}
+        <a href="{{ url_for('athlete_ai_chat', athlete_id=athlete.id) }}" class="quick-nav-link ai-chat-link">
+            <span class="nav-icon">🤖</span>
+            <span>AI-assistent</span>
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Readiness och Veckosammanfattning -->
+    <div class="summary-grid">
+        <div class="summary-card readiness-card readiness-{{ readiness.level }}">
+            <h2>Dagsform</h2>
+            <div class="big-score">{{ readiness.score }}</div>
+            <p class="readiness-level-text">{{ readiness.level | upper }}</p>
+            <p>{{ readiness.message }}</p>
+            <div class="acwr-display">
+                <span>ACWR: {{ readiness.acwr }}</span>
+                <span>•</span>
+                <span>7d: {{ readiness.acute_load }}</span>
+                <span>•</span>
+                <span>Snitt: {{ readiness.chronic_load }}/v</span>
+            </div>
+        </div>
+
+        <div class="summary-card">
+            <h2>Veckosammanfattning</h2>
+            <p class="summary-text">{{ summary.summary }}</p>
+
+            <h3>Rekommenderat fokus</h3>
+            <div class="focus-recommendation">
+                <div class="focus-main">
+                    <span class="focus-label">{{ summary.next_focus.label }}</span>
+                    <span class="intensity-badge intensity-{{ summary.next_focus.intensity }}">
+                        {{ summary.next_focus.intensity }}
+                    </span>
+                </div>
+                <p>{{ summary.next_focus.description }}</p>
+            </div>
+
+            <h4>Alternativ</h4>
+            <div class="alternatives">
+                {% for alt in summary.alternatives %}
+                <div class="alternative-chip">
+                    {{ alt.label }}
+                    <span class="alt-intensity">({{ alt.intensity }})</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Passförslag -->
+    <section class="session-suggestions">
+        <h2>Föreslagna pass</h2>
+        <p class="section-subtitle">Baserat på din dagsform och rekommenderat fokus</p>
+
+        <div class="session-grid">
+            {% for session in suggested_sessions %}
+            <div class="session-card">
+                <div class="session-header">
+                    <h3>{{ session.name }}</h3>
+                    <span class="intensity-badge intensity-{{ session.intensity }}">
+                        {{ session.intensity }}
+                    </span>
+                </div>
+                <p class="session-category">{{ session.category | capitalize }}</p>
+                <p>{{ session.description }}</p>
+                <p class="session-duration">⏱️ {{ session.duration }} min</p>
+
+                <div class="exercise-list">
+                    <h4>Övningar:</h4>
+                    <ul>
+                        {% for ex in session.exercises %}
+                        <li>
+                            <strong>{{ ex.name }}</strong> ({{ ex.duration }} min)
+                            <br><small>{{ ex.description }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <button class="btn btn-primary btn-full">Välj detta pass</button>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Träningshistorik -->
+    <section class="training-history">
+        <h2>Senaste träningspass</h2>
+
+        <div class="log-list">
+            {% for log in recent_logs %}
+            <a href="{{ url_for('view_log', log_id=log.id) }}" class="log-item log-item-link">
+                <div class="log-date">{{ log.date.strftime('%d %b') }}</div>
+                <div class="log-details">
+                    <span class="log-type">{{ log.session_type | capitalize }}</span>
+                    <span class="log-duration">{{ log.duration_minutes }} min</span>
+                    <span class="log-rpe rpe-{{ log.rpe }}">RPE {{ log.rpe }}</span>
+                </div>
+                <div class="log-load">{{ log.load }} load</div>
+                {% if log.comment %}
+                <div class="log-comment">{{ log.comment }}</div>
+                {% endif %}
+                <span class="log-arrow">→</span>
+            </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Trend (enkel visualisering) -->
+    <section class="trend-section">
+        <h2>Veckotrend</h2>
+        <div class="trend-chart">
+            {% for week in summary.trend.weeks %}
+            <div class="trend-bar-container">
+                <div class="trend-bar" style="height: {{ (week.total_load / 30) | int }}px;">
+                    <span class="trend-value">{{ week.total_load }}</span>
+                </div>
+                <span class="trend-label">{{ week.week_label }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        <p class="trend-legend">Total belastning (session-RPE load) per vecka</p>
+    </section>
+</div>
+{% endblock %}

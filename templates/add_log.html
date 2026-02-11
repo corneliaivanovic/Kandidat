@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Logga pass - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="add-log-page">
+    <div class="back-link">
+        <a href="{{ url_for('dashboard') }}">← Tillbaka till dashboard</a>
+    </div>
+
+    <h1>Logga träningspass</h1>
+    <p class="subtitle">{{ athlete.name }}</p>
+
+    {% if planned_session %}
+    <div class="planned-session-banner">
+        <div class="banner-icon">📅</div>
+        <div class="banner-content">
+            <h3>{{ planned_session.session_name }}</h3>
+            <p>Planerat för {{ planned_session.date.strftime('%d/%m') }} · {{ planned_session.planned_duration }} min · {{ planned_session.session_type }}</p>
+        </div>
+        <span class="intensity-badge intensity-{{ planned_session.planned_intensity }}">{{ planned_session.planned_intensity }}</span>
+    </div>
+
+    {% if planned_session.exercises %}
+    <div class="planned-exercises">
+        <h4>Övningar i passet</h4>
+        <ul>
+            {% for ex in planned_session.exercises %}
+            <li>
+                <strong>{{ ex.name }}</strong> ({{ ex.duration }} min)
+                <span class="exercise-desc">{{ ex.description }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <form method="POST" class="log-form">
+        {% if planned_session %}
+        <input type="hidden" name="planned_session_id" value="{{ planned_session.id }}">
+        {% endif %}
+
+        <div class="form-group">
+            <label for="date">Datum</label>
+            <input type="date" id="date" name="date" 
+                   value="{{ planned_session.date if planned_session else today }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="session_type">Passtyp</label>
+            <select id="session_type" name="session_type" required>
+                <option value="uthållighet" {% if planned_session and planned_session.session_type == 'uthållighet' %}selected{% endif %}>Uthållighet</option>
+                <option value="styrka" {% if planned_session and planned_session.session_type == 'styrka' %}selected{% endif %}>Styrka</option>
+                <option value="teknik" {% if planned_session and planned_session.session_type == 'teknik' %}selected{% endif %}>Teknik</option>
+                <option value="snabbhet" {% if planned_session and planned_session.session_type == 'snabbhet' %}selected{% endif %}>Snabbhet</option>
+                <option value="vila" {% if planned_session and planned_session.session_type == 'vila' %}selected{% endif %}>Vila / Återhämtning</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Varaktighet (minuter)</label>
+            <input type="number" id="duration" name="duration" min="1" max="300" 
+                   value="{{ planned_session.planned_duration if planned_session else 60 }}" required>
+            {% if planned_session %}
+            <span class="form-hint">Planerat: {{ planned_session.planned_duration }} min</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label>Ansträngning (RPE 1-10)</label>
+            <div class="rpe-selector">
+                {% for i in range(1, 11) %}
+                <label class="rpe-option">
+                    <input type="radio" name="rpe" value="{{ i }}" {% if i == 5 %}checked{% endif %}>
+                    <span class="rpe-value rpe-{{ i }}">{{ i }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <div class="rpe-scale">
+                <span>Lätt</span>
+                <span>Medel</span>
+                <span>Maximal</span>
+            </div>
+            <div class="rpe-descriptions">
+                <small>1-3: Lätt, kunde prata obehindrat</small>
+                <small>4-6: Måttlig, ansträngande men hanterbart</small>
+                <small>7-8: Svårt, kunde knappt prata</small>
+                <small>9-10: Maximalt, allt jag hade</small>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Kommentar (valfritt)</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="Hur kändes passet? Något särskilt att notera?"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Spara pass</button>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-large">Avbryt</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

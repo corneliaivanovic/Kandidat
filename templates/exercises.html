@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Övningsbank - Träningsplattform{% endblock %}
+
+{% block content %}
+<div class="exercises-page">
+    <h1>Övnings- och Passbank</h1>
+    <p class="subtitle">Fördefinierade övningar och passmallar för friidrott</p>
+
+    <section class="exercises-section">
+        <h2>Övningar</h2>
+        <div class="exercise-grid">
+            {% for id, ex in exercises.items() %}
+            <div class="exercise-card">
+                <div class="exercise-header">
+                    <h3>{{ ex.name }}</h3>
+                    <span class="category-badge category-{{ ex.category }}">{{ ex.category }}</span>
+                </div>
+                <p>{{ ex.description }}</p>
+                <div class="exercise-meta">
+                    <span>⏱️ {{ ex.duration_minutes }} min</span>
+                    <span class="intensity-badge intensity-{{ ex.intensity }}">{{ ex.intensity }}</span>
+                </div>
+                {% if ex.equipment %}
+                <div class="equipment">
+                    Utrustning: {{ ex.equipment | join(', ') }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="sessions-section">
+        <h2>Passmallar</h2>
+        <div class="session-grid">
+            {% for id, session in sessions.items() %}
+            <div class="session-card">
+                <div class="session-header">
+                    <h3>{{ session.name }}</h3>
+                    <span class="intensity-badge intensity-{{ session.intensity }}">{{ session.intensity }}</span>
+                </div>
+                <p class="session-category">{{ session.category | capitalize }}</p>
+                <p>{{ session.description }}</p>
+                <p class="session-duration">⏱️ {{ session.total_duration }} min</p>
+                <div class="suitable-for">
+                    Passar för:
+                    {% for s in session.suitable_for %}
+                    <span class="suitable-badge">{{ s }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

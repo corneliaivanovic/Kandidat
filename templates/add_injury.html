@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Rapportera skada/frånvaro - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="add-injury-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_injuries', athlete_id=athlete.id) }}">← Tillbaka till skadestatus</a>
+    </div>
+
+    <h1>Rapportera skada eller frånvaro</h1>
+    <p class="subtitle">{{ athlete.name }} · {{ athlete.discipline }}</p>
+
+    <form method="POST" class="injury-form">
+        <div class="form-section">
+            <h2>Vad har hänt?</h2>
+
+            <div class="form-group">
+                <label>Typ av frånvaro</label>
+                <div class="injury-type-selector">
+                    <label class="type-option">
+                        <input type="radio" name="injury_type" value="skada" checked>
+                        <span class="type-card">
+                            <span class="type-icon">🤕</span>
+                            <span class="type-name">Skada</span>
+                            <span class="type-desc">Muskel, led, ben etc.</span>
+                        </span>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="injury_type" value="sjukdom">
+                        <span class="type-card">
+                            <span class="type-icon">🤒</span>
+                            <span class="type-name">Sjukdom</span>
+                            <span class="type-desc">Förkylning, magsjuka etc.</span>
+                        </span>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="injury_type" value="annat">
+                        <span class="type-card">
+                            <span class="type-icon">⚠️</span>
+                            <span class="type-name">Annat</span>
+                            <span class="type-desc">Mental hälsa, privat etc.</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start_date">Startdatum</label>
+                    <input type="date" id="start_date" name="start_date" value="{{ today }}" required>
+                </div>
+                <div class="form-group" id="body-part-group">
+                    <label for="body_part">Kroppsdel/Område</label>
+                    <select id="body_part" name="body_part" required>
+                        <option value="">-- Välj område --</option>
+                        {% for key, value in body_parts.items() %}
+                        <option value="{{ key }}">{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Allvarlighetsgrad</label>
+                <div class="severity-selector">
+                    <label class="severity-option">
+                        <input type="radio" name="severity" value="lätt" checked>
+                        <span class="severity-card severity-lätt">
+                            <span class="severity-name">Lätt</span>
+                            <span class="severity-desc">Kan träna med anpassning</span>
+                        </span>
+                    </label>
+                    <label class="severity-option">
+                        <input type="radio" name="severity" value="måttlig">
+                        <span class="severity-card severity-måttlig">
+                            <span class="severity-name">Måttlig</span>
+                            <span class="severity-desc">Begränsad träning möjlig</span>
+                        </span>
+                    </label>
+                    <label class="severity-option">
+                        <input type="radio" name="severity" value="allvarlig">
+                        <span class="severity-card severity-allvarlig">
+                            <span class="severity-name">Allvarlig</span>
+                            <span class="severity-desc">Ingen träning möjlig</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Detaljer</h2>
+
+            <div class="form-group">
+                <label for="description">Beskrivning</label>
+                <textarea id="description" name="description" rows="3" required
+                          placeholder="Beskriv vad som hänt, hur det känns, eventuella omständigheter..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="treatment">Behandling (valfritt)</label>
+                <textarea id="treatment" name="treatment" rows="2"
+                          placeholder="T.ex. vila, is, läkarbesök, sjukgymnast..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="training_modifications">Träningsanpassning (valfritt)</label>
+                <textarea id="training_modifications" name="training_modifications" rows="2"
+                          placeholder="Vad kan idrottaren göra under rehabiliteringen? T.ex. överkroppsträning, simning..."></textarea>
+                <span class="form-hint">Tips: Specificera vilken träning som är OK att genomföra</span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Spara</button>
+            <a href="{{ url_for('athlete_injuries', athlete_id=athlete.id) }}" class="btn btn-secondary btn-large">Avbryt</a>
+        </div>
+    </form>
+</div>
+
+<script>
+// Visa/dölj kroppsdel baserat på typ
+document.querySelectorAll('input[name="injury_type"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+        const bodyPartGroup = document.getElementById('body-part-group');
+        const bodyPartSelect = document.getElementById('body_part');
+
+        if (this.value === 'sjukdom') {
+            bodyPartGroup.style.display = 'none';
+            bodyPartSelect.removeAttribute('required');
+            bodyPartSelect.value = 'allmänt';
+        } else {
+            bodyPartGroup.style.display = 'block';
+            bodyPartSelect.setAttribute('required', 'required');
+            if (bodyPartSelect.value === 'allmänt') {
+                bodyPartSelect.value = '';
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

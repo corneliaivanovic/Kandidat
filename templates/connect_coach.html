@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Coach - Träningsplattform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">🏃 Träningsplattform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Min träning</a>
+            <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+            <a href="{{ url_for('connect_coach') }}" class="active">Min coach</a>
+        </div>
+        <div class="nav-user">
+            <span class="user-badge athlete">🏃 Idrottare</span>
+            <span>{{ user.name }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logga ut</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <header class="page-header">
+            <h1>Min Coach</h1>
+        </header>
+
+        {% if current_coach %}
+            <section class="card">
+                <h2>Kopplad till</h2>
+                <div class="coach-info">
+                    <div class="coach-avatar">📋</div>
+                    <div class="coach-details">
+                        <h3>{{ current_coach.name }}</h3>
+                        <p>{{ current_coach.email }}</p>
+                    </div>
+                </div>
+                <p class="hint">Din coach kan se din träningsdata och hjälpa dig med planering.</p>
+            </section>
+        {% else %}
+            <section class="card">
+                <h2>Koppla till en coach</h2>
+                <p>Ange coach-koden du fått från din coach för att koppla dig till dem.</p>
+
+                <form method="POST" class="connect-form">
+                    <div class="form-group">
+                        <label for="coach_code">Coach-kod</label>
+                        <input type="text" id="coach_code" name="coach_code"
+                               placeholder="T.ex. ABCD"
+                               class="coach-code-input"
+                               maxlength="10"
+                               style="text-transform: uppercase;">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Koppla till coach
+                    </button>
+                </form>
+            </section>
+        {% endif %}
+    </main>
+</body>
+</html>

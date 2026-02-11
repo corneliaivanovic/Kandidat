@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Skapa passmall{% endblock %}
+
+{% block content %}
+<div class="create-template-page">
+    <div class="back-link">
+        <a href="{{ url_for('session_library') }}">← Tillbaka till träningsbanken</a>
+    </div>
+
+    <h1>Skapa ny passmall</h1>
+    <p class="subtitle">Skapa en mall som kan återanvändas för dina idrottare</p>
+
+    <form method="POST" class="template-form">
+        <div class="form-section">
+            <h2>Grundläggande information</h2>
+
+            <div class="form-group">
+                <label for="name">Passnamn *</label>
+                <input type="text" id="name" name="name" required
+                       placeholder="T.ex. Intervaller 6x800m, Teknikpass sprint...">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="session_type">Passtyp</label>
+                    <select id="session_type" name="session_type" required>
+                        <option value="uthållighet">Uthållighet</option>
+                        <option value="styrka">Styrka</option>
+                        <option value="teknik">Teknik</option>
+                        <option value="snabbhet">Snabbhet</option>
+                        <option value="rörlighet">Rörlighet</option>
+                        <option value="kombinerat">Kombinerat</option>
+                        <option value="tävling">Tävling</option>
+                        <option value="annat">Annat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="duration">Varaktighet (min)</label>
+                    <input type="number" id="duration" name="duration"
+                           min="10" max="300" value="60" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Intensitet</label>
+                <div class="intensity-selector">
+                    <label class="intensity-option">
+                        <input type="radio" name="intensity" value="låg">
+                        <span class="intensity-card intensity-låg">
+                            <span class="intensity-name">Låg</span>
+                            <span class="intensity-desc">Återhämtning</span>
+                        </span>
+                    </label>
+                    <label class="intensity-option">
+                        <input type="radio" name="intensity" value="medel" checked>
+                        <span class="intensity-card intensity-medel">
+                            <span class="intensity-name">Medel</span>
+                            <span class="intensity-desc">Normal träning</span>
+                        </span>
+                    </label>
+                    <label class="intensity-option">
+                        <input type="radio" name="intensity" value="hög">
+                        <span class="intensity-card intensity-hög">
+                            <span class="intensity-name">Hög</span>
+                            <span class="intensity-desc">Maximal</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Passinnehåll</h2>
+
+            <div class="form-group">
+                <label for="description">Beskrivning</label>
+                <textarea id="description" name="description" rows="4"
+                          placeholder="Beskriv passet i detalj: uppvärmning, huvuddel, nedvarvning..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Övningar</label>
+                <div class="exercises-builder" id="exercises-builder">
+                    <div class="exercise-row" data-index="0">
+                        <input type="text" name="exercises[0][name]" placeholder="Övningsnamn" class="exercise-name">
+                        <input type="text" name="exercises[0][details]" placeholder="T.ex. 3x10, 5 min, 4x100m" class="exercise-details">
+                        <button type="button" class="btn-icon remove-exercise" title="Ta bort">×</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-small btn-outline" id="add-exercise">+ Lägg till övning</button>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Synlighet</h2>
+            <label class="checkbox-label">
+                <input type="checkbox" name="is_public" value="1" checked>
+                <span class="checkbox-text">
+                    <strong>Synligt för idrottare</strong>
+                    <span class="checkbox-hint">Idrottare kan se passet i sin passbank</span>
+                </span>
+            </label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary btn-large">Spara mall</button>
+            <a href="{{ url_for('session_library') }}" class="btn btn-secondary btn-large">Avbryt</a>
+        </div>
+    </form>
+</div>
+
+<script>
+// Lägg till övning
+let exerciseIndex = 1;
+document.getElementById('add-exercise').addEventListener('click', function() {
+    const builder = document.getElementById('exercises-builder');
+    const row = document.createElement('div');
+    row.className = 'exercise-row';
+    row.dataset.index = exerciseIndex;
+    row.innerHTML = `
+        <input type="text" name="exercises[${exerciseIndex}][name]" placeholder="Övningsnamn" class="exercise-name">
+        <input type="text" name="exercises[${exerciseIndex}][details]" placeholder="T.ex. 3x10, 5 min, 4x100m" class="exercise-details">
+        <button type="button" class="btn-icon remove-exercise" title="Ta bort">×</button>
+    `;
+    builder.appendChild(row);
+    exerciseIndex++;
+});
+
+// Ta bort övning
+document.getElementById('exercises-builder').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-exercise')) {
+        const rows = this.querySelectorAll('.exercise-row');
+        if (rows.length > 1) {
+            e.target.closest('.exercise-row').remove();
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Testresultat - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="tests-page">
+    <div class="back-link">
+        <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+    </div>
+
+    <div class="page-header">
+        <div>
+            <h1>Testresultat</h1>
+            <p class="subtitle">{{ athlete.name }} · {{ athlete.discipline }}</p>
+        </div>
+        {% if user.is_coach() %}
+        <a href="{{ url_for('add_test', athlete_id=athlete.id) }}" class="btn btn-primary">+ Logga nytt test</a>
+        {% endif %}
+    </div>
+
+    <!-- Testkategorier -->
+    <div class="test-categories">
+        <button class="filter-btn active" data-filter="all">Alla</button>
+        <button class="filter-btn" data-filter="sprint">Sprint</button>
+        <button class="filter-btn" data-filter="hopp">Hopp</button>
+        <button class="filter-btn" data-filter="styrka">Styrka</button>
+        <button class="filter-btn" data-filter="uthållighet">Uthållighet</button>
+    </div>
+
+    {% if tests_by_type %}
+    <!-- Senaste resultat per testtyp -->
+    <div class="test-summary-cards">
+        {% for test_type, tests in tests_by_type.items() %}
+        {% set latest = tests[0] %}
+        <div class="test-summary-card" data-category="{{ latest.test_type }}">
+            <div class="test-type-icon">
+                {% if latest.test_type == 'sprint' %}🏃{% elif latest.test_type == 'hopp' %}🦘{% elif latest.test_type == 'styrka' %}💪{% elif latest.test_type == 'uthållighet' %}❤️{% else %}📊{% endif %}
+            </div>
+            <div class="test-info">
+                <h3>{{ latest.test_name }}</h3>
+                <div class="test-value">{{ latest.value }} {{ latest.unit }}</div>
+                <div class="test-date">{{ latest.test_date.strftime('%d/%m/%Y') }}</div>
+            </div>
+            {% if tests|length > 1 %}
+            <div class="test-trend">
+                {% set prev = tests[1] %}
+                {% set diff = latest.value - prev.value %}
+                {% if diff > 0 %}
+                <span class="trend-up">↑ {{ "%.2f"|format(diff|abs) }}</span>
+                {% elif diff < 0 %}
+                <span class="trend-down">↓ {{ "%.2f"|format(diff|abs) }}</span>
+                {% else %}
+                <span class="trend-same">→ 0</span>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Historik tabell -->
+    <div class="test-history-section">
+        <h2>Testhistorik</h2>
+        <table class="test-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Test</th>
+                    <th>Kategori</th>
+                    <th>Resultat</th>
+                    <th>Anteckningar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for test_type, tests in tests_by_type.items() %}
+                {% for test in tests %}
+                <tr class="test-row" data-category="{{ test.test_type }}">
+                    <td>{{ test.test_date.strftime('%d/%m/%Y') }}</td>
+                    <td><strong>{{ test.test_name }}</strong></td>
+                    <td><span class="category-badge {{ test.test_type }}">{{ test.test_type|capitalize }}</span></td>
+                    <td class="test-result">{{ test.value }} {{ test.unit }}</td>
+                    <td class="test-notes">{{ test.notes or '-' }}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">📊</div>
+        <h2>Inga testresultat ännu</h2>
+        <p>Börja logga fysiska tester för att spåra utvecklingen över tid.</p>
+        {% if user.is_coach() %}
+        <a href="{{ url_for('add_test', athlete_id=athlete.id) }}" class="btn btn-primary">Logga första testet</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<script>
+// Filter tests by category
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        const filter = this.dataset.filter;
+
+        document.querySelectorAll('.test-summary-card').forEach(card => {
+            if (filter === 'all' || card.dataset.category === filter) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.test-row').forEach(row => {
+            if (filter === 'all' || row.dataset.category === filter) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

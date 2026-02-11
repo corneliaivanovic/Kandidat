@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inställningar - Träningsplattform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">🏃 Träningsplattform</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+            <a href="{{ url_for('coach_settings') }}" class="active">Inställningar</a>
+        </div>
+        <div class="nav-user">
+            <span class="user-badge coach">📋 Coach</span>
+            <span>{{ user.name }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-small">Logga ut</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="page-header">
+            <h1>Inställningar</h1>
+        </header>
+
+        <section class="card">
+            <h2>Din Coach-kod</h2>
+            <div class="coach-code-display">
+                <code class="coach-code-large">{{ user.coach_code }}</code>
+            </div>
+            <p>Dela denna kod med dina idrottare. När de registrerar sig och anger koden kopplas de automatiskt till dig.</p>
+        </section>
+
+        <section class="card">
+            <h2>Kopplade idrottare ({{ athletes|length }})</h2>
+
+            {% if athletes %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Namn</th>
+                            <th>Gren</th>
+                            <th>Födelseår</th>
+                            <th>Antal loggar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for athlete in athletes %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">
+                                        {{ athlete.name }}
+                                    </a>
+                                </td>
+                                <td>{{ athlete.discipline }}</td>
+                                <td>{{ athlete.birth_year }}</td>
+                                <td>{{ athlete.logs|length }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="empty-state">
+                    <p>Inga idrottare kopplade ännu.</p>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="card">
+            <h2>Konto</h2>
+            <div class="account-info">
+                <p><strong>Namn:</strong> {{ user.name }}</p>
+                <p><strong>E-post:</strong> {{ user.email }}</p>
+                <p><strong>Roll:</strong> Coach</p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
