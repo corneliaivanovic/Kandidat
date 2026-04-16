@@ -22,6 +22,14 @@
     </nav>
 
     <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <header class="page-header">
             <h1>Inställningar</h1>
         </header>
@@ -67,6 +75,19 @@
                     <p>Inga idrottare kopplade ännu.</p>
                 </div>
             {% endif %}
+        </section>
+
+        <section class="card">
+            <h2>🏆 Tävlingsresultat</h2>
+            <p>Hämta nya tävlingsresultat från friidrottsstatistik.se för att se dina idrottares senaste prestationer.</p>
+            <form action="{{ url_for('update_competition_results') }}" method="POST" class="update-form">
+                <button type="submit" class="btn btn-primary" id="updateBtn" onclick="this.innerHTML='⏳ Hämtar resultat...'; this.disabled=true; this.form.submit();">
+                    🔄 Uppdatera tävlingsresultat
+                </button>
+            </form>
+            <p class="help-text" style="margin-top: 0.5rem; font-size: 0.85rem; color: #888;">
+                Detta kan ta upp till en minut. Resultaten hämtas från Göteborgs distrikt.
+            </p>
         </section>
 
         <section class="card">

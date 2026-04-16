@@ -4,6 +4,7 @@ Med autentisering, roller (coach/idrottare), planering och uppföljning.
 """
 
 import os
+import calendar
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -18,15 +19,14 @@ from exercise_bank import (
 )
 from ai_chat import ai_chat
 from agent_core import run_agent, get_available_skills, load_memory
-from strava_integration import (
-    is_configured as strava_is_configured,
-    get_authorization_url as strava_auth_url,
-    exchange_code_for_tokens,
-    refresh_access_token,
-    get_recent_activities,
-    strava_activity_to_log_data,
-    StravaTokens
+from competition_results import (
+    get_results_summary,
+    find_athlete_results,
+    get_personal_bests,
+    search_athletes
 )
+from ai_schedule import generate_week_schedule, generate_schedule_for_weeks, generate_month_schedule
+from tempo_model import TEMPO_MODEL_RUNNERS
 
 # Skapa Flask app
 app = Flask(__name__,
@@ -36,20 +36,454 @@ app = Flask(__name__,
 # Secret key för sessions (byt i produktion!)
 app.secret_key = 'dev-secret-key-change-in-production'
 
+AI_PROFILE_FIELDS = [
+    "running_focus",
+    "training_experience_level",
+    "weekly_training_amount",
+    "primary_goal",
+    "injury_constraints",
+    "best_5k_time",
+    "best_alt_distance",
+    "best_alt_time",
+    "easy_pace",
+    "threshold_pace",
+    "training_surface",
+    "tempo_model_runner_key",
+    "response_notes",
+    "best_60m_time",
+    "best_100m_time",
+    "best_200m_time",
+    "primary_sprint_event",
+]
+
+
+def _clean_form_value(value: str) -> str:
+    return (value or "").strip()
+
+
+def _parse_birth_year_value(value: str) -> int | None:
+    value = _clean_form_value(value)
+    if not value:
+        return None
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
+def _parse_ai_profile_from_form(form) -> dict:
+    """Normalisera AI-onboardingfält från formulär."""
+    profile = {field: _clean_form_value(form.get(field, "")) for field in AI_PROFILE_FIELDS}
+    profile["has_external_training_data"] = form.get("has_external_training_data") in {"on", "true", "1", "yes"}
+    return profile
+
+
+def _apply_ai_profile_to_athlete(athlete, form) -> dict:
+    """Spara AI-profilfält på athlete och returnera normaliserat dict."""
+    profile = _parse_ai_profile_from_form(form)
+    for field, value in profile.items():
+        setattr(athlete, field, value)
+    return profile
+
+
+@app.context_processor
+def inject_shared_template_context():
+    return {
+        "tempo_model_runners": TEMPO_MODEL_RUNNERS,
+    }
+
+
+def _can_manage_athlete(user, athlete) -> bool:
+    if not user or not athlete:
+        return False
+    if user.is_athlete():
+        return athlete.user_id == user.id
+    athlete_user = auth_db.get_user(athlete.user_id)
+    return bool(athlete_user and athlete_user.connected_coach_id == user.id)
+
+
+def _week_start_for(target_date: date) -> date:
+    return target_date - timedelta(days=target_date.weekday())
+
+
+def _parse_coach_notes_metadata(coach_notes: str) -> dict:
+    metadata = {}
+    for raw_line in (coach_notes or "").splitlines():
+        line = raw_line.strip()
+        if not line or ":" not in line:
+            continue
+        key, value = line.split(":", 1)
+        metadata[key.strip()] = value.strip()
+    return metadata
+
+
+def _session_description(session) -> str:
+    for exercise in session.exercises or []:
+        description = (exercise.get("description") or exercise.get("details") or "").strip()
+        if description:
+            return description
+    return ""
+
+
+def _session_status(session, today: date) -> str:
+    if session.completed:
+        return "completed"
+    if session.date < today:
+        return "missed"
+    if session.date == today:
+        return "today"
+    return "upcoming"
+
+
+def _is_recovery_week(week_theme: str, training_phase: str) -> bool:
+    theme = (week_theme or "").lower()
+    phase = (training_phase or "").lower()
+    return "aterhamt" in theme or "återhämt" in theme or "aterhamt" in phase or "återhämt" in phase
+
+
+def _is_competition_week(week_theme: str, training_phase: str) -> bool:
+    theme = (week_theme or "").lower()
+    phase = (training_phase or "").lower()
+    return "tavl" in theme or "tävl" in theme or "tavl" in phase or "tävl" in phase
+
+
+def _build_session_view(session, today: date) -> dict:
+    note_meta = _parse_coach_notes_metadata(session.coach_notes)
+    description = _session_description(session)
+    status = _session_status(session, today)
+    preview = ""
+    for line in description.splitlines():
+        stripped = line.strip()
+        if stripped and ":" not in stripped:
+            preview = stripped
+            break
+
+    tempo_source = getattr(session, "tempo_source", "") or note_meta.get("Tempo", "")
+    tempo_source_label = {
+        "garmin_model_offset": "Garmin-modell med personlig profil",
+        "garmin_model_population": "Garmin-modell",
+        "race_based_heuristic": "Profil-/tävlingsbaserad uppskattning",
+    }.get(tempo_source, tempo_source)
+
+    return {
+        "id": session.id,
+        "date": session.date,
+        "session_name": session.session_name,
+        "session_type": session.session_type,
+        "planned_duration": session.planned_duration,
+        "planned_intensity": session.planned_intensity,
+        "completed": session.completed,
+        "log_id": session.log_id,
+        "source": session.source,
+        "is_key_session": bool(getattr(session, "is_key_session", False)),
+        "week_theme": getattr(session, "week_theme", "") or note_meta.get("Veckofokus", ""),
+        "training_phase": getattr(session, "training_phase", "") or "",
+        "description": description,
+        "description_lines": [line.strip() for line in description.splitlines() if line.strip()],
+        "description_preview": preview,
+        "coach_notes": session.coach_notes or "",
+        "plan_status": note_meta.get("Planstatus", "AI-genererad" if session.source == "ai" else "Coachplanerad"),
+        "key_session_note": note_meta.get("Nyckelpass", ""),
+        "sources": note_meta.get("Källor", ""),
+        "coach_explanation": note_meta.get("Coachförklaring", ""),
+        "week_focus_note": note_meta.get("Veckofokus", ""),
+        "estimated_low_minutes": getattr(session, "estimated_low_minutes", 0),
+        "estimated_medium_minutes": getattr(session, "estimated_medium_minutes", 0),
+        "estimated_high_minutes": getattr(session, "estimated_high_minutes", 0),
+        "intensity_distribution_source": getattr(session, "intensity_distribution_source", ""),
+        "tempo_source": tempo_source,
+        "tempo_source_label": tempo_source_label,
+        "tempo_assumptions": getattr(session, "tempo_assumptions", ""),
+        "status": status,
+        "status_label": {
+            "completed": "Genomfort",
+            "missed": "Missat",
+            "today": "Idag",
+            "upcoming": "Kommande",
+        }[status],
+    }
+
+
+def _build_plan_weeks(athlete, today: date) -> list[dict]:
+    sorted_sessions = sorted(athlete.planned_sessions, key=lambda session: (session.date, session.id))
+    if not sorted_sessions:
+        current_start = _week_start_for(today)
+        return [{
+            "start": current_start,
+            "end": current_start + timedelta(days=6),
+            "days": [{"date": current_start + timedelta(days=index), "sessions": []} for index in range(7)],
+            "sessions": [],
+            "week_theme": getattr(athlete, "training_phase", "grundträning"),
+            "training_phase": getattr(athlete, "training_phase", "grundträning"),
+            "is_recovery_week": False,
+            "is_competition_week": False,
+            "planned_count": 0,
+            "completed_count": 0,
+            "missed_count": 0,
+            "total_duration": 0,
+            "upcoming_count": 0,
+        }]
+
+    earliest = _week_start_for(min(session.date for session in sorted_sessions))
+    latest = _week_start_for(max(session.date for session in sorted_sessions))
+    sessions_by_week = {}
+    for session in sorted_sessions:
+        sessions_by_week.setdefault(_week_start_for(session.date), []).append(session)
+
+    plan_weeks = []
+    cursor = earliest
+    while cursor <= latest:
+        week_sessions = sorted(sessions_by_week.get(cursor, []), key=lambda session: (session.date, session.id))
+        session_views = [_build_session_view(session, today) for session in week_sessions]
+        week_theme = next((item["week_theme"] for item in session_views if item["week_theme"]), "") or getattr(athlete, "training_phase", "grundträning")
+        training_phase = next((item["training_phase"] for item in session_views if item["training_phase"]), "") or getattr(athlete, "training_phase", "grundträning")
+        plan_weeks.append({
+            "start": cursor,
+            "end": cursor + timedelta(days=6),
+            "days": [
+                {
+                    "date": cursor + timedelta(days=index),
+                    "sessions": [item for item in session_views if item["date"] == cursor + timedelta(days=index)],
+                }
+                for index in range(7)
+            ],
+            "sessions": session_views,
+            "week_theme": week_theme,
+            "training_phase": training_phase,
+            "is_recovery_week": _is_recovery_week(week_theme, training_phase),
+            "is_competition_week": _is_competition_week(week_theme, training_phase),
+            "planned_count": len(session_views),
+            "completed_count": sum(1 for item in session_views if item["status"] == "completed"),
+            "missed_count": sum(1 for item in session_views if item["status"] == "missed"),
+            "upcoming_count": sum(1 for item in session_views if item["status"] in {"today", "upcoming"}),
+            "total_duration": sum(item["planned_duration"] for item in session_views),
+        })
+        cursor += timedelta(days=7)
+
+    return plan_weeks
+
+
+def _first_of_month(target_date: date) -> date:
+    return target_date.replace(day=1)
+
+
+def _next_month(target_date: date) -> date:
+    year = target_date.year + (1 if target_date.month == 12 else 0)
+    month = 1 if target_date.month == 12 else target_date.month + 1
+    return date(year, month, 1)
+
+
+def _build_plan_months(plan_weeks: list[dict], today: date) -> list[date]:
+    if not plan_weeks:
+        return [_first_of_month(today)]
+    first_month = _first_of_month(plan_weeks[0]["start"])
+    last_month = _first_of_month(plan_weeks[-1]["end"])
+    months = []
+    cursor = first_month
+    while cursor <= last_month:
+        months.append(cursor)
+        cursor = _next_month(cursor)
+    return months
+
+
+def _month_label(target_month: date) -> str:
+    month_names = [
+        "januari", "februari", "mars", "april", "maj", "juni",
+        "juli", "augusti", "september", "oktober", "november", "december"
+    ]
+    return f"{month_names[target_month.month - 1]} {target_month.year}"
+
+
+def _build_month_grid(target_month: date, athlete, today: date) -> list[list[dict]]:
+    month_start = _first_of_month(target_month)
+    month_end = date(target_month.year, target_month.month, calendar.monthrange(target_month.year, target_month.month)[1])
+    grid_start = _week_start_for(month_start)
+    grid_end = month_end + timedelta(days=6 - month_end.weekday())
+
+    sessions_by_date = {}
+    for session in athlete.planned_sessions:
+        sessions_by_date.setdefault(session.date, []).append(_build_session_view(session, today))
+
+    rows = []
+    cursor = grid_start
+    while cursor <= grid_end:
+        week_row = []
+        for _ in range(7):
+            day_sessions = sorted(sessions_by_date.get(cursor, []), key=lambda item: item["id"])
+            week_row.append({
+                "date": cursor,
+                "in_month": cursor.month == target_month.month,
+                "is_today": cursor == today,
+                "sessions": day_sessions,
+            })
+            cursor += timedelta(days=1)
+        rows.append(week_row)
+    return rows
+
+
+def _build_month_grid_from_sessions(target_month: date, sessions: list, today: date) -> list[list[dict]]:
+    month_start = _first_of_month(target_month)
+    month_end = date(target_month.year, target_month.month, calendar.monthrange(target_month.year, target_month.month)[1])
+    grid_start = _week_start_for(month_start)
+    grid_end = month_end + timedelta(days=6 - month_end.weekday())
+
+    sessions_by_date = {}
+    for session in sessions:
+        session_view = _build_session_view(session, today)
+        sessions_by_date.setdefault(session.date, []).append(session_view)
+
+    rows = []
+    cursor = grid_start
+    while cursor <= grid_end:
+        week_row = []
+        for _ in range(7):
+            day_sessions = sorted(sessions_by_date.get(cursor, []), key=lambda item: item["id"])
+            week_row.append({
+                "date": cursor,
+                "in_month": cursor.month == target_month.month,
+                "is_today": cursor == today,
+                "sessions": day_sessions,
+            })
+            cursor += timedelta(days=1)
+        rows.append(week_row)
+    return rows
+
+
+def _build_calendar_context_for_sessions(sessions: list, today: date, month_param: str = "") -> dict:
+    filtered_sessions = sorted(sessions, key=lambda session: (session.date, session.id))
+    if filtered_sessions:
+        first_month = _first_of_month(filtered_sessions[0].date)
+        last_month = _first_of_month(filtered_sessions[-1].date)
+    else:
+        first_month = _first_of_month(today)
+        last_month = first_month
+
+    available_months = []
+    cursor = first_month
+    while cursor <= last_month:
+        available_months.append(cursor)
+        cursor = _next_month(cursor)
+
+    selected_month = None
+    if month_param:
+        try:
+            selected_month = datetime.strptime(month_param, '%Y-%m').date().replace(day=1)
+        except ValueError:
+            selected_month = None
+    if selected_month not in available_months:
+        selected_month = _first_of_month(today)
+        if selected_month not in available_months:
+            selected_month = available_months[0]
+
+    selected_index = available_months.index(selected_month)
+    prev_month = available_months[selected_index - 1] if selected_index > 0 else None
+    next_month = available_months[selected_index + 1] if selected_index < len(available_months) - 1 else None
+    month_grid = _build_month_grid_from_sessions(selected_month, filtered_sessions, today)
+    session_views = [_build_session_view(session, today) for session in filtered_sessions]
+
+    return {
+        "available_months": available_months,
+        "selected_month": selected_month,
+        "prev_month": prev_month,
+        "next_month": next_month,
+        "month_label": _month_label(selected_month),
+        "month_grid": month_grid,
+        "session_views": session_views,
+    }
+
+
+def _build_coach_week_overview(athlete, today: date) -> dict:
+    recent_window_start = today - timedelta(days=14)
+    recent_sessions = [session for session in athlete.planned_sessions if recent_window_start <= session.date <= today]
+    missed_recent = sum(1 for session in recent_sessions if session.date < today and not session.completed)
+    next_key_session = next(
+        (
+            session for session in sorted(athlete.planned_sessions, key=lambda item: (item.date, item.id))
+            if session.date >= today and getattr(session, "is_key_session", False)
+        ),
+        None,
+    )
+    return {
+        "completion_rate": round(athlete.get_completion_rate_last_n_days(14) * 100),
+        "missed_recent": missed_recent,
+        "logs_last_7_days": len(athlete.get_logs_last_n_days(7)),
+        "next_key_session": _build_session_view(next_key_session, today) if next_key_session else None,
+    }
+
 
 def init_demo_data():
     """Initiera demo-data och koppla till users."""
-    # Demo-data för idrottare
+    # Demo-data för idrottare:
+    # - Ebba 3 och Daniel visar Garmin-baserad tempomodell
+    # - Hugo Kündig visar automatisk matchning mot tävlingsresultat
     athletes_info = [
-        (2, "Emma Lindström", 2008, "sprint"),   # user_id 2
-        (3, "Oscar Bergman", 2007, "medel"),      # user_id 3
-        (4, "Maja Eriksson", 2009, "hopp"),       # user_id 4
+        (
+            2,
+            "Ebba 3",
+            2003,
+            "distans",
+            "",
+            "ai",
+            {
+                "running_focus": "distans",
+                "training_experience_level": "mer än 3 år",
+                "weekly_training_amount": "5 pass eller 45 km",
+                "training_surface": "väg",
+                "tempo_model_runner_key": "Ebba 3",
+                "has_external_training_data": True,
+            },
+        ),
+        (
+            3,
+            "Hugo Kündig",
+            2006,
+            "sprint",
+            "Örgryte IS",
+            "ai",
+            {
+                "running_focus": "sprint",
+                "training_experience_level": "1–3 år",
+                "weekly_training_amount": "4 pass",
+                "training_surface": "bana",
+            },
+        ),
+        (
+            4,
+            "Daniel",
+            2001,
+            "medel",
+            "",
+            "ai",
+            {
+                "running_focus": "medel",
+                "training_experience_level": "mer än 3 år",
+                "weekly_training_amount": "5 pass eller 50 km",
+                "training_surface": "väg",
+                "tempo_model_runner_key": "Daniel",
+                "has_external_training_data": True,
+            },
+        ),
     ]
 
-    for user_id, name, birth_year, discipline in athletes_info:
-        athlete = db.create_athlete_for_user(user_id, name, birth_year, discipline)
+    for user_id, name, birth_year, discipline, club, training_mode, ai_profile in athletes_info:
+        athlete = db.create_athlete_for_user(
+            user_id, name, birth_year, discipline, club,
+            training_mode=training_mode,
+            **ai_profile,
+        )
         db.generate_demo_logs(athlete)
-        db.generate_demo_planned_sessions(athlete)
+        if training_mode == 'ai':
+            # Rensa eventuella gamla AI-pass (skyddar mot dubbletter vid omstart)
+            db.clear_future_ai_sessions(athlete.id)
+            # Använd bara lokal fallbacklogik vid uppstart så att servern
+            # inte blir beroende av extern AI/API redan vid boot.
+            try:
+                generate_month_schedule(athlete, db, use_rag=False)
+                print(f"  ✓ Demo-schema genererat för {name}")
+            except Exception as e:
+                print(f"  ⚠ Kunde inte generera demoschema för {name}: {e}")
+        else:
+            db.generate_demo_planned_sessions(athlete)
 
 
 # Initiera demo-data
@@ -65,6 +499,9 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'user_id' not in session:
+            return redirect(url_for('login'))
+        if auth_db.get_user(session['user_id']) is None:
+            session.clear()
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -144,9 +581,37 @@ def register():
             else:
                 # Om idrottare, skapa athlete-profil
                 if role == 'athlete':
-                    birth_year = int(request.form.get('birth_year', 2000))
+                    birth_year = _parse_birth_year_value(request.form.get('birth_year', '')) or 2000
                     discipline = request.form.get('discipline', 'sprint')
-                    athlete = db.create_athlete_for_user(user.id, name, birth_year, discipline)
+                    club = request.form.get('club', '').strip()
+                    training_mode = request.form.get('training_mode', 'coach')
+                    training_days_str = request.form.get('training_days', '').strip()
+                    training_days = int(training_days_str) if training_days_str else 4
+                    training_phase = request.form.get('training_phase', 'grundträning')
+                    ai_profile = _parse_ai_profile_from_form(request.form)
+
+                    if training_mode == 'ai' and not ai_profile.get('training_experience_level'):
+                        auth_db.users.pop(user.id, None)
+                        auth_db.users_by_email.pop(user.email, None)
+                        error = 'Välj din träningsvana för att få AI-genererad planering.'
+                        return render_template('register.html', error=error)
+
+                    athlete = db.create_athlete_for_user(
+                        user.id, name, birth_year, discipline, club,
+                        training_mode=training_mode,
+                        training_days_per_week=training_days,
+                        training_phase=training_phase,
+                        **ai_profile
+                    )
+
+                    # Om AI-schema valdes, generera en månadsplan direkt
+                    if training_mode == 'ai':
+                        sessions = generate_month_schedule(athlete, db, use_rag=True)
+                        flash(f'🤖 Ditt AI-schema är klart! {len(sessions)} pass planerade för 4 veckor.', 'success')
+                        if club:
+                            flash('Tävlingsresultat matchas automatiskt mot namn, ålder och klubb om sådana finns.', 'info')
+                        else:
+                            flash('Du kan lämna frivilliga AI-frågor tomma, men fler svar ger bättre individanpassning och tempouppskattning.', 'info')
 
                     # Koppla till coach om kod angavs
                     coach_code = request.form.get('coach_code', '').strip()
@@ -187,6 +652,9 @@ def index():
 def dashboard():
     """Huvuddashboard - olika vy för coach vs idrottare."""
     user = get_current_user()
+    if user is None:
+        session.clear()
+        return redirect(url_for('login'))
 
     if user.is_coach():
         # Coach ser alla sina idrottare med prioritering
@@ -269,11 +737,29 @@ def dashboard():
         # Hämta dagens planerade pass
         todays_session = athlete.get_todays_session()
 
-        # Hämta kommande pass
-        upcoming_sessions = athlete.get_upcoming_sessions(7)
+        # Förhandsvisa närmaste del av schemat, men skicka med hela planen för expandera-vy
+        upcoming_sessions = athlete.get_upcoming_sessions(14)
+        all_upcoming_sessions = athlete.get_upcoming_sessions(35)
+        calendar_context = _build_calendar_context_for_sessions(
+            all_upcoming_sessions,
+            today=date.today(),
+            month_param=request.args.get('month', '')
+        )
 
         # Hämta trenddata
         trend_data = get_week_trend(athlete)
+
+        # Räkna ut om schemat snart tar slut (för AI-idrottare)
+        schedule_expiring_soon = False
+        days_until_schedule_end = None
+        last_planned_date = None
+
+        if getattr(athlete, 'training_mode', 'coach') == 'ai':
+            if all_upcoming_sessions:
+                last_planned_date = max(s.date for s in all_upcoming_sessions)
+                days_left = (last_planned_date - date.today()).days
+                days_until_schedule_end = days_left
+                schedule_expiring_soon = days_left <= 7  # Varna om 7 dagar kvar
 
         return render_template('athlete_dashboard.html',
                                user=user,
@@ -284,8 +770,19 @@ def dashboard():
                                coach=coach,
                                todays_session=todays_session,
                                upcoming_sessions=upcoming_sessions,
+                               all_upcoming_sessions=all_upcoming_sessions,
+                               has_more_upcoming=len(all_upcoming_sessions) > len(upcoming_sessions),
+                               selected_month=calendar_context["selected_month"],
+                               prev_month=calendar_context["prev_month"],
+                               next_month=calendar_context["next_month"],
+                               month_label=calendar_context["month_label"],
+                               month_grid=calendar_context["month_grid"],
+                               calendar_session_views=calendar_context["session_views"],
                                trend_data=trend_data,
-                               today=date.today())
+                               today=date.today(),
+                               schedule_expiring_soon=schedule_expiring_soon,
+                               days_until_schedule_end=days_until_schedule_end,
+                               last_planned_date=last_planned_date)
 
 
 # ============================================================
@@ -331,11 +828,28 @@ def athlete_detail(athlete_id: int):
     )
 
     # Hämta kommande och dagens pass
-    upcoming_sessions = athlete.get_upcoming_sessions(7)
+    upcoming_sessions = athlete.get_upcoming_sessions(14)
+    all_upcoming_sessions = athlete.get_upcoming_sessions(35)
     todays_session = athlete.get_todays_session()
+    calendar_context = _build_calendar_context_for_sessions(
+        all_upcoming_sessions,
+        today=date.today(),
+        month_param=request.args.get('month', '')
+    )
 
     # Hämta trenddata
     trend_data = get_week_trend(athlete)
+
+    schedule_expiring_soon = False
+    days_until_schedule_end = None
+    last_planned_date = None
+
+    if getattr(athlete, 'training_mode', 'coach') == 'ai':
+        if all_upcoming_sessions:
+            last_planned_date = max(s.date for s in all_upcoming_sessions)
+            days_left = (last_planned_date - date.today()).days
+            days_until_schedule_end = days_left
+            schedule_expiring_soon = days_left <= 7
 
     return render_template(
         'athlete.html',
@@ -346,10 +860,68 @@ def athlete_detail(athlete_id: int):
         recent_logs=recent_logs,
         readiness=readiness,
         upcoming_sessions=upcoming_sessions,
+        all_upcoming_sessions=all_upcoming_sessions,
+        has_more_upcoming=len(all_upcoming_sessions) > len(upcoming_sessions),
+        selected_month=calendar_context["selected_month"],
+        prev_month=calendar_context["prev_month"],
+        next_month=calendar_context["next_month"],
+        month_label=calendar_context["month_label"],
+        month_grid=calendar_context["month_grid"],
+        calendar_session_views=calendar_context["session_views"],
         todays_session=todays_session,
         trend_data=trend_data,
-        today=date.today()
+        today=date.today(),
+        schedule_expiring_soon=schedule_expiring_soon,
+        days_until_schedule_end=days_until_schedule_end,
+        last_planned_date=last_planned_date,
     )
+
+
+@app.route('/athlete/<int:athlete_id>/update-ai-profile', methods=['POST'])
+@login_required
+def update_ai_profile(athlete_id: int):
+    """Uppdatera AI-profilen för en idrottare."""
+    user = get_current_user()
+    athlete = db.get_athlete(athlete_id)
+
+    if not athlete:
+        flash('Idrottaren hittades inte.', 'error')
+        return redirect(url_for('dashboard'))
+
+    if not _can_manage_athlete(user, athlete):
+        flash('Du har inte behörighet att uppdatera AI-profilen.', 'error')
+        return redirect(url_for('dashboard'))
+
+    if getattr(athlete, 'training_mode', 'coach') != 'ai':
+        flash('AI-profil kan bara uppdateras för AI-idrottare.', 'error')
+        return redirect(url_for('athlete_detail', athlete_id=athlete.id))
+
+    profile = _apply_ai_profile_to_athlete(athlete, request.form)
+    birth_year = _parse_birth_year_value(request.form.get('birth_year', ''))
+    if birth_year:
+        athlete.birth_year = birth_year
+    elif _clean_form_value(request.form.get('birth_year', '')):
+        flash('Födelseår måste vara ett giltigt årtal.', 'error')
+        target = request.form.get('return_to', 'dashboard')
+        if target == 'athlete_detail':
+            return redirect(url_for('athlete_detail', athlete_id=athlete.id))
+        return redirect(url_for('dashboard'))
+    club = _clean_form_value(request.form.get('club', athlete.club))
+    athlete.club = club
+
+    if not profile.get('training_experience_level'):
+        flash('Träningsvana är obligatorisk för AI-planering.', 'error')
+    else:
+        flash('AI-profilen uppdaterades. Nästa schema använder de nya uppgifterna.', 'success')
+        if athlete.club:
+            flash('Tävlingsresultat matchas automatiskt mot namn, ålder och klubb om sådana finns.', 'info')
+        else:
+            flash('Ingen klubb angiven, så automatisk tävlingsmatchning körs inte.', 'info')
+
+    target = request.form.get('return_to', 'dashboard')
+    if target == 'athlete_detail':
+        return redirect(url_for('athlete_detail', athlete_id=athlete.id))
+    return redirect(url_for('dashboard'))
 
 
 @app.route('/athlete/<int:athlete_id>/log', methods=['GET', 'POST'])
@@ -428,7 +1000,8 @@ def quick_log(athlete_id: int):
 
     invalidate_cache(athlete_id)  # Rensa cache så AI-sammanfattningen uppdateras
     flash('Pass loggat!', 'success')
-    return redirect(url_for('dashboard'))
+    redirect_url = request.form.get('redirect_url', '').strip()
+    return redirect(redirect_url or url_for('dashboard'))
 
 
 # ============================================================
@@ -524,7 +1097,9 @@ def plan_session(athlete_id: int):
                     duration,
                     intensity,
                     exercises,
-                    coach_notes
+                    coach_notes,
+                    source="coach",
+                    training_phase=getattr(athlete, 'training_phase', '')
                 )
                 flash(f'Eget pass planerat för {session_date.strftime("%d/%m")}!', 'success')
 
@@ -555,7 +1130,9 @@ def plan_session(athlete_id: int):
                     template.total_duration,
                     template.intensity,
                     exercises,
-                    coach_notes
+                    coach_notes,
+                    source="coach",
+                    training_phase=getattr(athlete, 'training_phase', '')
                 )
                 flash(f'Pass planerat för {session_date.strftime("%d/%m")}!', 'success')
                 return redirect(url_for('athlete_detail', athlete_id=athlete_id))
@@ -593,59 +1170,175 @@ def week_plan(athlete_id: int):
         flash('Idrottaren hittades inte.', 'error')
         return redirect(url_for('dashboard'))
 
-    # Hämta veckostartdatum från query string (eller använd aktuell vecka)
+    if not _can_manage_athlete(user, athlete):
+        flash('Du har inte behörighet att se denna planering.', 'error')
+        return redirect(url_for('dashboard'))
+
+    today = date.today()
+    plan_weeks = _build_plan_weeks(athlete, today)
+    available_starts = {week["start"]: week for week in plan_weeks}
+
     week_param = request.args.get('week')
     if week_param:
         try:
-            week_start = datetime.strptime(week_param, '%Y-%m-%d').date()
-            # Justera till måndag
-            week_start = week_start - timedelta(days=week_start.weekday())
+            week_start = _week_start_for(datetime.strptime(week_param, '%Y-%m-%d').date())
         except ValueError:
-            week_start = date.today() - timedelta(days=date.today().weekday())
+            week_start = None
     else:
-        week_start = date.today() - timedelta(days=date.today().weekday())
+        week_start = None
 
-    week_end = week_start + timedelta(days=6)
-    prev_week = week_start - timedelta(days=7)
-    next_week = week_start + timedelta(days=7)
-    today = date.today()
+    if week_start not in available_starts:
+        current_week_start = _week_start_for(today)
+        if current_week_start in available_starts:
+            week_start = current_week_start
+        else:
+            first_relevant = next((week["start"] for week in plan_weeks if week["end"] >= today), None)
+            week_start = first_relevant or plan_weeks[0]["start"]
 
-    # Hämta planerade pass för veckan
-    planned_sessions = athlete.get_planned_sessions_for_week(week_start)
+    selected_index = next((index for index, week in enumerate(plan_weeks) if week["start"] == week_start), 0)
+    selected_week = plan_weeks[selected_index]
+    week_end = selected_week["end"]
+    prev_week = plan_weeks[selected_index - 1]["start"] if selected_index > 0 else None
+    next_week = plan_weeks[selected_index + 1]["start"] if selected_index < len(plan_weeks) - 1 else None
 
-    # Hämta loggar för veckan
+    available_months = _build_plan_months(plan_weeks, today)
+    month_param = request.args.get('month', '').strip()
+    selected_month = None
+    if month_param:
+        try:
+            selected_month = datetime.strptime(month_param, '%Y-%m').date().replace(day=1)
+        except ValueError:
+            selected_month = None
+    if selected_month not in available_months:
+        selected_month = _first_of_month(selected_week["start"])
+        if selected_month not in available_months:
+            selected_month = available_months[0]
+    selected_month_index = available_months.index(selected_month)
+    prev_month = available_months[selected_month_index - 1] if selected_month_index > 0 else None
+    next_month = available_months[selected_month_index + 1] if selected_month_index < len(available_months) - 1 else None
+    month_grid = _build_month_grid(selected_month, athlete, today)
+
     logs_this_week = [log for log in athlete.logs if week_start <= log.date <= week_end]
+    logs_by_date = {}
+    for log in logs_this_week:
+        logs_by_date.setdefault(log.date, []).append(log)
 
-    # Beräkna totala minuter
-    total_planned_duration = sum(ps.planned_duration for ps in planned_sessions)
-    completed_sessions = sum(1 for ps in planned_sessions if ps.completed)
+    for day in selected_week["days"]:
+        day["logs"] = logs_by_date.get(day["date"], [])
+        day["is_today"] = day["date"] == today
+        day["is_past"] = day["date"] < today
+        day["has_missed"] = any(session["status"] == "missed" for session in day["sessions"])
+        day["has_completed"] = any(session["status"] == "completed" for session in day["sessions"])
 
-    # Kontrollera om användaren är coach
+    total_planned_duration = selected_week["total_duration"]
+    completed_sessions = selected_week["completed_count"]
     is_coach = user.is_coach()
 
-    return render_template('week_plan.html',
-                           user=user,
-                           athlete=athlete,
-                           planned_sessions=planned_sessions,
-                           logs_this_week=logs_this_week,
-                           week_start=week_start,
-                           week_end=week_end,
-                           prev_week=prev_week,
-                           next_week=next_week,
-                           total_planned_duration=total_planned_duration,
-                           completed_sessions=completed_sessions,
-                           today=today,
-                           is_coach=is_coach,
-                           timedelta=timedelta)
+    return render_template(
+        'week_plan.html',
+        user=user,
+        athlete=athlete,
+        selected_week=selected_week,
+        plan_weeks=plan_weeks,
+        selected_month=selected_month,
+        month_grid=month_grid,
+        month_label=_month_label(selected_month),
+        available_months=available_months,
+        prev_month=prev_month,
+        next_month=next_month,
+        logs_this_week=logs_this_week,
+        week_start=week_start,
+        week_end=week_end,
+        prev_week=prev_week,
+        next_week=next_week,
+        total_planned_duration=total_planned_duration,
+        completed_sessions=completed_sessions,
+        today=today,
+        is_coach=is_coach,
+        coach_overview=_build_coach_week_overview(athlete, today) if is_coach else None,
+        timedelta=timedelta
+    )
+
+
+@app.route('/planned-session/<int:session_id>/update', methods=['POST'])
+@coach_required
+def update_planned_session(session_id: int):
+    """Uppdatera ett planerat pass från veckovyn."""
+    user = get_current_user()
+    planned_session = db.get_planned_session(session_id)
+
+    if not planned_session:
+        flash('Passet hittades inte.', 'error')
+        return redirect(url_for('dashboard'))
+
+    athlete = db.get_athlete(planned_session.athlete_id)
+    if not athlete or not _can_manage_athlete(user, athlete):
+        flash('Du har inte behörighet att uppdatera detta pass.', 'error')
+        return redirect(url_for('dashboard'))
+
+    try:
+        from ai_schedule import estimate_intensity_distribution
+
+        planned_session.date = datetime.strptime(request.form['date'], '%Y-%m-%d').date()
+        planned_session.session_name = _clean_form_value(request.form.get('session_name', planned_session.session_name)) or planned_session.session_name
+        planned_session.session_type = _clean_form_value(request.form.get('session_type', planned_session.session_type)) or planned_session.session_type
+        planned_session.planned_duration = int(request.form.get('planned_duration', planned_session.planned_duration))
+        planned_session.planned_intensity = _clean_form_value(request.form.get('planned_intensity', planned_session.planned_intensity)) or planned_session.planned_intensity
+        planned_session.coach_notes = request.form.get('coach_notes', planned_session.coach_notes)
+        planned_session.is_key_session = request.form.get('is_key_session') == '1'
+        planned_session.week_theme = _clean_form_value(request.form.get('week_theme', planned_session.week_theme))
+        planned_session.training_phase = _clean_form_value(request.form.get('training_phase', planned_session.training_phase)) or getattr(athlete, 'training_phase', '')
+
+        description = request.form.get('description', '').strip()
+        if description:
+            updated = False
+            for exercise in planned_session.exercises:
+                if exercise.get("description") or exercise.get("name") == "Passbeskrivning":
+                    exercise["description"] = description
+                    exercise.setdefault("name", "Passbeskrivning")
+                    updated = True
+                    break
+            if not updated:
+                planned_session.exercises.insert(0, {
+                    "id": "coach_edit_description",
+                    "name": "Passbeskrivning",
+                    "description": description
+                })
+
+        description_text = _session_description(planned_session)
+        distribution = estimate_intensity_distribution(
+            session_name=planned_session.session_name,
+            session_type=planned_session.session_type,
+            planned_duration=planned_session.planned_duration,
+            planned_intensity=planned_session.planned_intensity,
+            description=description_text,
+        )
+        planned_session.estimated_low_minutes = distribution["low"]
+        planned_session.estimated_medium_minutes = distribution["medium"]
+        planned_session.estimated_high_minutes = distribution["high"]
+        planned_session.intensity_distribution_source = distribution["source"]
+        planned_session.tempo_source = ""
+        planned_session.tempo_assumptions = ""
+        flash('Passet uppdaterades.', 'success')
+    except ValueError:
+        flash('Kontrollera datum och duration innan du sparar.', 'error')
+
+    redirect_url = request.form.get('redirect_url', '').strip()
+    return redirect(redirect_url or url_for('week_plan', athlete_id=athlete.id))
 
 
 @app.route('/planned-session/<int:session_id>/delete', methods=['POST'])
 @coach_required
 def delete_planned_session(session_id: int):
     """Ta bort ett planerat pass."""
+    user = get_current_user()
     session = db.get_planned_session(session_id)
 
     if session:
+        athlete = db.get_athlete(session.athlete_id)
+        if not athlete or not _can_manage_athlete(user, athlete):
+            flash('Du har inte behörighet att ta bort detta pass.', 'error')
+            return redirect(url_for('dashboard'))
         db.delete_planned_session(session_id)
         flash('Passet har tagits bort.', 'success')
     else:
@@ -1025,7 +1718,8 @@ def apply_template(template_id: int):
                         template.duration,
                         template.intensity,
                         template.exercises,
-                        coach_notes
+                        coach_notes,
+                        source="coach"
                     )
                     count += 1
                 except ValueError:
@@ -1144,7 +1838,8 @@ def mass_plan():
                             duration,
                             intensity,
                             exercises,
-                            coach_notes
+                            coach_notes,
+                            source="coach"
                         )
                         count += 1
                     except ValueError:
@@ -1194,6 +1889,9 @@ def exercise_list():
 def connect_coach():
     """Idrottare kopplar sig till en coach."""
     user = get_current_user()
+    if user is None:
+        session.clear()
+        return redirect(url_for('login'))
 
     if not user.is_athlete():
         return redirect(url_for('dashboard'))
@@ -1284,189 +1982,213 @@ def ai_chat_clear(athlete_id: int):
 
 
 # ============================================================
-# STRAVA INTEGRATION ROUTES
+# TÄVLINGSRESULTAT ROUTES
 # ============================================================
 
-@app.route('/strava/connect')
+@app.route('/athlete/<int:athlete_id>/competition-results')
 @login_required
-def strava_connect():
-    """Starta Strava OAuth-flöde."""
+def athlete_competition_results(athlete_id: int):
+    """Visa tävlingsresultat för en idrottare."""
     user = get_current_user()
-
-    # Kolla om redan kopplad
-    if auth_db.is_strava_connected(user.id):
-        flash('Du har redan kopplat Strava!', 'info')
-        return redirect(url_for('strava_settings'))
-
-    # Kolla om Strava är konfigurerat
-    if not strava_is_configured():
-        flash('Strava-integration är inte konfigurerad. Lägg till API-nycklar i .env', 'error')
-        return redirect(url_for('dashboard'))
-
-    # Generera authorization URL
-    callback_url = url_for('strava_callback', _external=True)
-    # Använd user_id som state för säkerhet
-    state = f"user_{user.id}"
-    auth_url = strava_auth_url(callback_url, state)
-
-    return redirect(auth_url)
-
-
-@app.route('/strava/callback')
-@login_required
-def strava_callback():
-    """Hantera callback från Strava efter användaren godkänt."""
-    user = get_current_user()
-
-    # Kolla efter fel från Strava
-    error = request.args.get('error')
-    if error:
-        flash(f'Strava-koppling avbröts: {error}', 'error')
-        return redirect(url_for('strava_settings'))
-
-    # Hämta authorization code
-    code = request.args.get('code')
-    state = request.args.get('state')
-
-    if not code:
-        flash('Ingen authorization code mottagen från Strava.', 'error')
-        return redirect(url_for('strava_settings'))
-
-    # Verifiera state (säkerhetskontroll)
-    expected_state = f"user_{user.id}"
-    if state != expected_state:
-        flash('Ogiltig state-parameter. Försök igen.', 'error')
-        return redirect(url_for('strava_settings'))
-
-    # Byt code mot tokens
-    callback_url = url_for('strava_callback', _external=True)
-    tokens = exchange_code_for_tokens(code, callback_url)
-
-    if not tokens:
-        flash('Kunde inte slutföra Strava-koppling. Försök igen.', 'error')
-        return redirect(url_for('strava_settings'))
-
-    # Spara tokens för användaren
-    auth_db.connect_strava(
-        user_id=user.id,
-        access_token=tokens.access_token,
-        refresh_token=tokens.refresh_token,
-        expires_at=tokens.expires_at,
-        athlete_id=tokens.athlete_id,
-        athlete_name=tokens.athlete_name
-    )
-
-    flash(f'Strava kopplat! Inloggad som {tokens.athlete_name}', 'success')
-    return redirect(url_for('strava_settings'))
-
-
-@app.route('/strava/disconnect', methods=['POST'])
-@login_required
-def strava_disconnect():
-    """Koppla bort Strava."""
-    user = get_current_user()
-    auth_db.disconnect_strava(user.id)
-    flash('Strava har kopplats bort.', 'success')
-    return redirect(url_for('strava_settings'))
-
-
-@app.route('/strava/settings')
-@login_required
-def strava_settings():
-    """Visa Strava-inställningar och importera aktiviteter."""
-    user = get_current_user()
-    athlete = db.get_athlete_by_user(user.id)
-
-    strava_info = auth_db.get_strava_tokens(user.id)
-    is_connected = strava_info is not None
-    is_configured = strava_is_configured()
-
-    activities = []
-    if is_connected:
-        # Kolla om token behöver förnyas
-        import time
-        if strava_info['expires_at'] and strava_info['expires_at'] < time.time():
-            new_tokens = refresh_access_token(strava_info['refresh_token'])
-            if new_tokens:
-                auth_db.update_strava_tokens(
-                    user.id,
-                    new_tokens.access_token,
-                    new_tokens.refresh_token,
-                    new_tokens.expires_at
-                )
-                strava_info['access_token'] = new_tokens.access_token
-
-        # Hämta senaste aktiviteter
-        try:
-            activities = get_recent_activities(strava_info['access_token'], days=14)
-        except Exception as e:
-            flash(f'Kunde inte hämta aktiviteter: {e}', 'error')
-
-    return render_template('strava_settings.html',
-                           user=user,
-                           athlete=athlete,
-                           is_connected=is_connected,
-                           is_configured=is_configured,
-                           strava_info=strava_info,
-                           activities=activities)
-
-
-@app.route('/strava/import', methods=['POST'])
-@login_required
-def strava_import():
-    """Importera valda aktiviteter från Strava."""
-    user = get_current_user()
-    athlete = db.get_athlete_by_user(user.id)
+    athlete = db.get_athlete(athlete_id)
 
     if not athlete:
-        flash('Ingen idrottsprofil hittades.', 'error')
-        return redirect(url_for('strava_settings'))
+        flash('Idrottaren hittades inte.', 'error')
+        return redirect(url_for('dashboard'))
 
-    strava_info = auth_db.get_strava_tokens(user.id)
-    if not strava_info:
-        flash('Strava är inte kopplat.', 'error')
-        return redirect(url_for('strava_settings'))
+    # Hämta resultat baserat på idrottarens namn, födelseår och klubb
+    summary = get_results_summary(
+        name=athlete.name,
+        birth_year=athlete.birth_year,
+        club=getattr(athlete, 'club', None)
+    )
 
-    # Hämta valda aktivitets-IDs
-    selected_ids = request.form.getlist('activity_ids')
-    if not selected_ids:
-        flash('Inga aktiviteter valda.', 'warning')
-        return redirect(url_for('strava_settings'))
+    # Hämta alla resultat för detaljvy
+    results = find_athlete_results(
+        name=athlete.name,
+        birth_year=athlete.birth_year,
+        club=getattr(athlete, 'club', None)
+    )
 
-    # Hämta aktiviteter och importera
-    activities = get_recent_activities(strava_info['access_token'], days=30)
-    imported = 0
+    return render_template('competition_results.html',
+                           user=user,
+                           athlete=athlete,
+                           summary=summary,
+                           results=results)
 
-    for activity in activities:
-        if str(activity.id) in selected_ids:
-            log_data = strava_activity_to_log_data(activity)
 
-            # Hämta RPE från formuläret om användaren angett det
-            rpe_key = f'rpe_{activity.id}'
-            if rpe_key in request.form:
-                try:
-                    log_data['rpe'] = int(request.form[rpe_key])
-                except ValueError:
-                    log_data['rpe'] = 5  # Default
+@app.route('/competition-results/search')
+@login_required
+def search_competition_results():
+    """Sök efter idrottare i tävlingsresultat."""
+    query = request.args.get('q', '')
+    results = []
 
-            # Lägg till loggen
-            db.add_log(
-                athlete.id,
-                log_data['date'],
-                log_data['session_type'],
-                log_data['duration'],
-                log_data['rpe'] or 5,
-                log_data['comment']
+    if query and len(query) >= 2:
+        results = search_athletes(query)
+
+    return render_template('competition_search.html',
+                           query=query,
+                           results=results)
+
+
+@app.route('/api/competition-results/<name>')
+@login_required
+def api_competition_results(name: str):
+    """API endpoint för tävlingsresultat (JSON)."""
+    birth_year = request.args.get('birth_year', type=int)
+    club = request.args.get('club', '')
+
+    summary = get_results_summary(name, birth_year, club)
+    return jsonify(summary)
+
+
+@app.route('/competition-results/update', methods=['POST'])
+@coach_required
+def update_competition_results():
+    """Uppdatera tävlingsresultat genom att köra scrapern."""
+    import subprocess
+    import sys
+
+    scraper_path = os.path.join(os.path.dirname(__file__), 'scraping', 'friidrottsstatistik-api.py')
+
+    if not os.path.exists(scraper_path):
+        flash('Scrapern hittades inte.', 'error')
+        return redirect(url_for('coach_settings'))
+
+    try:
+        # Kör scrapern som subprocess
+        # Sätt cwd till projektmappen så att .env-filen hittas
+        project_dir = os.path.dirname(__file__)
+        result = subprocess.run(
+            [sys.executable, scraper_path, 'scrape'],
+            capture_output=True,
+            text=True,
+            timeout=120,  # Max 2 minuter
+            cwd=project_dir,  # Projektmappen där .env ligger
+            env={**os.environ}  # Skicka med miljövariabler
+        )
+
+        # Logga output för debugging
+        print("=== SCRAPER OUTPUT ===")
+        print("STDOUT:", result.stdout[:500] if result.stdout else "(tom)")
+        print("STDERR:", result.stderr[:500] if result.stderr else "(tom)")
+        print("RETURN CODE:", result.returncode)
+        print("======================")
+
+        if result.returncode == 0:
+            # Läs från JSON-filen för att få exakt antal
+            import json
+            json_path = os.path.join(os.path.dirname(scraper_path), 'friidrottsstatistik-goteborg-2026.json')
+            try:
+                with open(json_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                count = len(data.get('indoor', [])) + len(data.get('outdoor', []))
+                athletes = len(data.get('athletes', {}))
+                flash(f'Tävlingsresultat uppdaterade! ({count} resultat från {athletes} idrottare)', 'success')
+            except Exception as e:
+                flash(f'Tävlingsresultat uppdaterade! (kunde inte läsa antal: {e})', 'success')
+        else:
+            flash(f'Fel vid uppdatering: {result.stderr[:300] if result.stderr else result.stdout[:300]}', 'error')
+
+    except subprocess.TimeoutExpired:
+        flash('Uppdateringen tog för lång tid. Försök igen senare.', 'error')
+    except Exception as e:
+        flash(f'Kunde inte uppdatera: {str(e)}', 'error')
+
+    return redirect(url_for('coach_settings'))
+
+
+# ============================================================
+# AI SCHEMA ROUTES
+# ============================================================
+
+@app.route('/athlete/<int:athlete_id>/generate-schedule', methods=['POST'])
+@login_required
+def generate_ai_schedule(athlete_id: int):
+    """Generera nytt AI-schema för en idrottare."""
+    try:
+        user = get_current_user()
+        if user is None:
+            session.clear()
+            return redirect(url_for('login'))
+
+        athlete = db.get_athlete(athlete_id)
+
+        if not athlete:
+            flash('Idrottaren hittades inte.', 'error')
+            return redirect(url_for('dashboard'))
+
+        # Kontrollera behörighet (idrottaren själv eller coach)
+        if user.is_athlete() and athlete.user_id != user.id:
+            flash('Du har inte behörighet.', 'error')
+            return redirect(url_for('dashboard'))
+
+        # Uppdatera träningsfas och dagar om angett
+        new_phase = request.form.get('training_phase', '')
+        if new_phase and new_phase in ['grundträning', 'uppbyggnad', 'tävling', 'återhämtning']:
+            athlete.training_phase = new_phase
+
+        new_days = request.form.get('training_days', '')
+        if new_days:
+            athlete.training_days_per_week = int(new_days)
+
+        # Kontrollera om RAG ska användas
+        use_rag = 'use_rag' in request.form
+
+        # Dokumentval — vilka PDF:er RAG ska söka i
+        selected_docs = request.form.getlist('rag_documents')
+        if use_rag:
+            from rag_knowledge import resolve_allowed_doc_keys
+            running_type = {
+                "sprint": "sprint",
+                "medel": "medel",
+                "distans": "distans",
+                "hopp": "sprint",
+                "kast": "sprint",
+                "mangkamp": "medel",
+            }.get(getattr(athlete, 'discipline', ''), "medel")
+            athlete.rag_documents = resolve_allowed_doc_keys(selected_docs or getattr(athlete, 'rag_documents', None), running_type)
+
+        # Rensa gamla AI-pass innan nytt schema genereras (undviker dubbletter)
+        removed = db.clear_future_ai_sessions(athlete.id)
+        if removed:
+            print(f"  🗑 Rensade {removed} gamla AI-pass för {athlete.name}")
+
+        # Generera alltid en fullständig månadsplan (4 veckor)
+        sessions = generate_month_schedule(athlete, db, use_rag=use_rag) or []
+
+        all_fallback = bool(sessions) and all(
+            "Planstatus: Regelbaserad fallback" in (getattr(session_obj, 'coach_notes', '') or '')
+            for session_obj in sessions
+        )
+        fallback_reason = ""
+        if all_fallback and sessions:
+            notes = getattr(sessions[0], 'coach_notes', '') or ''
+            for line in notes.splitlines():
+                if line.startswith("Coachförklaring:"):
+                    fallback_reason = line.replace("Coachförklaring:", "").strip()
+                    break
+
+        from rag_knowledge import DOCUMENT_REGISTRY
+        doc_names = [DOCUMENT_REGISTRY[k]["title"] for k in (athlete.rag_documents or []) if k in DOCUMENT_REGISTRY]
+        rag_label = f"RAG ({', '.join(doc_names)})" if use_rag and doc_names else ("RAG" if use_rag else "regelbaserat")
+        if not sessions:
+            flash('Kunde inte generera något schema just nu. Försök igen senare.', 'error')
+        elif all_fallback:
+            flash(
+                f'🤖 Månadsschemat genererades med reservupplägg ({rag_label}). {fallback_reason or "AI-generering kunde inte användas."}',
+                'warning'
             )
-            imported += 1
-
-    if imported > 0:
-        invalidate_cache(athlete.id)
-        flash(f'{imported} aktivitet(er) importerade från Strava!', 'success')
-    else:
-        flash('Inga aktiviteter importerades.', 'warning')
-
-    return redirect(url_for('dashboard'))
+        else:
+            flash(f'🤖 Nytt månadsschema genererat ({rag_label})! {len(sessions)} pass planerade för 4 veckor.', 'success')
+        return redirect(url_for('dashboard'))
+    except Exception as e:
+        import traceback
+        print("⚠️ generate_ai_schedule kraschade:")
+        traceback.print_exc()
+        flash(f'Kunde inte generera träningsplan: {e}', 'error')
+        return redirect(url_for('dashboard'))
 
 
 # ============================================================
@@ -1630,7 +2352,7 @@ def athlete_agent(athlete_id: int):
 
 if __name__ == '__main__':
     import sys
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 5000
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
 
     print('=' * 50)
     print('🏃 Träningsplattform - Prototyp')
@@ -1639,7 +2361,9 @@ if __name__ == '__main__':
     print('')
     print('Demo-konton:')
     print('  Coach:     coach@demo.se / demo123')
-    print('  Idrottare: emma@demo.se / demo123')
+    print('  Idrottare: ebba@demo.se / demo123 (Garmin-tempomodell)')
+    print('             hugo@demo.se / demo123 (tävlingsresultat)')
+    print('             daniel@demo.se / demo123 (Garmin-tempomodell)')
     print('')
     print('Tryck Ctrl+C för att avsluta')
     print('=' * 50)

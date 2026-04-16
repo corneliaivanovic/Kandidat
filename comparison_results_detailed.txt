@@ -1,0 +1,1439 @@
+================================================================================
+TF-IDF vs EMBEDDINGS — DETALJERAD JÄMFÖRELSE
+================================================================================
+
+
+================================================================================
+FRÅGA 1: "sprint uppbyggnad träningsplanering veckoschema"
+================================================================================
+
+Gemensamma chunks: 0
+Unika TF-IDF:      8
+Unika Embeddings:  8
+--------------------------------------------------------------------------------
+
+
+PLATS #1
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0956]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+s in lower-body strength
+transfer positively to sprint performance: a systematic review with meta-analysis. Sports Med.
+december 2014;44(12):1693–702.
+
+Övervakning
+Övervakning och justering av träningsprogram
+För att principerna ska fungera i praktiken behöver träningen inte bara planeras – utan
+också följas upp och justeras över tid. Några nyckelmetoder för detta är:
+• Prestandamätning: Genom att använda prestationsdata – som VO₂ max,
+pulszoner, tider, styrkemätningar eller upplevd ansträngning – kan tränare och
+utövare få en tydlig bild av hur kroppen svarar på träningen.
+• Digitala hjälpmedel: Appar, träningsplattformar och wearables (t.ex.
+pulsklockor) gör det enklare att följa progression, identifiera mönster och fatta
+datadrivna beslut kring träningsplanering och återhämtning.
+
+EMBEDDINGS [score: 0.8458]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+erar tävling-
+en, såväl på egen hand som tillsammans med andra
+(tränare, förälder, kompis), är också en viktig del av
+inlärningen.
+I
+4-1
+
+210.0 x 240.0 mm
+Träningsplanering
+Steg 3: Gör en detaljplan
+Syftet med detaljplanen är att tydliggöra tränings- vecka 16 ska löpa 120 meter maximal snabbhet,
+betoningar, belastning och stegring utifrån årsplanen hoppa 90 mångstegshopp, köra 45 minuter aerob
+och flerårsplanen samt att säkerställa återhämtning. löpning, göra 20 längdhopp, träna 90 minuter all-
+I din veckoplan för du över årsplanens grovplanering män styrka och 120 minuter koordination i olika
+och gör en mer detaljerad planering. Har du till exempel grenar gäller det att fördela dessa mängder under
+i årsplanen planerat in att de aktiva under tränings- hela träningsveckan.
+
+
+PLATS #2
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0842]  Källa: uppbyggnad_medel_lang.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+och mer individuell. Som tränare
+de gemensamma och sociala behoven upplevs som
+fokuserar du mer på ”prestationsinriktad” träning,
+lika betydelsefulla.
+samtidigt som det är viktigt att ta hänsyn till att de
+aktiva är inne i en fas då de utvecklas mycket som
+En specialisering inleds mot enskilda friidrottsgrenar
+personer och snabbt närmar sig vuxenroller. En bra
+eller grengrupper. Friidrottens grenar är indelade i de
+friidrottsverksamhet bygger på ett ledarskap med
+fem grengrupperna mångkamp, sprint/häck, hopp, kast
+balans mellan dessa olika behov och intressen.
+och medeldistans. De första fyra är så kallade snabb-
+I
+4-1
+
+210.0 x 240.0 mm
+Träningsplanering
+Här är några grundläggande principer för träning i • Det är bra om de aktiva håller på med flera gre-
+åldern 14–17 år: nar.
+
+EMBEDDINGS [score: 0.7676]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+lägger en
+med sprintbakgrund eller är mera renodlade medel–
+grund för fortsatt utveckling.
+långdistanslöpare med en uthållig bas.
+I
+4-1
+
+210.0 x 240.0 mm
+Medel- och långdistans
+Uppbyggnadsperiod oktober–december
+14–15 år
+måndag vila
+tisdag grunduthållighet, distans 6–8 km
+onsdag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+teknikträning teknikträning annan friidrottsgren
+allmän styrka cirkelträning, styrkeövningar
+grunduthållighet, distans 3–5 km lugn distanslöpning
+alternativ: andra idrotter annan idrott
+torsdag intervaller på grus eller i terräng 3 x 4’, 4 x 2’ med 90’’ och 60’’ vila
+allmän styrka styrkeövningar 20’
+fredag vila
+lördag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+
+
+PLATS #3
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0803]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+an skapa utvecklingsbarriärer. Det är därför
+mycket viktigt att variera och förändra givna förutsättningar. Exempel beskrivs i tabellen på nästa sida.
+5 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Förändring/variation av rörelseutförandet i väg-, tids- och rumsförloppet
+EXEMPEL
+Förändrad rörelseriktning Sprint i kurva, kan även göras i motsatt riktning
+Längdutsprång i olika uthoppsvinklar
+Prickkastning med spjut
+Förändring i hastighet och rytm Tempoväxlingar i sprint
+Hopp med kortare/längre ansats
+Kast med lättare/tyngre redskap
+Förändrad kraftinsats Motståndslöpning
+Hopp över olika höjder
+Kast med olika vikter
+Förändrat rörelseutslag Kast med avkortad ansats
+Splithopp i längd
+Förändrade yttre villkor Löpning i terräng
+Häcklopp med olika häckavstånd
+Kast med annorlunda redskap
+
+EMBEDDINGS [score: 0.7660]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+dag allmän friidrottsträning med klubben
+löpteknik/löpkoordination/rörlighet löpskolning/löpteknik/häckar
+allmän styrka cirkelträning, styrkeövningar
+grunduthållighet, distans 5–6 km lugn distanslöpning
+alternativ: andra idrotter annan idrott
+torsdag tröskelträning 4–6 km, totalt 10 km uppvärmning/nedjogg
+allmän styrka styrkeövningar 20’
+fredag vila
+lördag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+snabbhet sprint upp till 60 m
+rörlighet/hoppstyrka häckövningar, hoppövningar
+grunduthållighet, distans 4–6 km lugn distanslöpning
+söndag grunduthållighet, distans 10–15 km
+alternativ: andra idrotter annan idrott
+R I
+R
+
+210.0 x 240.
+
+
+PLATS #4
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0725]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+r störst ökning av
+muskelmassan, alltså störst hypertrofi.
+Snabbstyrka
+Snabbstyrka är förmågan att övervinna ett motstånd i rörelse med hög hastighet. Denna form av muskelstyrka
+har avgörande betydelse för prestationen i sprint-, hopp- och kastgrenarna. Snabbstyrka är beroende av en
+god koordination och kan därför betecknas som en koordinativ form av styrka, och exempel på sådan styrka
+är sprint-, hopp- och kaststyrka. Snabbstyrka kan också utföras med tillsatsbelastning, det vill säga extra
+belastning som till exempel skivstång, motståndslöpning eller kast med olika redskap.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+43
+
+Beroende på hur stort motståndet är varierar snabbstyrkan
+mellan ytterpolerna, maximal styrka och snabbhet.
+
+EMBEDDINGS [score: 0.7485]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+rott
+torsdag löpteknik 8–10 x 100 m avslappnat med 90’’ vila
+grunduthållighet, distans 6–8 km
+fredag vila
+lördag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+snabbhet sprint upp till 60 m
+rörlighet/hoppstyrka häckövningar, hoppövningar
+grunduthållighet, distans 3–5 km lugn distanslöpning
+ev tävling tävling 400–3 000 m
+söndag grunduthållighet, distans 8–12 km
+alternativ: andra idrotter annan idrott
+16–17 år
+måndag grunduthållighet, distans 10–12 km
+allmän styrka cirkelträning, styrkeövningar 30’
+tisdag intervaller på grus eller i terräng 2–3 x (4’–3’–2’–1’), vila 1’
+eller tröskelpass 4–6 km
+grunduthållighet, distans 4–6 km uppvärmning/nedjogg
+onsdag allmän friidrottsträning med klubben
+
+
+PLATS #5
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0716]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+lmänna träningsläran
+Friidrottens allmänna träningslära gäller för alla friidrottens grenar och behandlar de allmänna principerna
+i träningsprocessen. Exempel på centrala delar är
+• träningsprocessens begrepp, principer och uppbyggnad
+• de prestationsbestämmande faktorerna (se bild sid xx)
+• mål, innehåll, medel och metoder
+De speciella träningslärorna
+De grenspeciella träningslärorna riktar sig mer till var och en av friidrottsgrenarna. Varje grenspeciell
+träningslära använder sig av den allmänna träningsläran och överför den till idrottsspeciella tillämpningar.
+
+EMBEDDINGS [score: 0.7400]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+änna att de är starka på slutet. Ett
+mycket vila. Då håller du ihop gruppen bra, vilket
+pass av det här slaget kan vara en bra avstämning
+gynnar alla. En lämplig volym på intervallträningen
+inför ett lopp för att de aktiva ska veta vilken utgångs-
+kan i åldern 14–17 år vara 15–20 minuters effektiv
+fart de ska ha utifrån sin kapacitet. Det går att tänka
+löpning. På seniornivå kan träningen innebära upp
+på samma sätt när det gäller kortare intervaller och
+till 30 minuters löpning.
+medeldistanslopp på 800 meter eller 1 500 meter.
+Då kan de aktiva vänja sig vid tänkt tävlingsfart
+Exempel på långa intervaller:
+eller lite snabbare för att kunna springa avslappnat
+• 5 x 4 minuter med 1 minuts vila eller
+i de hastigheterna.
+
+
+PLATS #6
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0677]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+ng (1´/10m)
+FREKVENS- • frekvensformer: exempelvis 10-30 m max 1-3´
+SNABBHET FÖR löpning över koner
+UNGDOM
+• flygande sprint 10-30 m max 3-7´
+MAXIMAL
+SNABBHET • test- och tävlingslopp 30-60 m max lång
+• sprint i överhastighet: t ex i med- 30.60 m max lång
+lutning, medvind eller med drag
+• kast i överhastighet: exempelvis
+kast med lättare redskap max kort/medel
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+101
+
+Grundsatser för snabbhetsträning
+• Före snabbhetsträning ska en ordentlig uppvärmning av muskulaturen genomföras.
+• Snabbhetsträning planeras in i den första delen av träningspasset, då det centrala nervsystemet
+är utvilat.
+• All snabbhetsträning ska utföras tekniskt korrekt och avspänt.
+1 02
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+EMBEDDINGS [score: 0.7344]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+pskolning/löpteknik
+snabbhet sprint upp till 60m
+rörlighet/hoppstyrka häckövningar, hoppövningar
+grunduthållighet, distans 4–6 km lugn distanslöpning
+ev tävling tävling 400–3 000 m
+söndag grunduthållighet, distans 10–15 km
+alternativ: andra idrotter annan idrott
+
+210.0 x 240.0 mm
+Medel- och långdistans
+Tävlingsförberedande period mars–maj
+14–15 år
+måndag backlöpning 3–4 x (100 m–150 m–200 m), lugn jogg tillbaka 4–
+grunduthållighet, distans 6 km
+tisdag intervaller bana 8 x 600 m med 75’’ vila
+grunduthållighet, distans 3–5 km
+allmän styrka styrkeövningar 20’
+onsdag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+teknikträning teknikträning annan friidrottsgren
+allmän styrka cirkelträning, styrkeövningar
+
+
+PLATS #7
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0672]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+grens uppbyggnad (prestationsstruktur) och utveckling (kravprofil)
+• erfarenheter om framgångsrika effekter i träningsprocessen (beprövad erfarenhet).
+Hur dessa principer konkret påverkar träningens utformning avgörs även av
+• målsättningar från RF, SOK, kommun, förbund eller förening
+• resurser i form av träningsanläggningar
+• tränarens personliga skicklighet och filosofi.
+Då kan man tala om ett så kallat träningssystem.
+Många olika träningssystem kan leda till samma slutmål, men
+varje träningssystem måste regleras av träningens grundprinciper
+för att ge den aktive en möjlig väg till framgång.
+
+EMBEDDINGS [score: 0.7317]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+ns 6–8 km
+onsdag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+rörlighet/hoppstyrka häckövningar, hoppövningar
+snabbhet sprint upp till 60 m, acceleration och flygande 30 m
+allmän styrka cirkelträning, styrkeövningar
+grunduthållighet, distans 3–4 km lugn distanslöpning
+alternativ: andra idrotter annan idrott
+torsdag intervaller på grus + bana 4 x 4’ med 1’ vila + 8 x 200 m med god löpteknik, vila 2’,
+sp 5’
+allmän styrka styrkeövningar 20’
+fredag vila eller 4–6 km lätt jogg
+lördag tävling 800–5 000 m
+söndag grunduthållighet, distans 12–14 km
+alternativ: andra idrotter annan idrott
+I
+4-1
+
+
+PLATS #8
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0663]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+n elektronisk eller mekanisk form
+eller på annat sätt spridas eller användas i försäljningssyfte utan skriftligt tillstånd från förlag och författare.
+
+Innehåll
+Förord 3
+Träningsläran 5
+Tränarens roll 7
+Hållbart ledarskap 9
+Den optimala träningsprocessen 11
+De prestationsbestämmande faktorerna 19
+Idrottsutvecklingens uppbyggnad 25
+Anatomi och fysiologi 30
+De fysiska grundegenskaperna 37
+Teknik 59
+Personlighetsegenskaper – Psykologi 70
+Träningens grundprinciper 75
+Pedagogiska principer 90
+Träningens mål 95
+Översikt – Träningsmedel 99
+
+Förord
+Friidrottens allmänna träningslära (1983) togs fram av Nils-Egil Rosenberg och den hade stor betydelse
+under en lång period i friidrottens tränarutbildningar.
+
+EMBEDDINGS [score: 0.7282]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+teknikträning teknikträning annan friidrottsgren
+allmän styrka cirkelträning, styrkeövningar
+grunduthållighet, distans 3–4 km lugn distanslöpning
+alternativ: andra idrotter annan idrott
+torsdag intervaller på grus eller i terräng 3 x 5’, 3 x 2’ med 90’’, 60’’ vila
+grunduthållighet, distans 3–5 km lugn distanslöpning
+fredag vila
+lördag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+snabbhet sprint upp till 60 m
+rörlighet/hoppstyrka häckövningar, hoppövningar
+grunduthållighet, distans 3–5 km lugn distanslöpning
+ev tävling tävling 2–8 km terräng/landsväg
+söndag grunduthållighet, distans 8–12 km
+alternativ: andra idrotter annan idrott
+16–17 år
+
+
+================================================================================
+FRÅGA 2: "sprint intervallträning uthållighet nyckelpass"
+================================================================================
+
+Gemensamma chunks: 1
+Unika TF-IDF:      7
+Unika Embeddings:  7
+--------------------------------------------------------------------------------
+
+
+PLATS #1
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.2161]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+, det vill säga i
+själva vändningsögonblicket
+(amortisationsfasen). Det är
+också i detta ögonblick som
+de flesta bristningar i muskler
+och senor sker.
+3 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+De fysiska
+grundegenskaperna
+Uthållighet
+Styrka Snabbhet
+Rörlighet Koordination
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+37
+
+Uthållighet
+Uthållighet är förmågan att stå emot trötthet
+vid långvarig belastning.
+Undergrupper av uthållighet
+• Aerob uthållighet
+• Anaerob alaktatisk uthållighet
+• Anaerob laktatisk uthållighet
+Man delar också in uthållighet i allmän respektive speciell uthållighet
+Aerob uthållighet
+När träning av uthållighet genomförs med en relativt låg intensitet där syret räcker till för att täcka energibe-
+hovet så kallas det aerob uthållighet.
+
+EMBEDDINGS [score: 0.8175]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+pskolning/löpteknik
+snabbhet sprint upp till 60m
+rörlighet/hoppstyrka häckövningar, hoppövningar
+grunduthållighet, distans 4–6 km lugn distanslöpning
+ev tävling tävling 400–3 000 m
+söndag grunduthållighet, distans 10–15 km
+alternativ: andra idrotter annan idrott
+
+210.0 x 240.0 mm
+Medel- och långdistans
+Tävlingsförberedande period mars–maj
+14–15 år
+måndag backlöpning 3–4 x (100 m–150 m–200 m), lugn jogg tillbaka 4–
+grunduthållighet, distans 6 km
+tisdag intervaller bana 8 x 600 m med 75’’ vila
+grunduthållighet, distans 3–5 km
+allmän styrka styrkeövningar 20’
+onsdag allmän friidrottsträning med klubben
+löpteknik/löpkoordination löpskolning/löpteknik
+teknikträning teknikträning annan friidrottsgren
+allmän styrka cirkelträning, styrkeövningar
+
+
+PLATS #2
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1863]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+ob uthållighet aerob uthål-
+EFFEKT tatisk uthål- snabbhets- uthållighet långtids- lighet
+lighet uthållighet korttidsuthållighet uthållighet långtids-
+korttidsuthållighet medeltids- uthållighet
+medeltids- uthållighet
+uthållighet
+4 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Sammanfattning på fokusområden för uthållighet
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+Förutsättningarna för att öka syre- Under puberteten uppstår Grenspecifik uthållighet
+upptagningsförmågan i unga år är en unik möjlighet att öka beroende på greninriktning.
+relativt begränsade. Ungdomarna kroppens aeroba förmåga.
+
+EMBEDDINGS [score: 0.8068]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+ed bra koordination,
+löpteknik och avslappning. Det är löpning i sprint-
+backe, 20-80 meter samt löpteknik i backe 100-150
+meter där farterna är höga. I den långa backen är fart-
+en lägre se kommande skrift. I den långa backen är
+farten däremot inte det intressanta. Här kan du jobba
+med längre intervaller på 300 meter och uppåt för att
+stärka de aktivas löputhållighet/löpstyrka. Ofta får
+de jogga lugnt tillbaka.
+FARTLEK
+Fartlek är en lustfylld träningsform som går att
+variera i all oändlighet – det är bara fantasin som
+sätter gränserna. Tanken är att variera snabb löpning
+med jogg i olika längder, gärna på en kuperad slinga
+med mjukt underlag. Fartlek är roligt i grupp, och del-
+tagarna måste inte vara på en jämn nivå.
+
+
+PLATS #3
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1843]  Källa: uppbyggnad_medel_lang.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+m
+Medel- och långdistans
+INTERVALLTRÄNING
+Exempel på korta intervaller:
+Steget efter tröskelträning kan vara snabbdistans,
+men intervall är vanligare. Både snabbdistans och • 15 x 1 minut med 1 minuts vila eller
+intervallträning är ett underbegrepp till aerob ut- 15 x 300 meter med 1 minuts vila
+hållighet. Intervallträning har visat sig vara mycket
+• 2 x 10 x 40 sekunder med 45 sekunders
+effektiv när de aktiva vill ta sin löpning vidare och
+vila och 3 minuters serievila eller 2 x 10
+utvecklas för att tävla och förbättra sina tider. När
+x 200 meter med 45 sekunders vila och
+de springer intervaller drar de på sig mjölksyra som
+3 minuters serievila
+känns.
+
+EMBEDDINGS [score: 0.8038]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+rna. Oavsett om målet är 5 km eller ultramaraton är hög
+träningsvolym en gemensam nämnare hos framgångsrika löpare.
+Forskningsstödet är mycket starkt. Studier visar att träningsvolym är starkt korrelerad
+med prestation, och att både elit och motionärer har nytta av att öka volymen gradvis
+upp till sin individuella tröskel för återhämtning och skaderisk.
+
+Praktiska exempel:
+• En nybörjare som springer 3 ggr/vecka à 30 minuter (totalt 90 minuter/vecka) kan
+efter några månader utöka till 4–5 pass à 30–40 min.
+• En avancerad löpare med 5 mil/vecka kan över tid öka till 7–8 mil/vecka genom
+att lägga in dubbla pass (t.ex. lätt morgonjogg + distanspass på kvällen).
+• En maratonlöpare på elitnivå kan ligga på 130–160 km/vecka fördelat på 10–12
+pass.
+
+
+PLATS #4
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1023]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+intervaller 10-60m hög kort till medel
+ALAKTATISK
+• stafetter, exempelvis kurirstafett
+UTHÅLLIGHET
+• hypertrofi (muskeltillväxt) kan medel medel kort
+stödja utvecklingen av den
+alaktatiska uthålligheten
+ANAEROB • sprintuthållighet 60-150 m hög medel till lång
+LAKTATISK
+• snabbhetsuthållighet 150-400m hög medel till lång
+UTHÅLLIGHET
+• korttidsuthållighet 400-800m hög kort till medel
+• uthållig styrka kan stödja medel hög kort
+utvecklingen av anaerob
+laktatisk uthållighet
+Grundsatser för uthållighet
+• Aerob uthållighet planeras antingen i början eller i slutet av träningspasset medan anaerob uthållighet
+oftast planeras i slutet av komplexa träningspass då flera fysiska egenskaper tränas.
+
+EMBEDDINGS [score: 0.7980]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+med jogg i olika längder, gärna på en kuperad slinga
+med mjukt underlag. Fartlek är roligt i grupp, och del-
+tagarna måste inte vara på en jämn nivå. De snabbare
+löparna kan springa tillbaka och möta de lite lång-
+sammare löparna på joggen. I grupp kan någon
+plötsligt säga ”kör”, och då ska alla hänga på så
+gott de kan. Detta ger även bra träning av de tempo-
+växlingar som kan ske i ett medel- och långdistans-
+lopp. En fartlek kan vara 15–30 minuter effektiv
+tid, och varje ”ryck” från 15–20 sekunder upp till
+2 minuter.
+I
+4-1
+
+210.0 x 240.0 mm
+Medel- och långdistans
+ALTERNATIV TRÄNING
+Det är alltid bättre med ett pass för lite än ett pass
+Den alternativa träningen har blivit allt vanligare,
+för mycket.
+
+
+PLATS #5
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0985]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+gelser Tävlingar
+Prestationsdiagnos
+Dokumentation
+Normjämförelser Utvärdering
+Plan för fortlöpande planering, genomförande och utvärdering av träning.
+9 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Översikt - Träningsmedel
+Uthållighetsegenskaper
+• Aerob uthållighet
+• Anaerob alaktatisk uthållighet
+• Anaerob laktatisk uthållighet
+FYSISK EGENSKAP ÖVNINGAR STRÄCKA/ TID INTENSITET PAUS
+AEROB • distanslöpning lång låg ingen
+UTHÅLLIGHET • fartlek medel medel ingen
+• intervaller kort till medel medel kort
+lång
+• grundstyrka exempelvis cirkel- medel kort
+träning kan stödja utvecklingen
+av aerob uthållighet
+ANAEROB • korta högintensiva intervaller 10-60m hög kort till medel
+ALAKTATISK
+• stafetter, exempelvis kurirstafett
+UTHÅLLIGHET
+• hypertrofi (muskeltillväxt) kan medel medel kort
+
+EMBEDDINGS [score: 0.7943]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+äning.
+• 5x1000 m i 5K-tävlingstempo, 90 s vila – snabbhet och uthållighet.
+• 8x30 s @ max + 1 min vila – anaerob träning med neuromuskulär stimulans.
+Används ofta i uppbyggnadsfasen och inför tävlingar för att vässa formen.
+Praktiska rekommendationer för löptränare:
+• 1–2 HIT-pass/vecka räcker. Mer än så kan vara kontraproduktivt om inte volym
+och återhämtning är optimerade.
+• Anpassa efter nivå: Nybörjare kan börja med tröskelintervaller (85–90 % av max),
+medan elitlöpare kan köra kortare, mer intensiva block.
+• Säkerställ god teknik även i hög fart: HIT ökar skaderisk om löptekniken
+försämras under trötthet.
+• Pulskontroll: Använd puls eller fart som guide, men ha koll på dagsform – HIT bör
+kännas hårt men kontrollerat.
+
+
+PLATS #6
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0912]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+das det stora
+mängder mjölksyra.
+Vid belastningar på över 2 minuter får den aeroba energiprocessen en allt större betydelse vilket kan ses i tabellen.
+100M 200M 400M 800M 1000M 1500M 5000M 10000M MARATON
+AEROB 5 10 25 45 50 65 90 95 99
+ANAEROB 95 90 75 55 50 35 10 5 1
+Allmän uthållighet
+Allmän uthållighet är detsamma som aerob uthållighet vilket är förmågan till energiutveckling med hjälp av
+syre. Denna förmåga är även viktig för återhämtningen efter all form av aktivitet.
+Exempel på allmän uthållighet kan vara distanslöpning eller löpformer, exempelvis lågintensiva intervaller
+eller fartlek. I ungdomsåren förekommer alternativa uthållighetsformer, exempelvis bollspel, simning, skidor.
+
+EMBEDDINGS [score: 0.7924]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+änna att de är starka på slutet. Ett
+mycket vila. Då håller du ihop gruppen bra, vilket
+pass av det här slaget kan vara en bra avstämning
+gynnar alla. En lämplig volym på intervallträningen
+inför ett lopp för att de aktiva ska veta vilken utgångs-
+kan i åldern 14–17 år vara 15–20 minuters effektiv
+fart de ska ha utifrån sin kapacitet. Det går att tänka
+löpning. På seniornivå kan träningen innebära upp
+på samma sätt när det gäller kortare intervaller och
+till 30 minuters löpning.
+medeldistanslopp på 800 meter eller 1 500 meter.
+Då kan de aktiva vänja sig vid tänkt tävlingsfart
+Exempel på långa intervaller:
+eller lite snabbare för att kunna springa avslappnat
+• 5 x 4 minuter med 1 minuts vila eller
+i de hastigheterna.
+
+
+PLATS #7
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0866]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+mal snabbhet
+• reaktionssnabbhet Uthållighet
+• frekvenssnabbhet • aerob uthållighet ex
+Uthållighet distans, fartlek
+Anaerob alaktatisk uthåll- • förb. anaerob uthållighet
+ighet (korta intensiva löp- (löpformer i ca 80% fart)
+ningar i t ex stafettformer Rörlighet
+som kurirstafett)
+Viktigt!
+Komplet- Lekar och spel Andra friidrottsgrenar Andra likartade
+terande Andra idrotter Lekar och spel friidrottsgrenar
+tränings- Gymnastik Andra idrotter Andra idrotter
+former
+Person- Psykiska egenskaper Fördjupad personlighets- Inledning av en specifik Specifik psykisk
+lighets- ut- • prestationsmotivation utveckling psykisk skolning skolning
+veckling • uppmärksamhet • självstyrande åtgärder • speciell livsföring
+• koncentration • klara press (ex från
+media etc)
+Kunskaper
+• träningsrutiner
+• hygien
+
+EMBEDDINGS [score: 0.7920]  Källa: uppbyggnad_medel_lang.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+m
+Medel- och långdistans
+INTERVALLTRÄNING
+Exempel på korta intervaller:
+Steget efter tröskelträning kan vara snabbdistans,
+men intervall är vanligare. Både snabbdistans och • 15 x 1 minut med 1 minuts vila eller
+intervallträning är ett underbegrepp till aerob ut- 15 x 300 meter med 1 minuts vila
+hållighet. Intervallträning har visat sig vara mycket
+• 2 x 10 x 40 sekunder med 45 sekunders
+effektiv när de aktiva vill ta sin löpning vidare och
+vila och 3 minuters serievila eller 2 x 10
+utvecklas för att tävla och förbättra sina tider. När
+x 200 meter med 45 sekunders vila och
+de springer intervaller drar de på sig mjölksyra som
+3 minuters serievila
+känns.
+
+
+PLATS #8
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0799]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+rritin = låg effekt och hög risk
+för uttröttning.
+• Var försiktig med värmeträning: Kort exponering först, sedan gradvis ökning.
+Anpassa intensiteten.
+• Använd koststrategier sparsamt: Undvik lågkolhydratträning nära kvalitetspass.
+Håll koll på återhämtning.
+• Mät och följ upp: Dokumentera vilopuls, hemoglobin, vikt, humör och
+träningskänsla.
+5. Mikroperiodisering
+Definition:
+Mikroperiodisering syftar på hur träningen struktureras över korta tidsperioder – oftast
+över en vecka. Det handlar om hur man varierar belastningen mellan dagar (t.ex. tuffa vs
+lätta pass), vilka dagar man placerar nyckelpass, och hur man väver in återhämtning.
+
+EMBEDDINGS [score: 0.7898]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+→ 5
+km i tävlingsfart.
+• Kombinera med långpass eller tröskelpass: Specifik fart kan integreras i längre
+träningspass för att efterlikna tävlingsslut.
+• Testa pacing och taktik: Låt löparen springa negativa splits, jämn fart eller
+medvetet offensivt – och diskutera upplevelsen efteråt.
+6. Prestationshöjande stimuli (höghöjd, värme, energitillgänglighet)
+Definition:
+Prestationshöjande stimuli syftar på specifika träningsstrategier eller miljöförändringar
+som syftar till att ytterligare förstärka kroppens träningssvar. Exempel inkluderar:
+• Höghöjdsträning: Träning eller vistelse på höjd för att förbättra kroppens
+syretransportsystem.
+• Värmeträning: Att vänja kroppen vid att prestera i hög temperatur för att förbättra
+termoreglering och plasmavolym.
+
+
+================================================================================
+FRÅGA 3: "återhämtning vilodag hard easy polariserad löpning"
+================================================================================
+
+Gemensamma chunks: 1
+Unika TF-IDF:      7
+Unika Embeddings:  7
+--------------------------------------------------------------------------------
+
+
+PLATS #1
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1818]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+rtvariga belastningar och flera minuters paus, sker denna typ av återhämtning. En direkt
+återhämtning sker också vid lågintensiva aeroba belastningar.
+Snabb återhämtning sker efter träning med främst anaerob belastning, där ATP-resyntesen inte räcker till
+att klara energiförbrukningen. Denna återhämtning tar 1,5–3 timmar.
+Fullständig återhämtning innebär, förutom påfyllning av glykogenförråd, till exempel återbildning av äggvit-
+estrukturer, förnyade hormon- och enzymaktiviteter, återställda vitamin-, vatten- och elektrolytvärden, samt
+syra/bas-balans. En fullständig återhämtning tar 24–48 timmar.
+
+EMBEDDINGS [score: 0.6528]  Källa: loptranare_2025.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+ör att
+planera träningen effektivt och undvika trötthet eller stagnation. Det är särskilt viktigt för
+löpare som tränar fler än fyra gånger per vecka.
+
+Praktiska exempel:
+• “Hard–easy”-principen: Ett tufft pass följs av ett lätt eller vilodag.
+• En klassisk 7-dagars mikrovecka:
+o Mån: Distans (lätt)
+o Tis: Intervaller (hårt)
+o Ons: Vila eller lätt distans
+o Tors: Tröskel
+o Fre: Återhämtning
+o Lör: Långpass
+o Sön: Vila eller lätt distans
+• Var fjärde vecka: återhämtningsvecka med 50–70 % volym.
+Praktiska rekommendationer för löptränare:
+• Skapa rytm i veckoschemat: Växla mellan hårda och lätta dagar.
+• Anpassa efter individens återhämtningsförmåga: Vissa klarar två hårda pass i
+följd, andra behöver mer mellanrum.
+
+
+PLATS #2
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1583]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+rkompensation. Varje sådan prestationsstegring
+uppnås därför främst genom en bra balans i träningen, mellan belastning och efterföljande återhämtning.
+För att den aktive ska kunna nå en stegrad prestationsförmåga
+måste belastning och återhämtning ses som en enhet.
+Belastning och återhämtning
+Exempel på belastningstyper:
+• Aerob energiprocess
+• Anaerob energiprocess
+• Påverkan på neuromuskulära systemet
+7 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Exempel på former för återhämtningsprocessen:
+Direkt återhämtning sker direkt under träning genom den ständiga ATP-resyntesen. Vid teknik- och snabb-
+hetsträning med kortvariga belastningar och flera minuters paus, sker denna typ av återhämtning. En direkt
+återhämtning sker också vid lågintensiva aeroba belastningar.
+
+EMBEDDINGS [score: 0.6518]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+ed bra koordination,
+löpteknik och avslappning. Det är löpning i sprint-
+backe, 20-80 meter samt löpteknik i backe 100-150
+meter där farterna är höga. I den långa backen är fart-
+en lägre se kommande skrift. I den långa backen är
+farten däremot inte det intressanta. Här kan du jobba
+med längre intervaller på 300 meter och uppåt för att
+stärka de aktivas löputhållighet/löpstyrka. Ofta får
+de jogga lugnt tillbaka.
+FARTLEK
+Fartlek är en lustfylld träningsform som går att
+variera i all oändlighet – det är bara fantasin som
+sätter gränserna. Tanken är att variera snabb löpning
+med jogg i olika längder, gärna på en kuperad slinga
+med mjukt underlag. Fartlek är roligt i grupp, och del-
+tagarna måste inte vara på en jämn nivå.
+
+
+PLATS #3
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1515]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+en, kan man ändå behöva vara försiktig –
+kanske införa en extra vilodag trots löparens entusiasm, för att förebygga att tröttheten
+slår till fördröjt.
+Justera planeringen dynamiskt:
+Utifrån denna veckogenomgång kan du justera nästa veckas träningsprogram. Använd
+TSB och ATL som vägledning för intensitetsfördelning. Om löparen ligger djupt negativt i
+TSB flera veckor i sträck, planera in en lättare vecka för återhämtning. Om ACWR riskerar
+gå över 1,3–1,5 nästa vecka p.g.a. planerad träningsökning, överväg att skala ner lite för
+att hålla kvoten i schack (eller se till att löparen är extra noggrann med återhämtning,
+t.ex. sömn och nutrition, om en hög ACWR är oundviklig kortvarigt).
+
+EMBEDDINGS [score: 0.6448]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+skerar överbelastning
+den veckan.
+Istället kanske man vill öka till ~45–50 km (ACWR ~1,1–1,25) för att ligga i ”sweet spot”
+och vänja kroppen gradvis.
+Omvänt, om löparen drar ner träningen rejält en period – säg springer bara 15 km en
+vecka trots att hen brukar ligga runt 40 km – blir ACWR = 15/40 = 0,375. Det indikerar att
+formen kanske håller på att falla tillbaka. När träningen sedan återgår till normala nivåer
+kan skaderisken paradoxalt nog öka eftersom löparen var undertränad den föregående
+veckan .
+Därför föreslår ACWR-modellen också att för låg belastning relativt sin vanliga nivå inte
+är optimalt ur skadesynpunkt.
+Många tränare använder en tumregel som liknar ACWR, nämligen ”10%-regeln”, vilken
+säger att man inte bör öka träningsmängden mer än ~10% per vecka.
+
+
+PLATS #4
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1271]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+ler minska risken för löprelaterade skador.
+Kapacitet
+• Vävnadstoleransen ökar med gradvis ökad exponering för löpning,
+förutsatt att anpassning sker.
+• Ytterligare styrketräning kan bidra till att öka löparens vävnadstolerans.
+• Du kan läsa mer om hur olika strukturer anpassar sig olika snabbt längre
+ner.
+Återhämtning
+• Tillräcklig återhämtning och vila är avgörande för att kroppen ska kunna ta
+till sig och dra nytta av den belastning som träningen innebär.
+• SÖMN och NÄRING är viktiga faktorer för att främja tillväxt och
+återhämtning, vilket i sin tur leder till positiva anpassningar från träningen.
+Tränings-Karaktäristik
+• Träningsrelaterade faktorer som löpfrekvens, volym, intensitet och
+progression har komplexa interaktioner som avgör löparens totala
+träningsbelastning och stress.
+
+EMBEDDINGS [score: 0.6437]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+tså det minst viktiga steget i
+en helhet, men fortfarande en pusselbit. Den spelar en roll när allt annat är på plats,
+särskilt vid viktiga tävlingar. Forskningsstödet är starkt, men svaren är individuella:
+vissa löpare toppar bäst med mycket vila, andra med kortare nedtrappning. Effekten av
+en bra taper är liten men viktig – ofta 1–3 % förbättring i prestation.
+
+Praktiska exempel:
+• En maratonlöpare minskar träningsvolymen med 50–60 % över 2–3 veckor inför
+loppet, men behåller nyckelpass i form av korta fartinslag.
+• En 5K-löpare behåller sin fartträning men kör kortare intervaller med mer vila
+sista veckan.
+• Ett långpass på 25 km byts ut mot 12 km med 3x1 km i tävlingsfart.
+
+
+PLATS #5
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1198]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+hormon- och enzymaktiviteter, återställda vitamin-, vatten- och elektrolytvärden, samt
+syra/bas-balans. En fullständig återhämtning tar 24–48 timmar.
+Åtgärder för återhämtning
+Flera åtgärder kan stödja återhämtningsprocessen och tidsmässigt förkorta den, till exempel:
+• Kost • Varmbad och bastu
+• Sömn • Mental träning, avslappning
+• Fysioterapeutisk behandling, • Omväxling i miljö och klimat,
+exempelvis massage exempelvis träningsläger
+Återhämtningsprocessen och tider för olika belastningstyper
+ÅTERHÄMTNINGS- AEROB BLANDAD ANAEROB STYRKE- NEURO-
+PROCESSER AEROB OCH ALAKTATISK TRÄNING MUSKULÄR
+ANAEROB OCH LAKTATISK
+INTENSITET LÅG MEDEL/HÖG HÖG/MAXIMAL MAXIMAL MAXIMAL
+Direkt återhämtning Vid 60-70%
+intensitet
+Snabb återhämtning 1,5 - 2 2 - 3 timmar
+(mycket ofullständig) timmar
+
+EMBEDDINGS [score: 0.6430]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+40.0 mm
+Medel- och långdistans
+BACKTRÄNING
+Att springa backlöpning är populärt och har många Backträningens syfte är att jobba med syreupptag-
+syften. Här kan de aktiva träna både uthållighet, snabb- ningsförmåga och styrka. Lutningen på backen
+het och ren löpstyrka. Långa backar är mer uthållig- kan variera något, men det är viktigt att de aktiva
+hetsbaserade, och kortare backar ger mer explosivt kan springa med bibehållen bra löpteknik. Kan du
+arbete. I den korta backen ska de aktiva springa 20–80 hitta en backe som avslutar med ett kortare flackt
+meter. Fördelen med backen är att skaderisken minskar parti kan de aktiva få en bra känsla av att få springa
+något eftersom det inte går så fort. En annan fördel ut i god fart på slutet.
+
+
+PLATS #6
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1132]  Källa: loptranare_2025.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+ör att
+planera träningen effektivt och undvika trötthet eller stagnation. Det är särskilt viktigt för
+löpare som tränar fler än fyra gånger per vecka.
+
+Praktiska exempel:
+• “Hard–easy”-principen: Ett tufft pass följs av ett lätt eller vilodag.
+• En klassisk 7-dagars mikrovecka:
+o Mån: Distans (lätt)
+o Tis: Intervaller (hårt)
+o Ons: Vila eller lätt distans
+o Tors: Tröskel
+o Fre: Återhämtning
+o Lör: Långpass
+o Sön: Vila eller lätt distans
+• Var fjärde vecka: återhämtningsvecka med 50–70 % volym.
+Praktiska rekommendationer för löptränare:
+• Skapa rytm i veckoschemat: Växla mellan hårda och lätta dagar.
+• Anpassa efter individens återhämtningsförmåga: Vissa klarar två hårda pass i
+följd, andra behöver mer mellanrum.
+
+EMBEDDINGS [score: 0.6423]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+rna. Oavsett om målet är 5 km eller ultramaraton är hög
+träningsvolym en gemensam nämnare hos framgångsrika löpare.
+Forskningsstödet är mycket starkt. Studier visar att träningsvolym är starkt korrelerad
+med prestation, och att både elit och motionärer har nytta av att öka volymen gradvis
+upp till sin individuella tröskel för återhämtning och skaderisk.
+
+Praktiska exempel:
+• En nybörjare som springer 3 ggr/vecka à 30 minuter (totalt 90 minuter/vecka) kan
+efter några månader utöka till 4–5 pass à 30–40 min.
+• En avancerad löpare med 5 mil/vecka kan över tid öka till 7–8 mil/vecka genom
+att lägga in dubbla pass (t.ex. lätt morgonjogg + distanspass på kvällen).
+• En maratonlöpare på elitnivå kan ligga på 130–160 km/vecka fördelat på 10–12
+pass.
+
+
+PLATS #7
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1126]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+lla kvoten i schack (eller se till att löparen är extra noggrann med återhämtning,
+t.ex. sömn och nutrition, om en hög ACWR är oundviklig kortvarigt). Var inte rädd att
+ändra ett planerat pass utifrån dagsdata: ser du på morgonen att löparens vilopuls är
+hög och HRV låg, och ett hårt pass stod på schemat, kan du besluta att byta till ett lugnt
+
+distanspass den dagen. Det är bättre att missa ett tänkt kvalitets-pass än att pusha
+igenom det och riskera bakslag.
+Lär känna individens mönster:
+Med tiden kommer du se individanpassade mönster. Kanske märker du att Löpare A
+alltid får lite höjd vilopuls efter två tuffa intervallpass och behöver en extra vilodag,
+medan Löpare B hanterar tre kvalitetspass men istället visar humörsvängningar som
+tecken på övertrötthet. Dokumentera dessa iakttagelser.
+
+EMBEDDINGS [score: 0.6373]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+d träning börjar springa sämre tider eller känner sig orkeslös på kvalitetspass.
+Men paradoxalt nog kan prestagnationen stanna av innan den försämras. I tidiga stadier
+kan löparen hamna i ett “platå”-läge där träningen inte längre ger förbättringar, trots
+ökad ansträngning. En ny studie (Flockhart et al. 2022) visade faktiskt att löparnas
+prestation varken förbättrades eller drastiskt försämrades under en period av mycket
+hög träningsbelastning – den stagnerade, medan andra indikatorer som humör och
+fysiologiska värden tydligt visade maladaptation . Detta understryker att tränare inte bör
+vänta på en dramatisk försämring av tävlingstider innan man reagerar; om progressen
+uteblir och andra tecken pekar nedåt är det dags att agera.
+
+
+PLATS #8
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1006]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+MEDEL/HÖG HÖG/MAXIMAL MAXIMAL MAXIMAL
+Direkt återhämtning Vid 60-70%
+intensitet
+Snabb återhämtning 1,5 - 2 2 - 3 timmar
+(mycket ofullständig) timmar
+90-95% återhämtning 2-4 timmar 6-12 timmar 12 - 24 18 - 36
+(ofullständig men god timmar timmar
+prestationsförmåga)
+Fullständig återhämtning 6 - 36 12 - 72 tim- 2 - 3 dygn 2 - 4 dygn 2 - 3 dygn
+till jämvikt för ämnes- timmar mar
+omsättning (höjd presta-
+tionsförmåga)
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+79
+
+Belastning Stegrad prestation
+Återhämtning
+Uttröttning
+Bild 1. Grundprincipen för stegrad prestation Bild 2. Om återhämtningen blir för Bild 3. Långsammare stegrad
+lång återgår prestationsförmågan prestationsförmåga
+till ursprunglig nivå
+Bild 4. Snabbare stegrad prestationsförmåga Bild 5. Ackumulerad prestationsförmåga Bild 6.
+
+EMBEDDINGS [score: 0.6300]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+ar sig igenom
+are med enbart fysisk talang – talangen måste kom- den perioden utvecklas positivt när de kommer ur den.
+bineras med förmågan att slita. Det är viktigt att träna på, kanske öka träningen och
+fortsätta bygga en bra grund även om det inte leder till
+Löpning på tävlingsnivå är slitsamt, och de aktiva resultatförbättringar i det korta perspektivet.
+måste kunna fortsätta att springa fort även när kroppen
+är trött och protesterar. Det är heller aldrig för sent
+att börja med löpning för den som har en annan
+I
+4-1
+
+210.0 x 240.0 mm
+Medel- och långdistans
+Gruppträning Vikten av en bred bas
+I framgångsrika löparmiljöer både nationellt och Att träna varierat och brett i unga år är nästan av-
+internationellt tränar många tillsammans i grupp. görande för att kunna utvecklas över tid.
+
+
+================================================================================
+FRÅGA 4: "uppbyggnad intensitetszoner 80 20 tröskelträning"
+================================================================================
+
+Gemensamma chunks: 1
+Unika TF-IDF:      7
+Unika Embeddings:  7
+--------------------------------------------------------------------------------
+
+
+PLATS #1
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1805]  Källa: uppbyggnad_medel_lang.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+gger på 5–7 kilometer
+får träna balans, koordination och styrka. kan ett långpass vara 10–12 kilometer. Långpasset
+ska gå sakta och vara kontrollerat. Det finns även
+Distanslöpningen ska vara så intensiv att de aktiva får
+snabbare distanslöpning, och det ska inte förväxlas
+andas ordentligt. Det behöver inte innebära att de
+med snabbdistans.
+springer i ett och samma tempo utan att de anpassar
+I
+4-1
+
+210.0 x 240.0 mm
+Medel- och långdistans
+TRÖSKELTRÄNING
+För aktiva i åldern 14–17 år kan 15–20 minuter totalt
+Nästa steg efter distanslöpning är tröskelträning.
+vara en bra riktlinje. Kom ihåg att löpningen ska vara
+Den kan du som tränare köra uppdelad i intervall-
+kontrollerad, och att de aktiva inte ska dra på sig
+form eller sammanhängande. Tröskelträning är en
+mjölksyra som känns.
+
+EMBEDDINGS [score: 0.7705]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+itel för exempel på
+med god teknik. Den här typen av träning är viktigt
+övningar för denna typ av träning).
+under de första åren av perioden 14–17 år. Denna
+träning ska emellertid inte ersätta de andra styrke-
+kvaliteterna då de är av stor vikt för att de aktiva ska
+utvecklas och förbättra sin prestationsförmåga i fri-
+idrotten.
+R I
+R
+
+210.0 x 240.0 mm
+Styrketräning
+Exempel på belastningsdosering för styrketräning med tillsatsbelastning
+Intensitet Omfång Vila Rörelsetempo Mål - idrottsgren
+Upprep- Serier
+ningar
+Maximal styrka
+90-100% 1-3 3-5 2-5´ optimal Maximal styrka för grenar med
+både acykliska och cykliska
+rörelser
+Förberedande
+maximal styrka
+70-90% 4-12 3-5 2-5´ optimal Förb. maximal styrka för grenar
+med cykliska rörelser.
+
+
+PLATS #2
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1719]  Källa: uppbyggnad_medel_lang.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+re köra uppdelad i intervall-
+kontrollerad, och att de aktiva inte ska dra på sig
+form eller sammanhängande. Tröskelträning är en
+mjölksyra som känns. Går de över gränsen springer
+träningsform som vunnit allt mer mark just för att
+de inte längre tröskelträning utan snabbdistans som
+den ökar kvaliteten i träningen utan att nämnvärt
+mer liknar tävlingsfart. Då bildas mjölksyra som
+försämra återhämtningen. Det gör att träningen inte
+kroppen inte hinner transportera bort.
+sliter lika mycket som exempelvis intervallträning.
+Många genomför tröskelträningen på löpband för
+Vid tröskelträning är tanken att de aktiva ska springa
+att verkligen kunna kontrollera farten eller för att
+kontrollerat och inte drar på sig ett överskott av
+vädret gör det svårt att hålla bestämd fart ute.
+
+EMBEDDINGS [score: 0.7659]  Källa: friidrottens_tranlara.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+beredande maximal styrka används huvudsakligen skivstång.
+Här stegrar man intensiteten respektive övervinnande av yttre motstånd under träningspasset.
+Intensiteten är mellan 60-100% av 1 RM.
+• Maximal styrketräning måste planeras långsiktigt och förberedas genom omfångsrik allmän
+styrketräning.
+• Vid all form av lyft är det viktigt med en god teknik för att optimera effekten av träningen och att
+minska risken för skador.
+
+
+PLATS #3
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1199]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+inns struktur, variation och återhämtning över tid.
+Praktiska exempel:
+• Grundfas (jan–mars): Mycket lågintensiv volym, fokus på aerob bas och styrka.
+• Specifik fas (april–juni): Mer fart och tröskelträning, längre intervaller,
+tävlingsförberedelser.
+• Tävlingstopp (juli–sept): Tävlingsfart, kortare intensitet, lättare volym,
+formtoppning.
+• Återhämtningsfas (okt): Lätt träning, alternativa aktiviteter, mental och fysisk
+vila.
+Praktiska rekommendationer för löptränare:
+• Skapa säsongsplan i början av året: Tydliggör tävlingsmål, nyckelperioder,
+träningsfokus per månad.
+• Bygg progression: Volym och intensitet bör successivt öka under grund- och
+uppbyggnadsfaserna.
+• Växla mellan uppbyggnad och återhämtning: Inför mikropauser och
+återhämtningsveckor efter hårda block.
+
+EMBEDDINGS [score: 0.7613]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+n du som tränare behöva arbeta med både i upp-
+Maximal styrka tränas med tung belastning, få repe- värmning och separat.
+titioner och ofta ca 3–5 set. Den maximala styrkan
+kan tränas med 1–3 repetitioner på 90–100 procent
+Hypertrofi/muskeltillväxt
+av max, men den utvecklas även vid arbete med 4–6
+Denna typ av träning syftar till att öka muskelns stor-
+repetitioner och en belastning på 75–85 procent av
+lek och tillväxt (kallas förberedande maximal styrka).
+max (kallas här förberedande maximal styrka).
+Även här arbetar de aktiva med tyngre belastning
+(70–85 procent av max) och 6–12 repetitioner. Det
+I åldersgruppen 14–17 år påbörjas träning för att ut-
+finns inga exakta gränser mellan de olika typerna av
+veckla den maximala styrkan. För att göra detta krävs
+styrketräning.
+
+
+PLATS #4
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.1015]  Källa: loptranare_2025.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+er i mellanzon.
+Praktiska exempel:
+• En löpare som springer 6 pass i veckan fördelar 5 pass i zon 1 (låg intensitet) och
+1 pass i zon 4 (intervaller).
+• En träningsvecka med 7 mil: ca 55–60 km i zon 1, och 10–15 km i zon 3–5.
+• Användning av fartzoner, puls eller ansträngningsskala (RPE) för att mäta
+intensitet.
+Praktiska rekommendationer för löptränare:
+• 80/20-regeln: Sikta på 80 % av träningsvolymen i låg intensitet (zon 1) och 20 % i
+högre zoner (zon 3–5).
+• Undvik för mycket träning i mellanzon (zon 2–3): Den ger inte lika starka
+adaptationer som zon 1 eller zon 4–5, men är mer slitsam än zon 1.
+• Använd mätbara zoner: Arbeta med puls, tempo, eller upplevd ansträngning
+(RPE) för att hålla koll på passens syfte och intensitet.
+
+EMBEDDINGS [score: 0.7486]  Källa: loptranare_2025.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+rad modell, där merparten av träningen är lågintensiv
+(zon 1), och en mindre del är högintensiv (zon 3–5). Mellanzonen (zon 2–3) används mer
+sparsamt. Syftet med en god intensitetsfördelning är att maximera träningseffekten utan
+att överbelasta kroppen.
+Betydelse enligt hierarkin:
+TID rankas som nivå 3 i Seilers hierarki – det vill säga det är mycket viktigt, men först
+efter att löparen etablerat god träningsvolym och kompletterat med återkommande HIT.
+
+Det finns starkt forskningsstöd för att en polariserad fördelning (ex. 80/20) leder till
+större prestationsförbättringar än modeller där för mycket träning sker i mellanzon.
+Praktiska exempel:
+• En löpare som springer 6 pass i veckan fördelar 5 pass i zon 1 (låg intensitet) och
+1 pass i zon 4 (intervaller).
+
+
+PLATS #5
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0825]  Källa: uppbyggnad_medel_lang.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+här sättet får de en känsla för vilken fart
+pass i veckan, bland annat med dubbeltröskel, det
+som är tröskelfart.
+vill säga två trösklar på samma dag. Då är minst
+en av trösklarna uppdelad. För aktiva i 16–17-års-
+Det kan vara bra att börja med uppdelad tröskel
+åldern kan ett pass i veckan vara en bra start.
+träning, exempelvis 4 x 5 minuter med så kort vila
+som 1 minut. När de aktiva har vant sig kan de
+springa 2 x 10 minuter för att sedan kanske testa
+och variera med en sammanhängande tröskel på 20
+minuter.
+R I
+R
+
+210.0 x 240.0 mm
+Medel- och långdistans
+INTERVALLTRÄNING
+Exempel på korta intervaller:
+Steget efter tröskelträning kan vara snabbdistans,
+men intervall är vanligare.
+
+EMBEDDINGS [score: 0.7478]  Källa: friidrottens_tranlara.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+vikten på skivstången övningen pågår.
+eller hastigheten i rörelserna som
+Retningens omfång – antalet
+utförs i löpning, kast eller hopp.
+upprepningar.
+Retningens täthet – tiden för vilan
+Träningens frekvens – antal tränings-
+mellan belastningsfaserna.
+pass per tidsenhet (t.ex. antal pass
+per vecka).
+1 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Översikt av belastningsfaktorer:
+Den yttre belastningen bestäms Den inre belastningen bestäms Exempel på psykiska och fysiska
+av belastningskomponenterna, av de processer som sker i krop- belastningsretningar:
+samt av övningens verknings- pens celler, exempelvis enzymer
+• Motiv
+grad (dvs. övningens likhet med och hormoner.
+• Behov
+tävlingsövningen i rörelsemön-
+ster och belastning).
+
+
+PLATS #6
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0813]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+suthållighet 2´ - 8´ 1000 - 3000m 800 - 1500m
+Långtidsuthållighet 1 8´ - 30´ 3000 - 10 000m 2000m -
+Långtidsuthållighet 2 30´ - 160´ 10 000 - 50 000m
+Metoder för löpformer
+INTENSITET 90-100% 90 - 100 % 80 - 90 % 60 - 80 % 40 - 60 %
+70 - 90 % AV
+FÖRMÅGAN PÅ
+LÖPNING 3-50 KM
+OMFÅNG många lopp 1 - 5 lopp 5 - 12 lopp många lopp mycket stort -
+löpkilometer
+VARAK- kort upp till 7” beroende på beroende på löp- beroende på löp- mycket lång
+TIGHET syfte sträckans längd sträckans längd
+PAUS relativt kort 3 - 45 minuter 1,5 - 5 minuter kort, aktiv, puls 120 ingen paus
+TRÄNINGS- anaerob alak- sprintuthållighet snabbhets- aerob uthållighet aerob uthål-
+EFFEKT tatisk uthål- snabbhets- uthållighet långtids- lighet
+lighet uthållighet korttidsuthållighet uthållighet långtids-
+
+EMBEDDINGS [score: 0.7376]  Källa: uppbyggnad_medel_lang.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+erar tävling-
+en, såväl på egen hand som tillsammans med andra
+(tränare, förälder, kompis), är också en viktig del av
+inlärningen.
+I
+4-1
+
+210.0 x 240.0 mm
+Träningsplanering
+Steg 3: Gör en detaljplan
+Syftet med detaljplanen är att tydliggöra tränings- vecka 16 ska löpa 120 meter maximal snabbhet,
+betoningar, belastning och stegring utifrån årsplanen hoppa 90 mångstegshopp, köra 45 minuter aerob
+och flerårsplanen samt att säkerställa återhämtning. löpning, göra 20 längdhopp, träna 90 minuter all-
+I din veckoplan för du över årsplanens grovplanering män styrka och 120 minuter koordination i olika
+och gör en mer detaljerad planering. Har du till exempel grenar gäller det att fördela dessa mängder under
+i årsplanen planerat in att de aktiva under tränings- hela träningsveckan.
+
+
+PLATS #7
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0784]  Källa: friidrottens_tranlara.txt  🔵 UNIK FÖR TF-IDF
+────────────────────────────────────────────────────────────────────────────────
+tta muskulaturens rörelser styrs av det ofrivilliga (autonoma) nervsystemet och finns i våra rörformiga
+håligheter som exempelvis tarmar och blodkärl.
+Skelettmuskelns uppbyggnad
+En enskild skelettmuskel, som är omsluten av en bindvävshinna (fascia), består av en stor mängd muskelfibrer
+som är ordnade i muskelbuntar med 10–20 fibrer i varje bunt. Då en arbetande muskel har en hög ener-
+giomsättning krävs också en effektiv cirkulation, därför innehåller också muskeln rikligt med blodkärl som
+förgrenas i ett fint nät av mycket tunna blodkärl (kapillärer).
+3 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+Muskelfibrerna är uppbyggda av cirka 1 000 muskelfibriller
+och varje muskelfibrill innehåller små sammandragande enheter
+(sarkomerer).
+
+EMBEDDINGS [score: 0.7365]  Källa: loptranare_2025.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+s in lower-body strength
+transfer positively to sprint performance: a systematic review with meta-analysis. Sports Med.
+december 2014;44(12):1693–702.
+
+Övervakning
+Övervakning och justering av träningsprogram
+För att principerna ska fungera i praktiken behöver träningen inte bara planeras – utan
+också följas upp och justeras över tid. Några nyckelmetoder för detta är:
+• Prestandamätning: Genom att använda prestationsdata – som VO₂ max,
+pulszoner, tider, styrkemätningar eller upplevd ansträngning – kan tränare och
+utövare få en tydlig bild av hur kroppen svarar på träningen.
+• Digitala hjälpmedel: Appar, träningsplattformar och wearables (t.ex.
+pulsklockor) gör det enklare att följa progression, identifiera mönster och fatta
+datadrivna beslut kring träningsplanering och återhämtning.
+
+
+PLATS #8
+--------------------------------------------------------------------------------
+
+TF-IDF [score: 0.0725]  Källa: loptranare_2025.txt  ✅ GEMENSAM
+────────────────────────────────────────────────────────────────────────────────
+rad modell, där merparten av träningen är lågintensiv
+(zon 1), och en mindre del är högintensiv (zon 3–5). Mellanzonen (zon 2–3) används mer
+sparsamt. Syftet med en god intensitetsfördelning är att maximera träningseffekten utan
+att överbelasta kroppen.
+Betydelse enligt hierarkin:
+TID rankas som nivå 3 i Seilers hierarki – det vill säga det är mycket viktigt, men först
+efter att löparen etablerat god träningsvolym och kompletterat med återkommande HIT.
+
+Det finns starkt forskningsstöd för att en polariserad fördelning (ex. 80/20) leder till
+större prestationsförbättringar än modeller där för mycket träning sker i mellanzon.
+Praktiska exempel:
+• En löpare som springer 6 pass i veckan fördelar 5 pass i zon 1 (låg intensitet) och
+1 pass i zon 4 (intervaller).
+
+EMBEDDINGS [score: 0.7311]  Källa: friidrottens_tranlara.txt  🟢 UNIK FÖR EMBEDDINGS
+────────────────────────────────────────────────────────────────────────────────
+Principen om belastningsstegring - ”Progressivitet”
+För en långsiktig prestationsförbättring krävs att man ständigt
+höjer träningens belastningskrav.
+Belastningsfaktorer
+Träningsbelastning innebär summan av alla de träningsfaktorer som påverkar kroppen. Varje ökat prestations-
+steg kopplas till nya, högre och mer målinriktade belastningskrav.
+Belastningsfaktorerna är enligt följande:
+• Träningstid och frekvens (antal pass och timmar per tidsenhet, t.ex. vecka eller månad)
+• Omfång (mängd)
+• Intensitet (antal % av max)
+• Kvalitet på övningsutförandet (teknisk skicklighet)
+• Specifika träningsövningar (direkt prestationshöjande)
+Belastningsfaktorerna är inte konstanta under utvecklingen:
+• I början av idrottsutvecklingen finns ett klart samband mellan träningsomfång och prestation.
+
+
+================================================================================
+SAMMANFATTNING ÖVER ALLA FRÅGOR
+================================================================================
+
+Totalt unika chunks TF-IDF valde:      32
+Totalt unika chunks Embeddings valde: 32
+Gemensamt valda chunks:               3
+Chunks enbart TF-IDF hittade:         29
+Chunks enbart Embeddings hittade:     29
+
+Överlapp: 5% av alla valda chunks är identiska mellan metoderna.
+
+→ Stor skillnad — embeddings och TF-IDF prioriterar helt olika chunks.

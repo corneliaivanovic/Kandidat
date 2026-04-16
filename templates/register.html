@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="auth-container">
-        <div class="auth-card">
+        <div class="auth-card" style="max-width: 760px;">
             <div class="auth-header">
                 <h1>🏃 Träningsplattform</h1>
                 <p>Skapa ditt konto</p>
@@ -45,7 +45,7 @@
                     <label>Jag är...</label>
                     <div class="role-selector">
                         <label class="role-option">
-                            <input type="radio" name="role" value="athlete" checked>
+                            <input type="radio" name="role" value="athlete" {% if request.form.get('role', 'athlete') == 'athlete' %}checked{% endif %}>
                             <div class="role-card">
                                 <span class="role-icon">🏃</span>
                                 <span class="role-title">Idrottare</span>
@@ -53,7 +53,7 @@
                             </div>
                         </label>
                         <label class="role-option">
-                            <input type="radio" name="role" value="coach">
+                            <input type="radio" name="role" value="coach" {% if request.form.get('role') == 'coach' %}checked{% endif %}>
                             <div class="role-card">
                                 <span class="role-icon">📋</span>
                                 <span class="role-title">Coach</span>
@@ -63,25 +63,228 @@
                     </div>
                 </div>
 
-                <!-- Fält för idrottare -->
                 <div id="athleteFields">
                     <div class="form-group">
                         <label for="birth_year">Födelseår</label>
                         <input type="number" id="birth_year" name="birth_year"
-                               placeholder="2005" min="1950" max="2020"
+                               placeholder="2005" min="1950" max="2025"
                                value="{{ request.form.get('birth_year', '') }}">
                     </div>
 
                     <div class="form-group">
-                        <label for="discipline">Gren</label>
+                        <label for="discipline">Friidrottsgren</label>
                         <select id="discipline" name="discipline">
-                            <option value="sprint">Sprint</option>
-                            <option value="medel">Medeldistans</option>
-                            <option value="distans">Långdistans</option>
-                            <option value="hopp">Hopp</option>
-                            <option value="kast">Kast</option>
-                            <option value="mangkamp">Mångkamp</option>
+                            <option value="sprint" {% if request.form.get('discipline') == 'sprint' %}selected{% endif %}>Sprint</option>
+                            <option value="medel" {% if request.form.get('discipline') == 'medel' %}selected{% endif %}>Medeldistans</option>
+                            <option value="distans" {% if request.form.get('discipline') == 'distans' %}selected{% endif %}>Långdistans</option>
+                            <option value="hopp" {% if request.form.get('discipline') == 'hopp' %}selected{% endif %}>Hopp</option>
+                            <option value="kast" {% if request.form.get('discipline') == 'kast' %}selected{% endif %}>Kast</option>
+                            <option value="mangkamp" {% if request.form.get('discipline') == 'mangkamp' %}selected{% endif %}>Mångkamp</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="club">Klubb (frivilligt)</label>
+                        <input type="text" id="club" name="club"
+                               placeholder="T.ex. Örgryte IS"
+                               value="{{ request.form.get('club', '') }}">
+                        <small class="form-hint">Om du fyller i klubb kan systemet försöka matcha tävlingsresultat automatiskt.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Hur vill du få dina träningspass?</label>
+                        <div class="role-selector">
+                            <label class="role-option">
+                                <input type="radio" name="training_mode" value="coach" {% if request.form.get('training_mode', 'coach') != 'ai' %}checked{% endif %}>
+                                <div class="role-card">
+                                    <span class="role-icon">📋</span>
+                                    <span class="role-title">Coach</span>
+                                    <span class="role-desc">En tränare lägger in dina pass manuellt</span>
+                                </div>
+                            </label>
+                            <label class="role-option">
+                                <input type="radio" name="training_mode" value="ai" {% if request.form.get('training_mode') == 'ai' %}checked{% endif %}>
+                                <div class="role-card">
+                                    <span class="role-icon">🤖</span>
+                                    <span class="role-title">AI-schema</span>
+                                    <span class="role-desc">AI skapar löppass och uppskattar tempo när underlag finns</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="aiFields" style="display:none; border:1px solid #dbeafe; background:#f8fbff; border-radius:12px; padding:18px; margin:18px 0;">
+                        <h3 style="margin-top:0;">🤖 AI-underlag för planering och tempo</h3>
+                        <p style="font-size:0.9em; color:#475569; margin-top:-6px;">
+                            Endast födelseår och träningsvana är obligatoriska. Övriga svar är frivilliga, men fler svar ger bättre individanpassning och bättre tempouppskattning.
+                        </p>
+
+                        <div class="form-group">
+                            <label for="training_days">Antal träningsdagar per vecka</label>
+                            <select id="training_days" name="training_days">
+                                <option value="3" {% if request.form.get('training_days') == '3' %}selected{% endif %}>3 dagar</option>
+                                <option value="4" {% if request.form.get('training_days', '4') == '4' %}selected{% endif %}>4 dagar</option>
+                                <option value="5" {% if request.form.get('training_days') == '5' %}selected{% endif %}>5 dagar</option>
+                                <option value="6" {% if request.form.get('training_days') == '6' %}selected{% endif %}>6 dagar</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="training_phase">Träningsfas</label>
+                            <select id="training_phase" name="training_phase">
+                                <option value="grundträning" {% if request.form.get('training_phase', 'grundträning') == 'grundträning' %}selected{% endif %}>Grundträning</option>
+                                <option value="uppbyggnad" {% if request.form.get('training_phase') == 'uppbyggnad' %}selected{% endif %}>Uppbyggnad</option>
+                                <option value="tävling" {% if request.form.get('training_phase') == 'tävling' %}selected{% endif %}>Tävlingsperiod</option>
+                                <option value="återhämtning" {% if request.form.get('training_phase') == 'återhämtning' %}selected{% endif %}>Återhämtning</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="training_experience_level">Hur länge har du tränat löpning regelbundet?</label>
+                            <select id="training_experience_level" name="training_experience_level">
+                                <option value="">Välj träningsvana</option>
+                                <option value="jag är ny till att träna" {% if request.form.get('training_experience_level') == 'jag är ny till att träna' %}selected{% endif %}>Jag är ny till att träna</option>
+                                <option value="mindre än 6 månader" {% if request.form.get('training_experience_level') == 'mindre än 6 månader' %}selected{% endif %}>Mindre än 6 månader</option>
+                                <option value="6 månader till 1 år" {% if request.form.get('training_experience_level') == '6 månader till 1 år' %}selected{% endif %}>6 månader till 1 år</option>
+                                <option value="1–3 år" {% if request.form.get('training_experience_level') == '1–3 år' %}selected{% endif %}>1–3 år</option>
+                                <option value="mer än 3 år" {% if request.form.get('training_experience_level') == 'mer än 3 år' %}selected{% endif %}>Mer än 3 år</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="running_focus">Vilken löpgren tränar du främst? (frivilligt men rekommenderat)</label>
+                            <select id="running_focus" name="running_focus">
+                                <option value="">Välj löpgren</option>
+                                <option value="sprint" {% if request.form.get('running_focus') == 'sprint' %}selected{% endif %}>Sprint</option>
+                                <option value="medel" {% if request.form.get('running_focus') == 'medel' %}selected{% endif %}>Medeldistans</option>
+                                <option value="distans" {% if request.form.get('running_focus') == 'distans' %}selected{% endif %}>Distans</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="weekly_training_amount">Hur mycket tränar du ungefär per vecka? (frivilligt)</label>
+                            <input type="text" id="weekly_training_amount" name="weekly_training_amount"
+                                   placeholder="T.ex. 4 pass eller 35 km"
+                                   value="{{ request.form.get('weekly_training_amount', '') }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="primary_goal">Vad är ditt huvudsakliga mål? (frivilligt)</label>
+                            <select id="primary_goal" name="primary_goal">
+                                <option value="">Välj mål</option>
+                                <option value="komma igång" {% if request.form.get('primary_goal') == 'komma igång' %}selected{% endif %}>Komma igång</option>
+                                <option value="förbättra kondition" {% if request.form.get('primary_goal') == 'förbättra kondition' %}selected{% endif %}>Förbättra kondition</option>
+                                <option value="förbättra tid" {% if request.form.get('primary_goal') == 'förbättra tid' %}selected{% endif %}>Förbättra tid</option>
+                                <option value="tävla" {% if request.form.get('primary_goal') == 'tävla' %}selected{% endif %}>Tävla</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="injury_constraints">Skador eller begränsningar (frivilligt)</label>
+                            <textarea id="injury_constraints" name="injury_constraints" rows="2" placeholder="T.ex. känslig hälsena eller svårt att tåla backintervaller">{{ request.form.get('injury_constraints', '') }}</textarea>
+                        </div>
+
+                        <div id="distanceFields" style="display:none;">
+                            <div class="form-group">
+                                <label for="best_5k_time">Vad är din bästa tid på 5 km? (frivilligt)</label>
+                                <input type="text" id="best_5k_time" name="best_5k_time"
+                                       placeholder="T.ex. 22:30"
+                                       value="{{ request.form.get('best_5k_time', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="best_alt_distance">Alternativ distans om du inte har 5 km-tid (frivilligt)</label>
+                                <select id="best_alt_distance" name="best_alt_distance">
+                                    <option value="">Välj distans</option>
+                                    <option value="1500 m" {% if request.form.get('best_alt_distance') == '1500 m' %}selected{% endif %}>1500 m</option>
+                                    <option value="3 km" {% if request.form.get('best_alt_distance') == '3 km' %}selected{% endif %}>3 km</option>
+                                    <option value="10 km" {% if request.form.get('best_alt_distance') == '10 km' %}selected{% endif %}>10 km</option>
+                                    <option value="annan" {% if request.form.get('best_alt_distance') == 'annan' %}selected{% endif %}>Annan</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="best_alt_time">Tid på alternativ distans (frivilligt)</label>
+                                <input type="text" id="best_alt_time" name="best_alt_time"
+                                       placeholder="T.ex. 5:10 eller 41:30"
+                                       value="{{ request.form.get('best_alt_time', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="easy_pace">I vilket ungefärligt tempo springer du dina lugna pass? (frivilligt)</label>
+                                <input type="text" id="easy_pace" name="easy_pace"
+                                       placeholder="T.ex. 5:45 min/km"
+                                       value="{{ request.form.get('easy_pace', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="threshold_pace">Ungefärligt tröskeltempo (frivilligt)</label>
+                                <input type="text" id="threshold_pace" name="threshold_pace"
+                                       placeholder="T.ex. 4:45 min/km"
+                                       value="{{ request.form.get('threshold_pace', '') }}">
+                            </div>
+                        </div>
+
+                        <div id="sprintFields" style="display:none;">
+                            <div class="form-group">
+                                <label for="best_60m_time">Bästa tid på 60 m (frivilligt)</label>
+                                <input type="text" id="best_60m_time" name="best_60m_time"
+                                       placeholder="T.ex. 7.55"
+                                       value="{{ request.form.get('best_60m_time', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="best_100m_time">Bästa tid på 100 m (frivilligt)</label>
+                                <input type="text" id="best_100m_time" name="best_100m_time"
+                                       placeholder="T.ex. 11.84"
+                                       value="{{ request.form.get('best_100m_time', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="best_200m_time">Bästa tid på 200 m (frivilligt)</label>
+                                <input type="text" id="best_200m_time" name="best_200m_time"
+                                       placeholder="T.ex. 24.10"
+                                       value="{{ request.form.get('best_200m_time', '') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="primary_sprint_event">Vilken sprintdistans är din huvuddistans? (frivilligt)</label>
+                                <select id="primary_sprint_event" name="primary_sprint_event">
+                                    <option value="">Välj distans</option>
+                                    <option value="60 m" {% if request.form.get('primary_sprint_event') == '60 m' %}selected{% endif %}>60 m</option>
+                                    <option value="100 m" {% if request.form.get('primary_sprint_event') == '100 m' %}selected{% endif %}>100 m</option>
+                                    <option value="200 m" {% if request.form.get('primary_sprint_event') == '200 m' %}selected{% endif %}>200 m</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="training_surface">Var tränar du oftast? (frivilligt)</label>
+                            <select id="training_surface" name="training_surface">
+                                <option value="">Välj miljö</option>
+                                <option value="bana" {% if request.form.get('training_surface') == 'bana' %}selected{% endif %}>Bana</option>
+                                <option value="väg" {% if request.form.get('training_surface') == 'väg' %}selected{% endif %}>Väg</option>
+                                <option value="terräng" {% if request.form.get('training_surface') == 'terräng' %}selected{% endif %}>Terräng</option>
+                                <option value="kuperat" {% if request.form.get('training_surface') == 'kuperat' %}selected{% endif %}>Kuperat</option>
+                                <option value="löpband" {% if request.form.get('training_surface') == 'löpband' %}selected{% endif %}>Löpband</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tempo_model_runner_key">Tempo-profil från Garmin-modellen (frivilligt)</label>
+                            <select id="tempo_model_runner_key" name="tempo_model_runner_key">
+                                <option value="">Ingen vald profil</option>
+                                {% for runner_name in tempo_model_runners %}
+                                <option value="{{ runner_name }}" {% if request.form.get('tempo_model_runner_key') == runner_name %}selected{% endif %}>{{ runner_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-hint">Välj bara en profil om du vet att den matchar samma löpare i den delade Garmin-modellen.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" name="has_external_training_data" {% if request.form.get('has_external_training_data') %}checked{% endif %}>
+                                Jag har annan träningsdata som kan användas senare
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="response_notes">Övrigt som AI:n bör veta (frivilligt)</label>
+                            <textarea id="response_notes" name="response_notes" rows="2" placeholder="T.ex. svarar bra på tröskelpass eller vill undvika för aggressiv progression">{{ request.form.get('response_notes', '') }}</textarea>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -89,7 +292,7 @@
                         <input type="text" id="coach_code" name="coach_code"
                                placeholder="T.ex. ABCD"
                                value="{{ request.form.get('coach_code', '') }}">
-                        <small class="form-hint">Fråga din coach om koden för att kopplas till dem</small>
+                        <small class="form-hint">Fråga din coach om koden för att kopplas till dem.</small>
                     </div>
                 </div>
 
@@ -105,20 +308,42 @@
     </div>
 
     <script>
-        // Visa/dölj idrottarfält baserat på roll
         const roleInputs = document.querySelectorAll('input[name="role"]');
+        const modeInputs = document.querySelectorAll('input[name="training_mode"]');
         const athleteFields = document.getElementById('athleteFields');
+        const aiFields = document.getElementById('aiFields');
+        const runningFocus = document.getElementById('running_focus');
+        const distanceFields = document.getElementById('distanceFields');
+        const sprintFields = document.getElementById('sprintFields');
+        const birthYearInput = document.getElementById('birth_year');
+        const experienceInput = document.getElementById('training_experience_level');
 
-        function updateFields() {
+        function updateRoleFields() {
             const selectedRole = document.querySelector('input[name="role"]:checked').value;
             athleteFields.style.display = selectedRole === 'athlete' ? 'block' : 'none';
         }
 
-        roleInputs.forEach(input => {
-            input.addEventListener('change', updateFields);
-        });
+        function updateAiFields() {
+            const selectedMode = document.querySelector('input[name="training_mode"]:checked');
+            const isAi = selectedMode && selectedMode.value === 'ai';
+            aiFields.style.display = isAi ? 'block' : 'none';
+            birthYearInput.required = document.querySelector('input[name="role"]:checked').value === 'athlete';
+            experienceInput.required = isAi;
+            updateRunningFocusFields();
+        }
 
-        updateFields();
+        function updateRunningFocusFields() {
+            const focus = runningFocus.value;
+            distanceFields.style.display = (focus === 'medel' || focus === 'distans') ? 'block' : 'none';
+            sprintFields.style.display = focus === 'sprint' ? 'block' : 'none';
+        }
+
+        roleInputs.forEach(input => input.addEventListener('change', updateRoleFields));
+        modeInputs.forEach(input => input.addEventListener('change', updateAiFields));
+        runningFocus.addEventListener('change', updateRunningFocusFields);
+
+        updateRoleFields();
+        updateAiFields();
     </script>
 </body>
 </html>

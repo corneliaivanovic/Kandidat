@@ -1,0 +1,2988 @@
+
+--- Sida 1 ---
+Friidrottens allmänna
+träningslära
+av Dejan Mirkovic och Peter Wikström
+inspirerad av Nils-Egil Rosenbergs träningslära från 1983
+
+--- Sida 2 ---
+SISU Idrottsböcker och Svensk Friidrott i samverkan!
+Det finns mängder av värdefull erfarenhet och kompetens bland dem som är engagerade inom Svensk Friidrott och
+andra idrotter i Sverige. SISU Idrottsböckers uppgift är att tillsammans med Svenska Friidrottsförbundet samla in,
+förädla och sprida kunskap och erfarenheter till fler. SISU Idrottsböcker driver också Idrottens bokklubb.
+Läs mer på sisuidrottsbocker.se, din idrottsbokhandel på nätet.
+Beställningar:
+SISU Idrottsböcker
+www.sisuidrottsbocker.se
+E-post: kundtjanst@sisuidrottsbocker.se
+Kontaktuppgifter till förlaget:
+SISU Idrottsböcker
+Box 11016
+100 61 Stockholm
+Besöksadress: Skansbrogatan 7
+Telefon: 08-699 60 00
+E-post: info@sisuidrottsbocker.se
+© SISU Idrottsböcker & Svenska Friidrottsförbundet, 2017
+Titel: Friidrottens allmänna träningslära
+Författare: Dejan Mirkovic och Peter Wikström
+Projektledning: SISU Idrottsböcker och Svenska Friidrottsförbundet
+Redaktionellt arbete: Magdalena Olsen
+Formgivning: Niclas Blyh, 2Shore
+Illustrationer: Mattias Frykholm
+Tryck: GPS Group, 2017
+Upplaga: Första upplagan, första tryckningen
+ISBN: 978-91-7727-009-6
+Alla rättigheter är inkluderade utom korta citat i syfte att kritisera, belysa eller understryka något. Inga delar av den här
+publikationen får mångfaldigas, sparas i informationslagringssystem eller kopieras i någon elektronisk eller mekanisk form
+eller på annat sätt spridas eller användas i försäljningssyfte utan skriftligt tillstånd från förlag och författare.
+
+--- Sida 3 ---
+Innehåll
+Förord 3
+Träningsläran 5
+Tränarens roll 7
+Hållbart ledarskap 9
+Den optimala träningsprocessen 11
+De prestationsbestämmande faktorerna 19
+Idrottsutvecklingens uppbyggnad 25
+Anatomi och fysiologi 30
+De fysiska grundegenskaperna 37
+Teknik 59
+Personlighetsegenskaper – Psykologi 70
+Träningens grundprinciper 75
+Pedagogiska principer 90
+Träningens mål 95
+Översikt – Träningsmedel 99
+
+--- Sida 4 ---
+Förord
+Friidrottens allmänna träningslära (1983) togs fram av Nils-Egil Rosenberg och den hade stor betydelse
+under en lång period i friidrottens tränarutbildningar. På Svenska Friidrottsförbundets årsmöte 2015 togs
+beslut om att uppdatera boken eftersom vi länge kunna se ett stort behov av att åter placera träningsläran och
+träningsplaneringen i förarsätet på förbundets utbildningar. Boken riktar sig till dig som är friidrottstränare.
+I slutet på 90-talet, bland annat tack vare Friidrotts-VM 1995 i Göteborg, strömmade stora mängder ungdomar
+till friidrotten och nya utbildningsmaterial togs fram, där träningslärans utrymme tonades ned. Effekten av
+minskad förståelse för träningslära och träningsplanering visade sig inte direkt, då vi fortfarande hade många
+tränare utbildade i det gamla systemet. Under 2000-talet har det dock blivit alltmer tydligt för dem som
+ansvarar för tränarutbildningar att det numerasaknas grundläggande kunskaper om träningslära och dess
+processer.
+Rosenberg var noga med begreppsapparaten och att tränarkåren skulle ha ett gemensamt språkbruk, dels för
+att säkerställa att tränarna pratar samma ”språk”, dels för att skapa förståelse i både träningsprocessen och
+i sättet att kommunicera med varandra. Begreppsapparaten har med åren blivit allt ”suddigare” och det finns
+all anledning att återskapa en tydlighet.
+Friidrottens allmänna träningslära utgör en källa för baskunskaper om träning och underlättar för tränarna
+att förstå träningsprocessen och dess planering. Målet är att tränare ska få förståelse för den långsiktiga
+träningsprocessen och därmed kunna optimera träningen för att kunna ge den aktive möjlighet att nå sin
+högsta potential.
+Den nya upplagan utgår i stort från Rosenbergs version, men har uppdaterats med en ny struktur, nya erfarenheter
+och nya rön. Tanken med uppdateringen är att försöka återskapa ett system för träning, där den allmänna tränings-
+läran är basen för friidrottens olika grenar. I en nära framtid kommer Friidrottens allmänna träningslära att
+kompletteras med grenspeciella träningsläror. Uppdateringen av 2008 års version av friidrottens kravanalyser
+för varje gren, utgår också från den nya upplagan.
+Ett speciellt tack från Svenska Friidrottsförbundet går till Peter Wikström och Dejan Mirkovic, som haft
+huvudansvaret för omarbetningen.
+Svenska Friidrottsförbundet
+
+--- Sida 5 ---
+Träningsläran
+Inom idrottsvetenskapen ingår många olika ämnen däribland träningsläran. Den syftar på den idrottsliga
+träningsprocessen och beskriver förutsättningarna som krävs för att nå olika idrottsliga mål, oavsett
+prestationsnivå.
+Träningsläran handlar om personlig högprestation inom idrott
+och är en vägledning till de aktivas optimala utveckling utifrån
+deras egna sociala, mentala och fysiska förutsättningar.
+Viktiga frågeställningar inom träningsläran:
+• Vilka faktorer och lagbundenheter är viktiga för utveckling av idrottsprestationen?
+• Vilka principer är viktiga när träningsprocessen ska planeras, utformas och intensifieras?
+• Vilka sociala och kulturella villkor är viktiga för träningsprocessen?
+Eftersom dessa frågeställningar är så mångsidigt sammansatta måste träningsläran utgå ifrån flera olika
+vetenskaper och blir därmed en så kallad tvärvetenskap. En stor del av träningslärans innehåll består
+dessutom av erfarenheter från framgångsrika tränare och aktiva, så träningsläran är ingen absolut vetenskap.
+Friidrott
+praktisk tillämpad
+Träningsläran beprövad
+fysiologi
+som tvär- och användningsvetenskap erfarenhet
+idrotts-
+biomekanik anatomi psykologi pedagogik näringslära
+medicin
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+5
+
+--- Sida 6 ---
+Den allmänna träningsläran
+Friidrottens allmänna träningslära gäller för alla friidrottens grenar och behandlar de allmänna principerna
+i träningsprocessen. Exempel på centrala delar är
+• träningsprocessens begrepp, principer och uppbyggnad
+• de prestationsbestämmande faktorerna (se bild sid xx)
+• mål, innehåll, medel och metoder
+De speciella träningslärorna
+De grenspeciella träningslärorna riktar sig mer till var och en av friidrottsgrenarna. Varje grenspeciell
+träningslära använder sig av den allmänna träningsläran och överför den till idrottsspeciella tillämpningar.
+Inom de grenspeciella träningslärorna återfinns:
+• Karaktäristik och prestationsutveckling • Riktlinjer för en långsiktig utveckling
+• Teknik och den pedagogiska processen • Grenspecifik forskning, träningshypoteser,
+• Fysiska egenskaper och deras utveckling debattinslag med mera
+• Planering
+Den komplexa träningen
+I dagsläget är det inte helt klarlagt hur olika träningsbelastningar påverkar kroppen eftersom träningen inte
+bara påverkar kroppen under belastningsfasen utan även under återhämtningsfasen (vilan). Att kunna kontrol-
+lera en sådan påverkan på kroppen blir därför en utmaning.
+Den komplexa träningen innebär träning av flera fysiska egenskaper, antingen under ett eller flera tränings-
+pass. Denna kombination av träning kan ge antingen positiva eller negativa effekter på prestationsutvecklin-
+gen, det vill säga att kombinationen av träning av de olika fysiska egenskaperna kan antingen komplettera
+eller motverka varandra. Till exempel
+kan vertikala hopp efter en maximal
+styrkeinsats (såsom upphopp eller
+När du som tränare planerar ett träningspass
+häckhopp efter knäböj) ge positiva
+ska du ta hänsyn till att olika kombinationer
+effekter eftersom man först rekryterar
+av träning kan antingen komplettera eller
+en stor del av musklernas motoriska
+motverka prestationsutvecklingen.
+enheter innan man utför explosiva hopp.
+I inledningen av ett träningspass då muskel- och
+Under ett träningspass använder man
+nervsystemet är utvilat bör du planera in koordination,
+sig oftast av flera olika fysiska egen-
+teknik och snabbhet, och i slutet av passet bör du lägga
+skaper och därför är det viktigt att
+till exempelvis grundstyrka och aerob uthållighet.
+tänka på i vilken ordning man tränar
+dessa.
+6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 7 ---
+Tränarens roll
+Som tränare har du många olika varierande
+uppgifter så det gäller att ha bra kunskap
+inom alla områden som påverkar den
+aktives träning, men också att ha
+förståelse för alla övriga faktorer
+som påverkar den aktives liv.
+Många aktiva är ambitiösa i sin
+satsning och har hög motivation
+att utvecklas. Det är viktigt att
+kunna möta den aktives strävan
+att uppnå de idrottsliga målen,
+men det är också viktigt att
+tänka långsiktigt och kunna
+bromsa en överambition
+hos den aktive så att
+exempelvis skador och
+sjukdomar kan undvikas.
+Som tränare är det viktigt att du kan bemöta den aktives mål inom idrotten
+eftersom du och den aktive utgör kärnteamet i en idrottslig satsning.
+Tränarens viktiga uppgifter inom olika områden
+Tränings- och tävlingsplanering
+• Tränaren ansvarar för den aktives tränings- och tävlingsplanering.
+• Tränaren har som uppgift att skapa ett team runt den aktive för att optimera förutsättningarna för
+utveckling. Exempel på roller i ett sådant team är fysioterapeut, kostrådgivare, agent och mental
+coach. Tränaren bör ha en god relation och kommunikation med alla medlemmar i teamet och se
+till att den aktive känner fullt stöd och att alla i teamet arbetar tillsammans mot gemensamma mål.
+• För att träningen ska fungera på bästa sätt är det viktigt att den aktives vardag är balanserad.
+Planering av skola, arbete och familj är också mycket viktigt för att återhämtningen mellan
+träningarna ska fungera optimalt. Här har tränaren en utbildande roll i att hjälpa den aktive
+att skapa rutiner på vägen mot att bli elitidrottare.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+7
+
+--- Sida 8 ---
+Bygga och behålla en god relation med den aktive
+• Tränaren och den aktive ska kunna känna lojalitet och förtroende till varandra eftersom tränaren
+ofta är den person som den aktive vänder sig till, även vid problem utanför idrotten. Den aktive ska
+kunna känna glädje tillsammans med tränaren vid framgång och mötas av förståelse och medkänsla
+vid motgång.
+• Det är viktigt att tränaren stöttar den aktive och ge bra förutsättningar för personlig utveckling och
+självförverkligande inom idrotten, och att tränaren inte använder den aktive för sina egna ändamål.
+• Tränaren förklarar vikten av kontinuitet av träning i utvecklingsprocessen för att den aktive ska få
+förståelse för att kontinuitet är viktig på både kort och lång sikt.
+• Den aktive ska lära sig att självständigt kunna motivera sig för träning och tävling. Tränaren kan vara
+en inspirationskälla, men det är viktigt att den aktive tränar för sin egen skull.
+Träningens genomförande
+• När det gäller inlärning av teknik har tränaren en undervisande roll. Det är extremt viktigt att tränaren
+har kunskap och förståelse om de olika stadier som finns inom teknisk utveckling eftersom det som den
+aktive lär sig från början blir svårt att ändra på i ett senare skede.
+• Tränaren ska lära ut det praktiska genomförandet av träning och utveckla den aktives nivå inom de olika
+träningsmomenten.
+Inta rollen som tränare och ledare i föreningen
+• Det är viktigt att en tränare/ledare är öppen och villig att kommunicera med sin omgivning, det vill
+säga har en bra relation till den aktive och andra tränare/ledare i både förening och förbund.
+• Tränare/ledare ansvarar för att dela med sig av positiva attityder till träningsgruppen när det gäller
+såväl träning och tävling som attityder mot den friidrottsliga omgivningen, såsom träningskamrater,
+ledare, klubben, funktionärer och förbund.
+Droger, doping och andra regler
+• Tränaren ska ansvara för att den aktive informeras om attityder mot droger och doping. Det är viktigt
+att den aktive förstår att hen själv bär ansvaret för vad hen använder och stoppar i sig.
+• Tränaren ska lära ut regler, hur den aktive ska handskas med redskap, säkerhetsfrågor, förebyggande
+av skador och hur hen ska agera vid sjukdom och skada.
+Som friidrottstränare måste du ha kunskap om alla områden inom träningsläran samtidigt
+som du har många andra viktiga uppgifter inom flertalet områden. Det är viktigt att du
+hela tiden utvecklar och förbättrar dina kunskaper om människan och idrotten.
+8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 9 ---
+Hållbart ledarskap
+Det finns två nyckelfrågor som hänger ihop och som är centrala för ett väl fungerande ledarskap, men som trots
+detta får alltför lite uppmärksamhet. Mycket förenklat kan vi konstatera att fokus inom ledarskapsforskning,
+utbildning och praktiska insatser traditionellt handlar om att optimera ledarskapet för att skapa bästa möjliga
+förutsättningar för enskilda idrottare eller lag att prestera. Detta kommer så klart alltid att vara högt prioriterat,
+men det har också inneburit att betydelsen av coachens hälsa och välbefinnande försummats. Därför känns det
+angeläget att reflektera över följande två nyckelfrågor:
+• Vad innebär ett hållbart ledarskap för dig?
+• Varför ska vi bry oss om hur coachen mår?
+Ett hållbart ledarskap handlar primärt om att må bra och fungera bra över tid. Vi utgår nämligen från det
+förenklade antagandet att en coach som mår bra sannolikt är mer framgångsrik och ”långlivad” (verksam
+under en längre tid) i jämförelse med en coach som mår dåligt.
+När en coach mår som bäst är också förutsättningarna mest gynnsamma att coacha på toppen av sin förmåga.
+Antagligen stämmer även det omvända scenariot, att en coach som mår dåligt sannolikt coachar under sin
+normala förmåga. Vi vet att tränarskap och ledarskap kan vara utvecklande, tillfredsställande och belönande
+på många sätt. Alla älskar att se en passionerad och engagerad tränare! Men det finns också en baksida.
+Den som brinner behöver vara uppmärksam på sitt eget välbefinnande och då särskilt inom elitidrotten med
+alla dess utmaningar. Ett alltför gränslöst och engagerat ledarskap ökar nämligen risken för stressrelaterad
+utmattningsproblematik. Ingen är immun mot kronisk långvarig stress och bristande återhämtning oavsett
+kompetens och erfarenhet.
+När en person ”går in i väggen” och blir långtidssjukskriven så
+är det en stor förlust för alla – i synnerhet för den drabbade
+och den närmaste omgivningen. Detta är att betrakta som
+“They say
+konsekvenser av ett ohållbart ledarskap. Samtidigt som
+vi reflekterar över vad som är ett ohållbart ledarskap if you burn bright,
+blir ofta innebörden av ett hållbart ledarskap you burn fast.
+ännu tydligare.
+We say if you burn fast,
+you’re not doing
+it right.”
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+9
+
+--- Sida 10 ---
+En grundläggande förutsättning är att först och främst kunna
+ta hand om sin egen hälsa och sitt eget välbefinnande för
+att därefter kunna ta hand om andra. Tänk exempelvis på
+“The most
+instruktionen du får när du sitter i ett flygplan redo för start.
+important thing Du får då instruktionen att i händelsen av sänkt lufttryck i
+is to keep the most kabinen först ta på dig din egen syrgasmask, för att därefter
+hjälpa personen intill dig. Detta synsätt är även fundamentalt
+important thing
+för en idrottsledare. Vilka insatser har då genomförts för att
+the most important uppmärksamma hur coachen mår? Kortfattat kan konstateras
+thing”. att dessa har varit begränsade. Traditionellt har uppmärksam-
+heten, insatserna och stödsystemen inom elitidrotten i stor
+utsträckning fokuserat på idrottarnas hälsa och prestationer.
+Detta har inneburit att tränarnas och ledarnas hälsa ofta
+kommer i skymundan. En ökad uppmärksamhet på tränarens
+och ledarens hälsa kan resultera i att elitidrotten totalt sätt
+utvecklas till en mer hållbar miljö.
+Hur mår du – egentligen? Stanna upp och reflektera på djupet. Ta särskild hänsyn till potentiellt bristande
+återhämtning, varaktig trötthet och även närvaro av det goda livet. Hur upplever du ditt välbefinnande och
+kvaliteten i din motivation? Lever du det liv du vill leva? Reflektera, dela och lär. Gör detta regelbundet.
+Bli en ambassadör för det goda och hållbara ledarskapet. Detta är av största betydelse för alla coacher,
+ledare och tränare oavsett i vilken omfattning och på vilken idrottslig nivå som du befinner dig.
+Det finns relativt enkla metoder som redan testats med goda resultat i liten skala bland både landslags-
+tränare och RIG-tränare inom friidrotten. Grundprincipen är baserad på att systematiska och genomtänka
+självreflektioner över dagens humör och energinivå, är av stor betydelse för ökad självkännedom kring hälsa
+och välbefinnande. Dessutom är humör tillsammans med upplevd energinivå centrala källor, vilka ger värdefull
+information med avseende på stress- och återhämtningsbalansen. En ökad självkännedom gör det möjligt att
+bättre notera och vara medveten om sin egen hälsa och sitt eget välbefinnande i relation till både stress och
+återhämtning.
+Det finns mer att läsa i boken Utveckla ledarskapet och kapitlet Hållbart ledarskap (Bentzen & Kenttä, 2016).
+1 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 11 ---
+Den optimala
+träningsprocessen
+För att den aktive ska kunna utvecklas maximalt enligt sina potentiella förutsättningar krävs en optimal
+träningsprocess.
+Begrepp och definitioner
+Maximal – högsta möjliga Potential – möjlig förmåga
+Optimal – bästa möjliga Potentiell – möjlig förmåga men ännu
+Optimering – framtagning av inte uppnådd
+bästa möjliga lösning Process – ständigt pågående förändring
+Anlag,
+anpassning
+Anlag – potentiella förmågor som kan förverkligas genom
+omgivningens påverkan
+Alla människor har unika
+genetiska förutsättningar, Fysisk talang – när det genetiska taket ligger högre än andra
+eller anlag, och genom människors motsvarande tak inom någon förmåga
+påverkan av miljön utvecklas
+Gener – ärvda villkor för en människas egenskaper
+både fysiska och psykiska
+egenskaper inom ramen för Genetiskt tak – en individs högsta möjliga prestations-
+dessa förutsättningar. förmåga
+Superkompensation – en anpassning som sker när yttre
+Människan anpassar sig efter
+belastning påverkar det fysiska och psykiska funktions-
+de krav som finns i omgivningen.
+systemet och tar det till en ny prestationsnivå
+Denna anpassning är grunden
+för att kunna utveckla den Talang – innefattar den fysiska talangen, men även
+idrottsliga prestationsförmågan målmedvetenhet, vilja och andra faktorer som är avgörande
+som kallas superkompensation. för att den fysiska talangen ska nå sin fulla potential
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+11
+
+--- Sida 12 ---
+Träningstillstånd
+Träningens avsikt är att höja den aktives träningstillstånd till en högre prestationsnivå, vilket är en ständigt
+pågående process. Träningsprocessen och dess utveckling innefattar allt från nybörjare, oftast barn, till den
+vuxna elitidrottaren. Därför måste innehållet i träningen hela tiden följa en växande människas naturliga
+tillväxt och mognad, vilket innebär att träningen av olika egenskaper ska ske vid en optimal ålder för att
+den aktive ska vara mottaglig för den.
+Träningstillståndet uttrycker vilken nivå den aktives idrottsliga funktioner ligger på i den långsiktiga
+utvecklingen. Träningstillståndet är beroende av
+• den åldersmässiga utvecklingen dvs mognaden
+• anlagen
+• den koordinativa förmågan
+• kapaciteten inom fysiska och psykiska egenskaperna
+• träningsbakgrund
+• systematik: lagbundna ordningsföljder.
+Tänk på! Barn och ungdomar är inte kopior av vuxna!
+Träningsprocessen ska därför följa en systematisk väg framåt.
+stimuli
+organismen reaktion
+retning
+träningstillstånd beteende
+belastning
+prestationsförmåga handling
+träning
+prestation
+Schematisk bild av träning. Genom yttre belastningar utvecklar den aktive sin förmåga att prestera.
+1 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 13 ---
+Schematisk bild av den optimala träningsprocessen
+Den optimala träningsprocessen utformas utifrån
+flera relativt lagbundna villkor och principer
+som kallas träningens grundprinciper (se s. XX)
+stimuli organism reaktion och fungerar i träning på både kort och lång sikt.
+Den aktives vilja är viktig, men hens vision kan
+bara uppnås om målen för utvecklingen är tydligt
+formulerade – det är målen som avgör i vilken
+riktning träningen ska styras. Att uppnå den
+aktives strävan genom en optimal träning är
+därför en pedagogisk process och det är viktigt
+stimuli organism reaktion
+att tränaren vägleder den aktive
+i hens önskade inriktning.
+Genom att utgå från den aktives nuvarande träningstillstånd
+och systematiskt öka belastningen, kan hens prestations-
+förmåga förbättras och nå nya nivåer.
+Träning är sättet att planera och
+systematiskt stegra idrottsprestationen
+mot ett bestämt mål. Denna process
+påverkas av träningens grundprinciper.
+Målet man har valt styr vilka metoder
+och medel man använder sig av och
+vad träningen kommer att innehålla.
+Träningen planeras utifrån
+• en bild av det slutliga målet
+• kunskaper om uppbyggnaden av den
+komplexa idrottsprestationen
+• människans fysiska och psykiska
+egenskaper
+• den sociala och materiella miljön.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+13
+
+--- Sida 14 ---
+Den komplexa idrottsprestationen
+Idrottsliga handlingar och prestationer består av många samverkande faktorer som ständigt samspelar med
+och påverkar varandra. Uppdelningen av dessa faktorer är därför egentligen bara konstruktioner för praktisk
+tillämpning i träningen.
+Den komplexa idrottsprestationen är en helhet som har många dimensioner, men att dela upp den i olika
+faktorer som bestämmer prestationer underlättar träningens planering och genomförande. De olika prestations-
+faktorerna kan betonas i olika stadier av den idrottsliga utvecklingen, men svårigheten blir att balansera
+dessa faktorer och knyta ihop dem till den förväntade komplexa idrottsprestationen.
+En komplex idrottsprestation – utförandet av ett idrottsligt moment
+som en helhet, sammansatt av olika samverkande faktorer.
+Prestationsförmåga – en individuell förmåga till idrottsprestationer. Det som
+den aktive strävar efter är att genom ett allt högre träningstillstånd nå upp till
+sin högsta prestationsförmåga. Denna förmåga syns i idrottsliga topprestationer
+och är komplext sammansatt, precis som prestationen i sig självt.
+1 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 15 ---
+Övningsformer
+Övning är en grundläggande form av verksamhet i träningsprocessen och är central för den idrottsliga träningen.
+Vilket mål som står bakom valet av övningar är alltså viktigt och avgör hur den idrottsliga prestationen kommer
+att förbättras.
+Tävlingsövningar
+Speciella övningar
+Allmänna övningar
+Man skiljer mellan träningsövningar (allmänna eller speciella övningar) och tävlingsövningar:
+ALLMÄNNA De allmänna övningarna är till för att ge den aktive en bred bas för en senare ökad
+ÖVNINGAR specialisering och ger en mångsidig och allmän fysisk förberedelse för framtida presta-
+tioner.
+SPECIELLA De speciella övningarna är utformade så att de antingen liknar utförandet i tävlings-
+ÖVNINGAR situationer, i belastningar och rörelser, eller är fokuserade på en delkomponent av
+tävlingsutförandet.
+TÄVLINGS- Tävlingsövningen motsvarar hela tävlingsprestationen och formen på denna definieras
+ÖVNINGAR därför av tävlingsreglerna.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+15
+
+--- Sida 16 ---
+Tävlingsövningen
+Be k l a a r s a t k n t
+in
+ä
+g
+r
+s- Rörelsem
+önster
+Träningsövningar
+Alla övningar har en viss verkningsgrad som beror på
+deras likhet med tävlingsövningen i rörelsemönster
+och belastningskaraktär, det vill säga hur kroppen
+belastas under övningen.
+Träningsbelastning
+Träningsbelastning är den påverkan som sker genom den idrottsliga träningen. För att förbättra den idrottsliga
+prestationsförmågan krävs att man successivt ökar och/eller varierar träningsbelastningen.
+Belastning Störning Anpassning Höjd
+genom av (superkom- prestations-
+träning jämvikten pensation) förmåga
+En höjning av prestationsförmågan sker på detta sätt.
+Hur man utformar en lämplig belastning bestäms genom användningen av de olika belastningskomponenterna.
+Belastningskomponenter
+Retningens intensitet – kraftinsatsen, Retningens varaktighet – hur länge
+det vill säga vikten på skivstången övningen pågår.
+eller hastigheten i rörelserna som
+Retningens omfång – antalet
+utförs i löpning, kast eller hopp.
+upprepningar.
+Retningens täthet – tiden för vilan
+Träningens frekvens – antal tränings-
+mellan belastningsfaserna.
+pass per tidsenhet (t.ex. antal pass
+per vecka).
+1 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 17 ---
+Översikt av belastningsfaktorer:
+Den yttre belastningen bestäms Den inre belastningen bestäms Exempel på psykiska och fysiska
+av belastningskomponenterna, av de processer som sker i krop- belastningsretningar:
+samt av övningens verknings- pens celler, exempelvis enzymer
+• Motiv
+grad (dvs. övningens likhet med och hormoner.
+• Behov
+tävlingsövningen i rörelsemön-
+ster och belastning). • Stress
+• Föreställningar
+• Klimat
+Som tränare har du en viktig roll att anpassa
+belastningen på träningsmomenten.
+För låg belastning ger ingen träningseffekt.
+För hög belastning kan ge överbelastningsskador,
+vilket tyvärr är ganska vanligt.
+Belastningens intensitet och omfång är omvänt proportionella. Träning på
+hög intensitet måste genomföras med färre upprepningar och längre vila.
+Träning på låg intensitet medger fler upprepningar och kortare vila.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+17
+
+--- Sida 18 ---
+Övningsform X Belastningsdosering = Belastningsretning
+Knäböj 4x3 på 90% maximal styrka
+Startblock 4x30m accelerationssnabbhet
+Löpform/Fartlek 3x (5x1’) aerob uthållighet
+Man uppnår en lämplig belastningsretning genom att använda sig av en målinriktad övningsform och en riktig
+belastningsdosering, det vill säga en riktig utformning av belastningskomponenterna
+Målmodeller
+Olika prestationsfaktorer bidrar tillsammans till en hög prestation i en friidrottsgren. Sammanställningen av
+dessa faktorer kallas prestationsstrukturen och den fungerar som ett långsiktigt mål för hela den idrottsliga
+utvecklingen och specialiseringen mot en specifik gren.
+Struktur – sammanställning av de delar som ingår i helheten.
+Kravprofiler
+Kravprofiler är mer detaljerade målmodeller för olika stadier inom den aktives utveckling. En kravprofil visar
+delmål i den långsiktiga utvecklingen på väg mot den specifika grenens prestationsstruktur. Hur prestations-
+faktorerna förhåller sig till varandra varierar beroende på den optimala träningens inriktning, som är olika i
+olika stadier (se s. 25). Det är viktigt att den aktives aktuella träningstillstånd stämmer överens med grenens
+kravprofil. Det är när den slutliga kravprofilen, det sista delmålet, stämmer överens med prestationsstrukturen
+som topprestationen kan uppnås. Det är när den slutliga kravprofilen, det sista delmålet, stämmer överens
+med prestationsstrukturen som topprestationen kan uppnås.
+Tränings- Prestations-
+Kravprofiler
+tillstånd struktur
+1 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 19 ---
+De prestationsbestämmande
+faktorerna
+De fysiska
+grundegenskaperna
+(uthållighet, styrka,
+snabbhet, rörlighet och
+koordination/teknik
+Personliga egenskaper
+(psykiska, attityder, Taktik
+värderingar etc
+Den komplexa
+idrottsliga
+prestationen
+Genetiska Kunskap/
+förutsättningar kompetens
+Yttre betingelser
+Hälsa
+(väder, material etc)
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+19
+
+--- Sida 20 ---
+Delfaktorer
+De prestationsbestämmande faktorerna kan delas upp i delfaktorer, som i sin tur kan delas upp i ytterligare
+faktorer. Vissa av de prestationsbestämmande faktorerna går att påverka mer än andra genom träning, de
+så kallade träningsfaktorerna: fysiska, psykiska, tekniska och taktiska färdigheter.
+Överlappning
+Den idrottsliga prestationen är en komplex handling och därför finns det inte nödvändigtvis tydliga gränser
+mellan faktorerna; de överlappar varandra även när man försöker betona en enskild faktor.
+Med överlappning menas hur man får träningen att ge effekt på flera olika faktorer. Detta fenomen är
+mycket svårt att kontrollera, men trots det utnyttjas det särskilt mycket i ungdomsträning, och till viss del
+i elitträning.
+De fysiska grundegenskaperna
+De fysiska grundegenskaperna är naturliga egenskaper som finns hos alla människor och som är beroende av
+varje individs genetiska förutsättningar. Dessa egenskaper utvecklas genom naturlig tillväxt och med träning
+samt bestämmer den fysiska prestationsförmågan.
+De fem fysiska grundegenskaperna är
+• Uthållighet • Rörlighet
+• Styrka • Koordination/teknik
+• Snabbhet
+Hela komplexet av dessa olika fysiska grundegenskaper sammanfattas under begreppet fysik. Utvecklingen av
+prestationsförmågan kallas därför fysisk träning och är avgörande i träningsprocessen. De fysiska kraven varierar
+beroende på friidrottsgren, till exempel skiljer de sig mycket mellan en kulstötare och en långdistanslöpare.
+Alla fysiska egenskaper finns dock med
+i någon form oavsett greninriktning.
+2 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 21 ---
+De fysiska kraven kan även ha väldigt olika betydelse inom en och samma gren hos olika individer. Detta beror
+på att varje individ har olika uppsättningar av egenskaper och färdigheter. Dessa skillnader går till exempel
+att se hos två olika sprinters där den ena är startsnabb och den andra sprintuthållig. När man ser på träning
+ur ett långtidsperspektiv växlar betydelsen av de fysiska kraven beroende på vilket stadie i utvecklingen den
+aktive befinner sig i (se s. 77). När man kommer upp på elitnivå och träningen blir mer och mer individuell
+betonas de grenspeciella faktorerna olika för olika individer.
+Teknisk träning är inlärning av rörelsefärdigheter och rörelsemönster med syftet att lösa en viss uppgift. Varje
+aktiv har sin egen personliga stil, men till grund för dessa olika personliga stilar hos olika idrottare ligger ett
+tekniskt ideal, en så kallad ”idealtyp”. Den personliga stilen är med andra ord den individuella idrottarens stil
+av idealtypen.
+En bra bas av rörelsefärdigheter (allmän koordination)
+är en förutsättning för att den aktive bättre ska kunna
+ta till sig teknikträning (speciell koordination).
+Rörelsefärdigheten är inte identisk med teknikens bästa möjliga utformning, men med en bra rörelsefärdighet
+ökar förutsättningarna för att kunna utföra tekniken på bästa sätt.
+Personliga egenskaper
+De psykiska och personliga egenskaperna är mycket viktiga beståndsdelar i prestationsförmågan och därför
+ingår de aktivt i träningsprocessen.
+Viktiga områden är:
+• Psykisk stabilitet
+• Inställning
+• Självständighet
+• Attityder
+• Värderingar
+• Erfarenhet
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+21
+
+--- Sida 22 ---
+Genetiska förutsättningar
+Med genetiska förutsättningar menas varje individs personliga och fysiska egenskaper, förutsättningar som
+även kallas den fysiologiska konstitutionen. Den innefattar exempelvis kroppslängd och muskelfibersamman-
+sättning, vilka inte går att påverka genom träning.
+Hälsa
+En fysisk och psykisk god hälsa är extremt viktig för att träningsprocessen ska fungera så bra som möjligt.
+Den aktives hälsa påverkar den idrottsliga prestationen i hög grad och därför är återhämtning i form av till
+exempel kost, sömn och avslappning väldigt viktig. Kostrådgivare, fysioterapeut, mental coach och andra
+stödpersoner/stödfunktioner kan vara avgörande för att optimera prestationen. Även familj, arbete och skola
+kan ge stor påverkan på återhämtning och prestation. Det är därför viktigt att den aktive har bra balans i livet
+och undviker att ha för många stressmoment i sin vardag.
+Yttre betingelser
+Yttre betingelser är prestationsbestämmande faktorer såsom tillgång till träningsmöjligheter (tillgång till
+hallar och material) och väderförhållanden (regn, starka vindar, temperatur). Vid tävling påverkas den aktive
+även av till exempel tävlingsregler, banlottning och tidsprogram.
+Kunskap/kompetens
+Hur träningsprocessen utvecklas avgörs också av den kunskap och de erfarenheter som den aktive och
+tränaren har, men också av hur de hanterar förutsedda och oförutsedda situationer som kan uppkomma
+på såväl träning som tävling.
+Taktik
+Taktik är inlärda strategier vid träning och tävling där den aktive kan ha antingen en förutbestämd strategi
+eller en flexibel strategi, beroende på vilka situationer som uppstår under träning eller tävling.
+2 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 23 ---
+Sambandet fysik-teknik-taktik
+Det är skillnad på teknisk och fysisk träning. Den tekniska träningen är en inlärning av rörelsefärdigheter
+medan den fysiska träningen är en utveckling av fysiska grundegenskaperna. Det är viktigt att notera dessa
+skillnader eftersom träningsmetoderna är helt olika för inlärning (teknik/taktik) och utveckling (fysik).
+Fysik, teknik och taktik kan dock inte ses som helt skilda faktorer; förändringar inom en av dessa faktorer
+påverkar automatiskt de andra.
+Teknik Taktik
+Fysik
+Inlärningen av tekniken följer den fysiska prestationsnivån. Teknisk träning utan fysiska förberedelser ger sämre
+resultat och en för stark betoning på fysisk träning ger sämre resultat om den inte omvandlas i tekniska färdigheter.
+De fysiska prestationsfaktorerna och den tekniska kunskapen
+måste utvecklas parallellt.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+23
+
+--- Sida 24 ---
+Sambandet mellan teknik, fysik och taktik samt deras etappvisa utvecklingsförlopp framgår av nedanstående översikt.
+TEKNIK/TAKTIK SOM ETAPPVIS INLÄRNING ETAPPVIS UTVECKLING
+TRÄNINGSINNEHÅLL TILL NÖDVÄNDIG AV DE FYSISKA
+OCH TRÄNINGSMÅL FÄRDIGHETSNIVÅ GRUNDEGENSKAPERNA
+idealtypisk skola många
+koordinations-
+grenteknik som rörelsefärdigheter
+träning
+målorientering grovkoordination av
+den idrottsliga tekniken
+förtaktiska finskolning av den allmän fysisk
+moment idrottsliga tekniken förberedelse
+fullända, automatisera
+taktisk och stabilisera den speciell fysisk
+handlingsfärdighet idrottsliga tekniken förberedelse
+den komplexa
+Start
+idrottsliga
+prestationen
+Mål
+2 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 25 ---
+Idrottsutvecklingens
+uppbyggnad
+Det långsiktiga målet med träning är att ett barn ska kunna utvecklas och uppnå sin fulla potential som vuxen.
+För att nå högsta möjliga prestationsförmåga krävs det många års träning av både allmän och speciell karaktär.
+Träningen kan delas in i olika delar:
+Stadium – en följd av år med likartad Enhet – en träningsenhet = ett träningspass.
+träningsfilosofi.
+Moment – träning av en enskild prestations-
+Period – grov uppdelning av ett träningsår faktor.
+- Makrocykel: säsongs- eller årsplanering. Komplexa träningspass – träningspass som
+- Mesocykel: 2–6 veckor. består av flera olika moment.
+- Mikrocykel: 10 dagar, en vecka eller
+del av vecka.
+Den långsiktiga utvecklingen
+Den långsiktiga utvecklingen innebär processen av träning från en otränad nybörjare upp till hens prestations-
+gräns. Uppgiften är att höja träningstillståndet varje år för att till slut nå den gräns för prestationsförmågan
+som sätts av det genetiska taket, det vill säga arvets förutsättningar. Utvecklingen av träningstillståndet ska
+ske med inriktning mot specifika mål som ligger till grund i kraven för den idrottsliga topprestationen. Dessa
+mål definieras i varje enskild grens prestationsstruktur. På vägen till topprestationen finns det motsvarande
+delmål i form av kravprofiler för olika nivåer.
+Fysisk prestationsnivå Kravprofiler Prestationsstruktur
+Prepubertalt Pubertalt Postpubertalt
+Prestations- Högprestations-
+Lekstadium Grundstadium Uppbyggnadsstadium
+stadium stadium
+Barn Ungdom Vuxen
+Den långsiktiga utvecklingens olika stadier
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+25
+
+--- Sida 26 ---
+Åldersgränser
+Åldersspannet i alla stadier är brett och detta måste man ta hänsyn till i träningsprocessen. Man bör också ta
+hänsyn till de olika greninriktningarna eftersom det visat sig att snabba tekniska grenar som sprint och hopp
+har ett betydligt snabbare utvecklingsförlopp än grenar som bygger på maximal styrka, till exempel tunga
+kast. Grenar som bygger på uthållighet kan också ha ett längre utvecklingsförlopp än sprint och hopp. Utöver
+detta är det viktigt att notera att flickor generellt ligger två år före i den fysiska utvecklingen jämfört med
+pojkar.
+Allmänna stadiemål
+Målet med elitträning är att maximalt utveckla de enskilda
+tävlingsgrenarnas speciella prestationsfaktorer och de dominerande
+förutsättningarna för prestation hos den aktive.
+Elitträning är därför mycket specialiserad.
+Målet med ungdomsträning är att ge den aktive både allmänna och
+speciella förutsättningar för att kunna ta steget till elitträning.
+Ungdomsträningen delas in i två stadier: grundstadiet och uppbyggnadsstadiet.
+Målet med grundstadiet är att genom en optimal träning anpassad efter fysisk mognad ge den aktive allmänna
+förutsättningar för fortsatt utveckling. Träningen ska vara allsidig och tekniska moment från alla friidrottens
+grenar bör vara en stor del av innehållet.
+Under uppbyggnadsstadiet inleds en systematisk uppbyggnad av både allmänna och speciella prestations-
+förutsättningar. Dessutom läggs de fysiska grunderna för optimala förutsättningar inför prestationsstadierna.
+I vissa fall kan framför allt tidigt utvecklade flickor ha kommit in i prestationsstadiet trots att de fortfarande
+är ungdomar.
+2 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 27 ---
+Delmål för respektive stadie
+GRUNDSTADIET UPPBYGGNADSSTADIET PRESTATIONSSTADIET HÖGPRESTATIONS-
+STADIET
+Fokus på Lära många tekniska Målinriktad bred upp- Målinriktad fördjupad Målinriktad fördjupad
+grundformer byggnad av prestations- specialisering av en eller specialisering av en grens
+faktorer i en grengrupp några grenars prestations- prestationsfaktorer
+Springa, hoppa och kasta
+faktorer
+(träna friidrottens alla Förbättra rörelsekoordina- Fullända den tekniska
+grenar), samla rörelse- tionen inom vald grengrupp Automatisering och skolningen
+erfarenheter specialisering av teknik
+Inledande uppbyggnad av Maximera den komplexa
+speciella fysiska egenskaper Fördjupa förberedelser fysiska träningen
+av de speciella fysiska
+Optimera förberedelserna
+egenskaperna
+av de fysiska grund-
+egenskaperna
+Fysiska Koordination Koordination Kompletterande allmän Kompletterande allmän
+grund- Grundkoordination Förfinad koordination träning av de fysiska träning av de fysiska
+egenskaper (grundteknik i friidrottens (grenteknik) grundegenskaperna grundegenskaperna
+alla grenar) utifrån vald gren/ar. utifrån vald gren/ar.
+Styrka
+Hopp- kast, häck- och • grundstyrka Skillnaden mellan Skillnaden mellan
+löpkoordination • snabbstyrka (med friidrottens grenar är friidrottens grenar är
+stor och därför hänvisas stor och därför hänvisas
+Styrka försiktighet) till de grenspeciella till de grenspeciella
+• förberedande maximal styrka
+• grundstyrka träningslärorna. träningslärorna
+• snabbstyrka Snabbhet
+• skivstångsteknik • aktionssnabbhet
+Snabbhet • inledande maximal snabbhet
+• reaktionssnabbhet Uthållighet
+• frekvenssnabbhet • aerob uthållighet ex
+Uthållighet distans, fartlek
+Anaerob alaktatisk uthåll- • förb. anaerob uthållighet
+ighet (korta intensiva löp- (löpformer i ca 80% fart)
+ningar i t ex stafettformer Rörlighet
+som kurirstafett)
+Viktigt!
+Komplet- Lekar och spel Andra friidrottsgrenar Andra likartade
+terande Andra idrotter Lekar och spel friidrottsgrenar
+tränings- Gymnastik Andra idrotter Andra idrotter
+former
+Person- Psykiska egenskaper Fördjupad personlighets- Inledning av en specifik Specifik psykisk
+lighets- ut- • prestationsmotivation utveckling psykisk skolning skolning
+veckling • uppmärksamhet • självstyrande åtgärder • speciell livsföring
+• koncentration • klara press (ex från
+media etc)
+Kunskaper
+• träningsrutiner
+• hygien
+Attityder
+• kamratskap
+• samarbete
+27
+Periodisering av träningsåret
+
+--- Sida 28 ---
+Periodisering av träningsåret
+Utvecklingen av den idrottsliga formen sker med sikte mot en topp (ett maximum) vid en bestämd tidpunkt.
+Detta kallas ”toppform”.
+För att nå en ”toppform” krävs en längre
+tids kontinuerlig planerad träning.
+Året kan delas in i tre olika sorters perioder
+1:a delen Förberedelseperiod (allmän och tävlingsförberedande): förberedelse för att uppnå
+en högre prestationsnivå.
+2:a delen Tävlingsperiod: uppnå en högre prestationsnivå och nå ”toppform”.
+3:e delen Viloperiod: vila, eller aktiv vila i form av lätt träning eller andra aktiviteter än friidrott.
+När ungdomarna går in i pubertal ålder och ökar sin träningsmängd kan det vara lämpligt att börja med en
+typ av periodisering där året delas in i tre typer av perioder:
+Förberedelseperiod
+Förberedelseperioden kan delas in i en eller flera olika allmänna, inledande perioder för att sedan gå över i en
+enda tävlingsförberedande period. De allmänna förberedelseperioderna fokuserar på allmänna förberedelser
+av just de fysiska grundegenskaperna och under den tävlingsförberedande perioden fokuserar man på en mer
+grenspeciell och prestationsutvecklande träning. En period bör vara mellan 2-6 veckor.
+Tävlingsperiod
+Målsättningen för tävlingsperioden är att skapa form och nå toppformen utifrån säsongsmålet. Har den aktive
+en längre tävlingsperiod är det nödvändigt att stabilisera formen, det vill säga att under några veckor planera
+in mer allmän eller tävlingsförberedande träning för att kunna hålla toppformen under en längre tid.
+2 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 29 ---
+Periodisering av årsplanen
+Träningsåret ser olika ut beroende på om man väljer enkel eller dubbel periodisering, det vill säga om man
+både satsar på en inomhussäsong och en utomhussäsong, eller bara utomhussäsong.
+Exempel på enkel periodisering (årsplan med en tävlingsperiod och därmed en toppform):
+OKT NOV DEC JAN FEB MARS APRIL MAJ JUNI JULI AUG SEPT
+allmän tävlingsförberedande tävling (form) stabili- tävling
+sering (form)
+förberedelseperiod tävlingsperiod vila
+Exempel på dubbel periodisering (årsplan med två tävlingsperioder och därmed två formtoppar):
+OKT NOV DEC JAN FEB MARS APRIL MAJ JUNI JULI AUG SEPT
+allmän tävlings- tävling (form) allmän tävlings- tävling stabili- tävling
+förbe- förbe- (form) sering (form)
+redande redande
+förberedelseperiod tävlingsperiod förberedelseperiod tävlingsperiod vila
+Periodernas längd avgörs utifrån
+• tidpunkten för viktigaste tävlingen (man utgår från den och planerar sedan bakåt).
+• träningstillståndet
+• speciella yttre omständigheter (t ex klimat, lokaler, helger, läger).
+Det är även viktigt att notera att årsplanen kan se annorlunda ut för exempelvis en löpare som satsar mot en
+terrängsäsong som inte sammanfaller med den traditionella inom- eller utomhussäsongen.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+29
+
+--- Sida 30 ---
+Anatomi och fysiologi
+Läran om kroppens uppbyggnad kallas anatomi och läran om hur den fungerar kallas fysiologi. Grundläggande
+kunskaper inom anatomi och fysiologi är värdefulla när du som tränare planerar och genomför träning.
+Muskler
+I kroppen finns tre typer av muskelvävnad:
+• Skelettmuskulatur
+• Hjärtmuskulatur
+• Glatt muskulatur
+Skelettmuskulaturen är den största typen av muskelvävnad och utgör cirka 60 procent av den totala kropps-
+vikten hos en vältränad vuxen person. Hos barn är procenten av den totala kroppsvikten betydligt lägre.
+Hjärtat är en muskel som tränas vid förhöjd puls, exempelvis löpning.
+Den glatta muskulaturens rörelser styrs av det ofrivilliga (autonoma) nervsystemet och finns i våra rörformiga
+håligheter som exempelvis tarmar och blodkärl.
+Skelettmuskelns uppbyggnad
+En enskild skelettmuskel, som är omsluten av en bindvävshinna (fascia), består av en stor mängd muskelfibrer
+som är ordnade i muskelbuntar med 10–20 fibrer i varje bunt. Då en arbetande muskel har en hög ener-
+giomsättning krävs också en effektiv cirkulation, därför innehåller också muskeln rikligt med blodkärl som
+förgrenas i ett fint nät av mycket tunna blodkärl (kapillärer).
+3 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 31 ---
+Muskelfibrerna är uppbyggda av cirka 1 000 muskelfibriller
+och varje muskelfibrill innehåller små sammandragande enheter
+(sarkomerer). Det är alltså i sarkomererna som muskelsamman-
+dragningen (kontraktionen) äger rum.
+De två viktigaste komponenterna i sarkomeren är två
+proteiner: aktin och myosin. Kontraktionen sker genom att
+dessa hakar fast i varandra vid en muskelsammandragning
+och överlappar varandra ju mer en muskel drar ihop sig.
+Muskelfibrer
+Det finns två huvudtyper av muskelfibrer, typ I (lång-
+samma) och typ II (snabba). Alla skelettmuskler inne-
+håller en blandning av dessa båda typer men för-
+delningen varierar. Förhållandet mellan antalet
+typ I- och typ II-fibrer i musklerna varierar något
+beroende på musklernas uppgifter. Bålens muskler
+har en något större andel långsamma muskelfibrer
+jämfört med exempelvis arm- och benmuskler där
+snabba och kraftfulla rörelser dominerar.
+Antalet muskelfibrer av en viss typ varierar också mellan
+olika individer och detta bestäms i stort sett redan
+vid födseln. En person med fler långsamma muskel-
+fibrer passar bra för uthållighetsidrotter, medan en
+person med snabba muskelfibrer passar bättre för
+explosiva idrotter. En maratonlöpare på elitnivå har
+exempelvis cirka 70 procent långsamma muskelfibrer
+i framsida lår medan en sprinter har cirka 70 procent
+av de snabba muskelfibrerna.
+Vid träning ökar inte antalet muskelfibrer utan i stället ändras
+egenskaperna hos de muskelfibrer som man har sedan födseln.
+De långsamma typ I-fibrerna har ett större antal mitokondrier, som är muskelns energikraftverk där
+näringsämnena omvandlas till energi, samt är omgivna av ett tätare nät av kapillärer än de snabba fibrerna.
+Detta gör att de långsamma fibrerna är väl lämpade till aktiviteter som kräver aerob uthållighet.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+31
+
+--- Sida 32 ---
+De snabba typ II-fibrerna delas ofta in i två typer: typ IIx och typ IIa. Typ IIx utnyttjas vid snabba rörelser
+men tröttas ut mycket snabbt och typ IIa är något mer uthålliga än typ IIx och denna fibertyp är exempelvis
+viktig vid lång sprint (400–800 m).
+Aerob uthållighetsträning leder till ett ökat antal mitokondrier och kapillärer i och runt muskulaturen vilket
+ökar förmågan att omsätta energi i cellerna. Denna träning leder till att musklerna kan upprätthålla hög
+aktivitet under en längre tid utan att tröttas.
+För att på effektivaste sätt öka muskelmassan är kortvariga kraftutvecklingar bäst. Träningen leder till ökad
+produktion av aktin och myosin, med fler aktin- och myosintrådar som följd. Muskeln ökar därmed i diameter
+och kan skapa mer kraft.
+Skillnaden mellan de olika fibertyperna:
+LÅNGSAMMA SNABBA
+BENÄMNING TYP I TYP IIA TYP IIX
+Tid för utveckling av max spänning långsam snabb snabb
+Relaxionstid lång kort kort
+Antal kapillärer per muskelfiber hög låg låg
+Effektutveckling låg hög mycket hög
+Uthållighet hög medel låg
+Motorisk enhet Hjärna
+En motorisk enhet består av en nervcell i Nerv
+ryggmärgen, nervcellens axon (nervtråd)
+Ryggmärg Muskel
+samt alla de muskelfibrer som detta axon
+med sina förgreningar är kopplad till.
+I en motorisk enhet kan det ingå olika antal
+muskelfibrer. Från några få i muskler som Ryggmärgsnerv
+kräver finmotorik, exempelvis fingrarna, till Motorändplatta
+flera hundra i muskler som inte kräver samma Muskelfiber
+precision, exempelvis lårmuskeln.
+Ryggmärg
+3 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 33 ---
+Senor och ligament
+Senvävnad är mycket stark. En sena med en tvärsnittsarea på en kvadratcentimeter kan motstå en belastning på
+500–1 000 kilo. Två av våra starkaste senor, knäskålssenan (patellasenan) och hälsenan (akillessenan), klarar
+belastningar som motsvarar 10–15 gånger kroppsvikten.
+En sena kan töjas ut maximalt 3–4 procent innan det uppstår små bristningar. Vid cirka 8 procent uttöjning går
+senan av. Med träning kan man öka senans hållfasthet och tjocklek, men den brister dock vid samma uttöjningsgrad.
+Ligament finns på många ställen i kroppen och deras funktion är att stabilisera lederna samt begränsa eller
+kontrollera rörelseomfånget. I ligament finns många receptorer som känner av rörelser och belastning. Vid en
+skada, exempelvis fotledsstukning, försämras denna förmåga. Sköter man inte rehabiliteringen med exempelvis
+balansövningar är risken stor att man stukar foten igen.
+Hjärta och lungor
+Hjärtat består av muskelceller som bildar muskelväggarna.
+Hjärtat är uppdelat i förmak och kammare och är ungefär lika
+stort som din egen knytnäve. Hjärtat fungerar som kroppens
+pump och ska tillgodose kroppens organ och vävnader med
+syre samt transportera bort koldioxid och slaggprodukter.
+I kroppen finns två kretslopp, det lilla och det stora.
+Det stora kretsloppet försörjer alla organ med blod och
+det lilla kretsloppet deltar i gasutbytet mellan blodet
+och inandad luft. Tillsammans bildar de ett kontinuerligt
+kretslopp format som en åtta. I centrum finns pumpen,
+hjärtat. Alla blodkärl som tar med sig blod från hjärtat
+i systemkretsloppet kallas artärer (syrerikt blod) och
+alla blodkärl som levererar blod till hjärtat kallas vener
+(syrefattigt blod). Mellan artärer och vener i kretsloppet
+finns ett nätverk av fina blodkärl (kapillärer).
+Skelettet
+Skelettet är kroppens stomme och ger stöd åt vår rörelseapparat
+(muskler, leder). Skelettet skyddar också kroppens vitala organ via
+skallbenet som skyddar hjärnan, bröstkorgen som skyddar hjärta
+och lungor samt bäckenet som skyddar tarmar och urinblåsa.
+Under barn- och ungdomsåren frisätts stora mängder hormon (growth hormon) i kroppen, vilket är
+nödvändigt för förbeningsprocessen. Denna process sker i tillväxtzonerna (fysplattorna). Under puberteten
+börjar könshormonerna att stimulera såväl längdtillväxt som tillslutning av fysplattorna.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+33
+
+--- Sida 34 ---
+Energiprocesserna
+Vid lågintensivt långvarigt, aerobt, arbete används främst fett och syre som energikälla. När arbetet
+intensifieras räcker inte syret till och då använder sig kroppen i stället av ATP (adenosintrifosfat) och
+KP (kreatinfosfat) som energikällor, så kallat anaerobt arbete. Om arbetet är relativt kortvarigt (6–7 sek)
+och vilan tillräckligt lång, så hinner dessa depåer fyllas på. Arbetar man däremot högintensivt under längre
+perioder än 6–7 sekunder kommer kroppen börja producera mjölksyra.
+En schematisk bild på energiprocesser som sker i kroppen vid fysisk belastning.
+KP Fett + Syre
+Muskelarbete
+KP
+Värme
+Glykos Mjölksyra Glukos + Syre
+Koordinationen i musklernas kraftutveckling
+I stort sätt alla rörelser utförs genom ett aktivt samarbete mellan en rad olika muskler. Agonist kallas den
+muskeln som är huvudsakligen ansvarig för en rörelse. De muskler som stödjer agonistens rörelse kallas
+synergister. De muskler som motverkar agonistens rörelse kring en led kallas antagonister. Det finns alltid
+ett samspel mellan agonist och antagonist – antagonisten minskar sin aktivitet när agonisten ökar sin.
+Det centrala nervsystemet har en avgörande betydelse när det gäller koordinationen och får sin information
+från en mängd olika sensorer eller känselorgan. Dessa kallas mekanoreceptorer och finns i alla kroppens
+vävnader som muskler, senor, skelett, ledband och andra ledstrukturer. Viktig information kommer även från
+synen och balansorganet i innerörat.
+Den slutliga rörelsen utförs med ett mycket noggrant samspel mellan det centrala nervsystemet, kroppens
+muskler och de yttre krafterna som påverkar kroppen.
+All information från alla sensorer (syn, balansorgan och mekanoreceptorer) bearbetas
+i det centrala nervsystemet och signaler skickas kontinuerligt till rätt muskler.
+3 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 35 ---
+Mekanoreceptorer
+Det finns ett flertal mekanoreceptorer (sensorer och känselorgan) som känner av
+olika kraftspel i kroppen. Det finns sensorer i huden för beröring, tryck, temperatur
+och smärta. För fingrarnas finmotoriska rörelser är berörings- och tryckreceptorer
+i huden mycket viktiga. När vi går finns tryckreceptorer i foten som ger viktig
+information. I kroppens alla leder finns receptorer som ger information om
+kroppsdelars olika läge.
+I musklernas senor finns flera olika typer av mekanoreceptorer, som till
+exempel muskelspolar och senorgan (Golgis senorgan). Dessa fungerar
+som kraftmätare och känner av hur mycket kraft muskeln utvecklar.
+Funktionen hos denna reflex är att jämna ut kraftutvecklingen och
+skydda musklerna från alltför stora belastningar, som kan leda till
+skada. Muskelspolar är rikligt förekommande i muskler som har till
+uppgift att hålla oss i upprätt läge (postural muskulaturen) samt för
+muskler som ska utföra finmotoriska rörelser. Muskelspolen förekommer
+i de allra flesta skelettmuskler och är mycket känsliga för längdförändringar.
+När muskeln aktiveras och förkortas (koncentrisk rörelse) eller förlängs
+(excentrisk rörelse) ställer muskelspolarna om sig för att kunna hjälpa till
+med längd- och hastighetsförändringar i det nya läget.
+Samordningen av all information från
+kroppens alla sensorer är mycket komplex
+och mycket av detta sker reflexmässigt.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+35
+
+--- Sida 36 ---
+Stretch-shortening-cykeln
+Stretch-shortening-cykeln kan liknas vid en gummibandseffekt.
+• muskler och senor töjs ut (stretch)
+• muskler och senor fjädrar tillbaka (shortening)
+• cykel för att detta sker repetitivt.
+Vid idrotter som spjut eller höjdhopp nyttjas stretch-shortening inte i en cykel utan enbart vid kastet eller
+hoppögonblicket (förutom i själva ansatslöpningen).
+Uttöjningsfasen i stretch-shortening-cykeln sker alltid med en excentrisk rörelse. När muskler och senor fjädrar
+tillbaka sker det alltid med en koncentrisk rörelse. Syftet med stretch-shortening-cykeln är att öka kraften i
+rörelsen, det vill säga förbättra prestationsförmågan. Detta sker främst genom att energi lagras i muskler och
+senor under den excentriska fasen och utnyttjas sedan i den direkt påföljande koncentriska fasen.
+Muskeln och senan utsätts
+för mycket stora krafter under
+stretch-shortening-cykeln och
+den högsta kraften uppstår
+i övergången mellan den
+excentriska och den koncen-
+triska fasen, det vill säga i
+själva vändningsögonblicket
+(amortisationsfasen). Det är
+också i detta ögonblick som
+de flesta bristningar i muskler
+och senor sker.
+3 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 37 ---
+De fysiska
+grundegenskaperna
+Uthållighet
+Styrka Snabbhet
+Rörlighet Koordination
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+37
+
+--- Sida 38 ---
+Uthållighet
+Uthållighet är förmågan att stå emot trötthet
+vid långvarig belastning.
+Undergrupper av uthållighet
+• Aerob uthållighet
+• Anaerob alaktatisk uthållighet
+• Anaerob laktatisk uthållighet
+Man delar också in uthållighet i allmän respektive speciell uthållighet
+Aerob uthållighet
+När träning av uthållighet genomförs med en relativt låg intensitet där syret räcker till för att täcka energibe-
+hovet så kallas det aerob uthållighet. Den aeroba uthålligheten bygger på en process där energi frigörs genom
+att glykogen och fett förbränns tillsammans med syre.
+Om det aeroba systemet ska förbättras måste kroppens syreupptagning förbättras, det vill säga transporten av
+syret från omgivande luft till att den används i muskelcellen.
+Syretransporten från luft till muskel kan delas upp i tre huvudsakliga nivåer:
+• Den centrala nivån av syreupptaget, med hjärta och lungor.
+• Mellannivån med blod och blodkärl, och förmågan att fördela och distribuera blodet till olika delar
+av kroppen.
+• Den lokala nivån i muskeln, som även kallas perifer eller muskulär.
+Prestationen är en kombination av dessa tre nivåer som alla går att förbättra med träning.
+För att du ska kunna utforma ett optimalt träningsprogram
+som förbättrar den aktives aeroba prestation är det viktigt
+att du vet var i systemet begränsningen finns.
+Steady-state är ett begrepp som innebär att det är jämnvikt mellan syreupptagning och syreförbrukning.
+3 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 39 ---
+Anaerob uthållighet
+Vid tillräckligt hög intensitet räcker syret inte till för att täcka energibehovet. Den anaeroba processen
+(som också kallas spjälkning) blir i stället dominerande och energi utvinns utan att syre medverkar.
+Syreupptagningen är inte tillräcklig och syreskuld uppstår, vilket innebär att mjölksyra bildas.
+Energidepåerna för den anaeroba processen utgörs av de två fosfatföreningarna ATP (adenosintrifosfat)
+och KP (kreatinfosfat) och även glykogen.
+Anaerob alaktatisk uthållighet
+Vid inledningen av ett hårt arbete (upp till ca 7 sek) kommer energin från ATP och KP. Detta är en
+anaerob alaktatisk process, alltså en process som utförs utan mjölksyra.
+Anaerob laktatisk uthållighet
+Under det direkt påföljande arbetet (efter den anaeroba alaktatiska fasen) påbörjas sedan även en
+utvinning av energi genom spjälkning av glykogen, en process som kallas glykolys. Om detta arbete är
+upp till 15 sekunder (sprintuthållighet) med tillräckligt långa vilor bildas inte stora mängder mjölksyra
+(laktat) men är vilan kort eller arbetet mellan 15-50 sekunder (snabbhetsuthållighet) bildas det stora
+mängder mjölksyra.
+Vid belastningar på över 2 minuter får den aeroba energiprocessen en allt större betydelse vilket kan ses i tabellen.
+100M 200M 400M 800M 1000M 1500M 5000M 10000M MARATON
+AEROB 5 10 25 45 50 65 90 95 99
+ANAEROB 95 90 75 55 50 35 10 5 1
+Allmän uthållighet
+Allmän uthållighet är detsamma som aerob uthållighet vilket är förmågan till energiutveckling med hjälp av
+syre. Denna förmåga är även viktig för återhämtningen efter all form av aktivitet.
+Exempel på allmän uthållighet kan vara distanslöpning eller löpformer, exempelvis lågintensiva intervaller
+eller fartlek. I ungdomsåren förekommer alternativa uthållighetsformer, exempelvis bollspel, simning, skidor.
+Vissa alternativa uthållighetsformer kan med fördel också användas som alternativ träning på elitnivå eller
+vid rehabilitering av skada.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+39
+
+--- Sida 40 ---
+Speciell uthållighet
+Den speciella uthålligheten är förmågan att uppfylla den specifika idrottsgrenens uthållighetskrav, alltså
+att kunna utföra det specifika arbetet effektivt så länge som idrottsgrenen kräver, därför kallas den också
+tävlingsspeciell uthållighet.
+Övningsformer och belastningar finns noggrant beskrivna för respektive gren där energiprocesserna kan
+vara både aeroba och anaeroba.
+Den speciella uthålligheten kan delas upp utifrån de olika löpgrenarnas arbetstid och löpsträcka. Då gäller följande
+delfaktorer:
+Tabellförklaring: sekunder betecknas med ’’ och minuter med ’
+SPECIELL UTHÅLLIGHET ELIT UNGDOM
+ARBETSTID LÖPSTRÄCKA LÖPSTRÄCKA
+Anaerob alaktatisk uthållighet upp till 7” upp till 60m upp till 50m
+Sprintuthållighet 7” - 15” 60 - 150m 50 - 120m
+Snabbhetsuthållighet 15” - 50” 150 - 400m 120 - 300m
+Korttidsuthållighet 50” - 2´ 400 - 800m 300 - 700m
+Medeltidsuthållighet 2´ - 8´ 1000 - 3000m 800 - 1500m
+Långtidsuthållighet 1 8´ - 30´ 3000 - 10 000m 2000m -
+Långtidsuthållighet 2 30´ - 160´ 10 000 - 50 000m
+Metoder för löpformer
+INTENSITET 90-100% 90 - 100 % 80 - 90 % 60 - 80 % 40 - 60 %
+70 - 90 % AV
+FÖRMÅGAN PÅ
+LÖPNING 3-50 KM
+OMFÅNG många lopp 1 - 5 lopp 5 - 12 lopp många lopp mycket stort -
+löpkilometer
+VARAK- kort upp till 7” beroende på beroende på löp- beroende på löp- mycket lång
+TIGHET syfte sträckans längd sträckans längd
+PAUS relativt kort 3 - 45 minuter 1,5 - 5 minuter kort, aktiv, puls 120 ingen paus
+TRÄNINGS- anaerob alak- sprintuthållighet snabbhets- aerob uthållighet aerob uthål-
+EFFEKT tatisk uthål- snabbhets- uthållighet långtids- lighet
+lighet uthållighet korttidsuthållighet uthållighet långtids-
+korttidsuthållighet medeltids- uthållighet
+medeltids- uthållighet
+uthållighet
+4 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 41 ---
+Sammanfattning på fokusområden för uthållighet
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+Förutsättningarna för att öka syre- Under puberteten uppstår Grenspecifik uthållighet
+upptagningsförmågan i unga år är en unik möjlighet att öka beroende på greninriktning.
+relativt begränsade. Ungdomarna kroppens aeroba förmåga.
+Exempelvis genom:
+har även en lägre anaerob förmåga
+Exempelvis på träningsformer: • Löpformer med hög intensitet
+jämfört med vuxna, men besitter en
+• Distanslöpning för sprinters (sprint- och
+förbluffande träningsbarhet när det
+• Intervaller snabbhetsuthållighet)
+gäller alaktatisk anaerob kapacitet
+• Fartlek
+(ej mjölksyra). • Distans och löpformer på
+• Cirkelträning längre sträckor och lägre
+Träningen bör därför baseras på korta
+hastighet för medeldistansare
+högintensiva intervaller med korta
+vilopauser.
+Exempelvis på övningar:
+• Lekar
+• Stafetter
+• Bollspel
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+41
+
+--- Sida 42 ---
+Styrka
+Styrka är förmågan att med hjälp av muskelkraft
+motstå eller övervinna en yttre kraft.
+Undergrupper av styrka
+Styrkan delas in i fyra olika undergrupper:
+• Grundstyrka
+• Maximal styrka
+• Snabbstyrka
+• Uthållig styrka
+Dessa undergrupper av styrka är olika viktiga för friidrottens olika grengrupper men bör finnas med i någon
+form under träningsåret. När träningen blir mer specialiserad postpubertalt är det viktigt att uppehålla en
+optimal styrkenivå då detta är en grundförutsättning för prestationen. Även en medeldistanslöpare behöver
+annan typ av styrka än den aeroba uthålliga grundstyrkan likväl som en kastare behöver annan typ av styrka
+än den maximala styrkan.
+Grundstyrka
+Grundstyrka är en viktig bas inför träning av de övriga styrkeformerna och tränas främst under grund- och
+uppbyggnadsstadiet. Den utvecklas genom många lågintensiva övningar med relativt många upprepningar.
+Grundstyrka finns även med som komplement till den specialiserade styrkan under prestationsstadierna och
+hjälper även till att undvika så kallade styrkebarriärer som annars kan uppstå vid ett ensidigt användande av
+speciella träningsövningar och metoder.
+På grund av den låga intensiteten kan grundstyrkan betecknas som aerob uthållig grundstyrka och den stöder
+därför utvecklingen av den aeroba uthålligheten. Träningen kan ske i stations- eller cirkelform med arbete
+om exempelvis 30” och vila 15–30”. Genom inslag av koordinativa övningar som rytm i rörelse till musik kan
+effekten med denna styrkeform ökas.
+Maximal styrka
+Den maximala styrkan är den största kraft som nerv-muskelsystemet (neuromuskulära systemet) kan åstad-
+komma vid maximala viljemässiga muskelsammandragningar, det vill säga aktivering av det största möjliga
+antalet motoriska enheter. Den maximala styrkan är en viktig grund för explosiv styrka (se s. xx) och snabb-
+styrka. Exempel på maximala styrkeövningar är knäböj, bänkpress och marklyft.
+4 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 43 ---
+För att utveckla den maximala styrkan måste man belasta med minst 90 procent av den maximala presta-
+tionsförmågan, 90 procent av 1RM (en repetition med maxvikt). Även om belastningen är stor och övningen
+relativt långsam är det viktigt att övningen utförs med optimal hastighet så att utförandet är kontrollerat men
+ändå så explosivt som möjligt. Nya forskningsrön visar också att det är viktigt att barn ”får ta i på träningen”
+och att detta leder till positiva effekter på träningen av den maximala styrkan i senare stadier.
+Det finns också ett begrepp som heter förberedande maximal styrka. Den används i ungdomsåren, men även
+senare under förberedelseperioden till prestationsstadierna. Här är procentsatsen lägre än 90 procent av
+1RM och oftast gör man 4–12 repetitioner. Dessutom är det även den styrkeform som ger störst ökning av
+muskelmassan, alltså störst hypertrofi.
+Snabbstyrka
+Snabbstyrka är förmågan att övervinna ett motstånd i rörelse med hög hastighet. Denna form av muskelstyrka
+har avgörande betydelse för prestationen i sprint-, hopp- och kastgrenarna. Snabbstyrka är beroende av en
+god koordination och kan därför betecknas som en koordinativ form av styrka, och exempel på sådan styrka
+är sprint-, hopp- och kaststyrka. Snabbstyrka kan också utföras med tillsatsbelastning, det vill säga extra
+belastning som till exempel skivstång, motståndslöpning eller kast med olika redskap.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+43
+
+--- Sida 44 ---
+Beroende på hur stort motståndet är varierar snabbstyrkan
+mellan ytterpolerna, maximal styrka och snabbhet.
+Ju större motstånd desto långsammare rörelse och ju mindre motstånd desto snabbare rörelse.
+För en fullständig mobilisering av snabbstyrkan krävs en hög grad av viljekraft i utförandet.
+Snabbstyrka är en blandning av flera komponenter
+Teknik och
+Snabbhet
+koordination
+Snabbstyrka
+Psykisk Maximal
+viljekraft styrka
+Två ytterligare begrepp som tillhör snabbstyrkan är explosiv styrka och reaktiv styrka.
+Explosiv styrka
+Explosiv styrka är förmågan att med ett explosivt rörelsetempo, alltså med maximal acceleration, övervinna
+ett stort motstånd. När träningstillståndet höjs närmar sig den explosiva styrkan den maximala styrkan,
+Exempel på explosiva styrkeövningar är ryck, frivändning och överstöt.
+Reaktiv styrka
+Reaktiv styrka är förmågan att snabbt övergå från ett eftergivande (excentriskt) arbete till ett övervinnande
+(koncentriskt) arbete, alltså från bromsande till accelererande arbete. Från det uppbromsande, excentriska
+arbetet kan effekter överföras till det koncentriska arbetet som därmed kan få en större explosiv styrkeeffekt.
+Övergången från det eftergivande arbetet (excentriskt) till det övervinnande arbetet (koncentriskt) kallas
+för amortisationsfas. Rent fysiologiskt utnyttjas tänjningsreflexer, förinnervation och muskelns elastiska
+komponenter och exempel på denna träningsform är plyometrisk träning, det vill säga hopp av olika slag.
+4 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 45 ---
+Uthållig styrka
+Uthållig styrka är förmågan att utstå trötthet under lång tid vid en aktivitet som kräver relativt hög kraftinsats
+och den rör sig mellan polerna maximal styrka/snabbhet och uthållighet/varaktighet. Uthållig styrka är en
+målinriktad, speciell styrka för de grenar som i sitt tävlingsutförande kräver en långvarig muskelinsats, till
+exempel 400 m häck.
+Man brukar även inom snabbstyrkegrenarna träna uthållig styrka i början av förberedelseperioden för att
+förbereda stödapparaten och nerv-muskelsystemet för de stora belastningar som blir aktuella under senare
+perioder. Ur energisynpunkt påverkas den glykotiska och glykolytiska processen och uthållig styrka är därför
+viktig som komplement till den anaeroba uthålligheten.
+Man kan därför också använda benämningen anaerob uthållig styrka. Träning av uthållig styrka ger endast
+obetydlig ökning av muskelmassan och tränas exempelvis med skivstång (vikter på 20–60 % av 1RM),
+medicinboll, viktväst eller med den egna kroppen som belastning.
+Allmän styrka
+Allmän styrka är en styrkeform som inte är grenspeciell. Grundstyrka är en vanlig form av allmän styrka.
+Speciell styrka
+Avsikten med speciell styrketräning är att förbättra funktioner på nerv-muskelsystemet på ett speciellt sätt
+som är viktigt för just den valda grenen, och behovet av särskilda träningsformer och metoder ökar med
+höjning av prestationsnivån. De speciella styrkeövningarna kan genomföras som en komplex övning som
+liknar helhetsrörelsen i grenen eller genom en övning som är en del av helhetsrörelsen.
+Exempel på träning av speciell styrka för en släggkastare kan vara användandet av olika redskapsvikter och
+variationen av redskapslängder i kastträningen. De tyngre redskapen används för att utveckla speciell styrka
+och de normalviktiga och lättare för att inte enbart bana den något annorlunda teknik som blir följden av
+tunga redskap.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+45
+
+--- Sida 46 ---
+Exempel på belastningsdosering för styrketräning med tillsatsbelastning
+INTENSITET OMFÅNG VILA RÖRELSETEMPO MÅL - IDROTTSGREN
+MAXIMAL STYRKA UPPREP- SERIER
+NINGAR
+90-100% 1-3 3-5 2-5´ optimal Maximal styrka för grenar med både
+acykliska och cykliska rörelser
+FÖRBEREDANDE
+MAXIMAL STYRKA
+70-90% 4-12 3-5 2-5´ optimal Förb. maximal styrka för grenar
+med cykliska rörelser. Tangerar
+snabbstyrka och uthållig styrka
+70-90% 10- långsam Muskelmassa
+EXPLOSIV STYRKA
+70-100% 1-5 3-5 2-5´ maximalt Explosivitet och kraft för
+friidrottens snabbstyrkegrenar
+SNABBSTYRKA
+60-70% 6-10 4-6 2-5´ snabb Snabbstyrka och samtidigt
+förbättring av maximal styrka
+40-60% 6-10 4-6 2-5´ explosiv, högsta snabbstyrka som bygger på en
+möjliga hastighet god maximal styrka
+20-40% 6-12 6-12 2-5´ explosiv, högsta snabbstyrka
+möjliga hastighet
+UTHÅLLIG STYRKA
+40-60% vid skivstångs- 12-20 3-5 30-90” optimal uthållig styrka för grenar med
+övning högre krav på anaerob uthållighet
+20-40% vid skivstångs- 20- 4-6 30-60” optimal uthållig styrka för grenar med
+övning lägre krav på anerob uthållig
+Absolut styrka Styrka oberoende av kroppsvikt
+Relativ styrka Styrka i förhållande till kroppsvikt
+4 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 47 ---
+Styrkebegreppet
+För att få en så fullständigt beskrivning som möjligt av styrkebegreppet bör man se på det ur två synvinklar,
+dels en mekanisk synvinkel där man studerar muskelns arbetssätt, dels en fysiologisk synvinkel där man
+studerar muskelns kontraktionsform och typ av muskelspänning. Begreppet styrka kan då illustreras med
+nedanstående schematiska bild.
+Översiktsmodell av styrka
+Muskelstyrka
+Muskelns arbetssätt
+Koncentriskt Excentriskt Statisk Kombinerad
+Muskelns kontraktionsform
+Isotonisk Auxotonisk
+Isometrisk
+Typ av muskelspänning
+Explosiv-
+Cyklisk Acyklisk Explosiv Explosiv-
+reaktiv- Fasisk Tonisk
+snabbhet snabbhet ballistisk tonisk
+ballistisk
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+47
+
+--- Sida 48 ---
+Muskelns arbetssätt
+Koncentriskt arbetssätt – muskeln arbetar under förkortning (muskeln kontraheras). Kallas även koncentrisk
+kontraktion.
+Excentriskt arbetssätt – muskeln arbetar under förlängning (muskeln förlängs genom belastning). Kallas även
+excentrisk kontraktion.
+Statiskt arbetssätt – muskelns längd förblir oförändrad eftersom styrkan precis balanserar den yttre belastningen
+Kombinerade arbetssätt som är vanliga i idrott:
+• Eftergivande/övervinnande (reaktiv styrka)
+• Övervinnande/hållande/övervinnande (konträr styrka)
+Muskelns kontraktionsform
+Isotonisk muskelspänning – oförändrad muskelspänning medan muskellängden förändras.
+Isometrisk muskelspänning – muskelspänning under oförändrad muskellängd.
+Uxotonisk muskelspänning – förändring av både muskelspänning och muskellängd.
+Isokinetisk muskelspänning – rörelseutförande som styrs av ett yttre motstånd, från till exempel en maskin,
+med samma hastighet i alla faser av rörelsen.
+Typ av muskelspänning
+Cyklisk snabbhet – många kontraktioner med ett lågt motstånd upprepas i en bestämd frekvens (exempelvis
+sprintlöpning).
+Acyklisk snabbhet – en enda, snabb kontraktion (exempelvis kulkast).
+Explosiv tonisk – utförs med ett mycket högt motstånd där spänningen i början av kontraktionen snabbt når en
+viss nivå för att sedan fortsätta att långsamt stiga tills rörelsen är slutförd. Man stimulerar musklerna på detta
+sätt genom att ha motståndsnivån på 80–100 procent av maximal styrka, genom till exempel tyngdlyftning.
+Explosiv ballistisk – utförs genom en maximal kraftinsats mot ett lågt motstånd. Kraftutvecklingen är störst
+i början av rörelsen för att sedan avta och det ballistiska arbetet stimuleras när det kommer strax efter en
+lätt muskeltänjning, som till exempel kula.
+Explosiv reaktiv ballistisk – utförs på samma sätt som explosiv ballistisk styrka med den skillnaden att det
+i denna typ av muskelspänning förekommer en stark och snabb muskeltänjning och ett eftergivande och
+bromsande arbete i stället för en enda lätt muskeltänjning. Detta sker till exempel i hoppgrenar.
+Fasisk – utförs genom till exempel dynamiskt muskelarbete i rytmiska och cykliska rörelser där man ständigt
+växlar mellan spänning och avspänning. Här har hastigheten inte lika stor betydelse som styrkan och uthålligheten.
+Rodd, simning och cykling är exempel på idrotter där man kan utföra fasisk styrka.
+Tonisk – utförs genom ett muskelarbete som främst består av isometrisk muskelspänning, som till exempel
+skytte, men också starka och långsamma rörelser som brottning och dragkamp.
+4 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 49 ---
+Sammanfattning på fokusområden för styrka
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+Styrketräning kan med fördel Här tar grundstyrkan mycket stor Maximal styrka, snabbstyrka och
+utföras i lekform. Styrketräningen plats men det gör även träning av uthållig styrka är tre former som
+är en del av den träning som bedrivs grenspeciell styrka. Snabbstyrka är tar stor plats i denna fas. Den
+och sker oftast som snabbstyrka också viktig men under denna fas grenspeciella styrkan blir också
+eller snarare koordinationsövningar bör man vara försiktig och uppmärk- dominerande och vilken typ som
+i löpning, hopp och kast. sam på ”pubertetssymptom” (t.ex. tränas beror på grenval.
+schlatter).
+I den senare delen av denna fas är
+det viktigt med grundstyrka. Exempel på träningsformer:
+• Cirkelträning
+Exempel på träningsformer:
+• Skivstång förberedande maxstyrka
+• Lekar och spel
+• Styrkeövningar för respektive gren
+• Gymnastikövningar
+• Medicinboll
+• Friidrottens alla grenar
+• Reaktiv styrka med försiktighet
+• Lågintensiv reaktiv styrka
+• Övningar för skivstångsteknik
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+49
+
+--- Sida 50 ---
+Snabbhet
+Snabbhet är förmågan att under bestämda villkor
+utföra rörelser på så kort tid som möjligt.
+Med snabbhet i löpning menas löpning upp till 6–7 sekunder med över 96 procent av maximal snabbhet.
+Undergrupper av snabbhet
+Snabbhet delas in i fem olika undergrupper:
+• Reaktionssnabbhet • Frekvenssnabbhet
+• Accelerationssnabbhet • Aktionssnabbhet
+• Maximal snabbhet
+Reaktionssnabbhet
+Reaktionssnabbhet tränas bäst prepubertalt och innebär en förmåga att snabbt reagera på en retning från
+omgivningen som till exempel uppfattas av synen, hörseln eller känseln. Den kan uttryckas som tiden från
+retningens start till den första motoriska reaktionen, som till exempel reaktionstiden efter startskott.
+Det tar en viss tid mellan startskottet och den första märkbara muskelaktiviteten som utförs för att lämna
+startblocken. Denna reaktionstid upptas av sinnesfysiologiska processer som tar minst 0,1 sekunder och skulle
+någon reagera snabbare än så klassas det som en tjuvstart. Reaktionstiden beror även på vilken typ av retning
+som utförs; man reagerar snabbare på en ljudsignal än en ljussignal.
+Accelerationssnabbhet
+Accelerationssnabbhet innebär förmågan att snabbt kunna öka hastigheten från låg eller noll till maximal
+hastighet genom till exempel löpning från startblock till maximal hastighet. I de första stegen i en sprintstart
+har sambandet mellan accelerationssnabbhet och den maximala styrkan störst betydelse för accelerationen.
+Därefter har den explosiva styrkan och framför allt den reaktiva styrkan störst betydelse.
+Maximal snabbhet
+Maximal snabbhet innebär förmågan att röra sig i högsta möjliga hastighet. Den här snabbhetsformen bygger
+mycket på den explosiva styrkan och framför allt den reaktiva styrkan. Maximal snabbhet kan också kallas
+snabbkoordination eftersom den framför allt är beroende av muskulaturens koordinations-, innervations- och
+kontraktionsförmåga, samt av nivån i det neuromuskulära systemet (nerv-muskelsystemet).
+5 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 51 ---
+Frekvenssnabbhet
+Frekvenssnabbhet används främst under ungdomsåren som ett särskilt begrepp för den maximala rörelse-
+snabbheten. Eftersom rörelsesnabbhet, eller de neuromuskulära processerna, är extra träningsbara prepubertalt
+och pubertalt blir denna träningsform viktig i barn- och ungdomsträningen. Ska man bedöma ungdomars anlag
+är snabba rörelser en viktig egenskap för snabbstyrkegrenarna.
+Aktionssnabbhet
+Aktionssnabbhet är en acyklisk rörelse och den bygger på att accelerera en kroppsdel eller hela kroppen med
+största möjliga hastighet. Aktionssnabbhet grundar sig på faktorer som tillhör snabbstyrkan och därför kan
+den behandlas som ett snabbstyrkebegrepp.
+Snabbhetens komplexitet
+Snabbhet är en komplex förmåga vilket innebär att den grundar sig på många olika egenskaper, i första hand:
+• förmågan i nerv-muskelsystemet
+• förmågan till styrkeutveckling i muskulaturen.
+Exempel på faktorer inom dessa egenskaper:
+• Muskeltyp • Elasticitet, töjbarhet och avspänningsförmåga i muskeln
+• Muskelstyrka • Muskelns uppvärmningstillstånd
+• Muskelns biokemi • Trötthet
+• Koordination • Psykologiskt tillstånd
+Acykliska och cykliska rörelser
+De rörelser som innefattas av snabbhet kan vara av acyklisk eller cyklisk karaktär:
+• Acykliska rörelser innebär ensidiga rörelser som inte går att upprepa på ett rytmiskt sätt, till exempel
+en kulstöt eller ett upphopp. Dessa kan också kallas för aktionssnabbhet och grundar sig på faktorer som
+tillhör snabbstyrkan, vilket innebär att aktionssnabbheten kan behandlas som ett snabbstyrkebegrepp.
+• Cykliska rörelser är rörelser som är rytmiskt upprepningsbara, som till exempel i löpning.
+Förutbestämda villkor för snabbhet
+Snabbheten kan komma till uttryck på många olika sätt beroende på de förutbestämda villkoren, till exempel:
+• Snabbhet i uppfattning av syn, hörsel och känsel (reaktionssnabbhet)
+• Snabbhet vid acykliskt arbete exempelvis pendelbenets rörelse i ett upphopp (aktionssnabbhet)
+• Snabbhet i start (accelerationssnabbhet)
+• Snabbhet i full fart (maximal snabbhet)
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+51
+
+--- Sida 52 ---
+Sammanfattning på fokusområden för snabbhet
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+Under denna fas är barnen I denna fas tränas den maximala Med ökning av den maximala och
+mottagliga för att utveckla sin snabbheten bäst genom att träna i en explosiva styrkan tränas med fördel
+reaktionsförmåga och maximala optimal hastighet, dvs. så snabbt som accelerationssnabbhet och maximal
+rörelsefrekvens. tekniken tillåter. snabbhet.
+Exempel på övningar: Aktionssnabbhet och frekvensövningar Exempel på övningar:
+• Lekar är också viktiga träningsformer. • Blockstarter
+• Spel Exempel på övningar: • Flygande 30 m
+• Stafetter • Kulkast
+• Reaktionsövningar • Konlöpningar
+• Zonlöpning (t.ex. acc-flyt-driv)
+5 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 53 ---
+Rörlighet
+Rörlighet är förmågan att utföra rörelser med stort
+rörelseutslag, alltså amplitud.
+Rörlighetsträning är en fysisk grundegenskap som inte fokuserar på att maximera effekten, utan som i stället är
+till för att optimera tänjbarheten i ledband, senor och muskler utifrån det krav som respektive friidrottsgren ställer.
+Rörelseträning kan utföras aktivt med hjälp av egen muskelkraft eller passivt med hjälp av egen kroppsvikt, träning-
+skamrat eller redskap.
+Undergrupper av rörlighet
+Rörlighet delas in i två olika undergrupper: dynamisk och statisk rörlighet.
+Dynamisk rörlighet
+Dynamisk rörlighet är intensiva muskelinsatser för att nå ytterlägen, oftast med hjälp av egen muskelkraft.
+Denna form av rörlighetsträning används först och främst under uppvärmning för att förbereda musklerna för
+en kommande aktivitet.
+Statisk rörlighet
+Statisk rörlighet innebär att under en viss tid hålla en kroppsdel eller hela kroppen still i ett ytterläge av
+rörelseomfånget. Den här formen av rörlighetsträning används för att förbättra rörligheten och utförs främst
+i slutet av träningspasset.
+Tre principiellt olika rörlighetsmetoder
+Tänjning/pendling
+Tänjning eller pendling är en aktiv form av träning där man tilldelar en kroppsdel rörelseenergi genom
+till exempel en sving, och den används vanligtvis som metod vid uppvärmning och ungdomsträning.
+Stretching
+Stretching innebär att man efter uttöjning av en muskel eller muskelgrupp stannar kvar i ytterläget under
+en relativt lång tid (minst 30 sek). Stretching används helst i slutet av träningspasset.
+KAT
+KAT-metoden innebär att muskeln töjs ut (ca 10’’), kontraheras i detta läge (ca 5’’) och slappas av (ca 2’’).
+Detta upprepas sedan cirka 3–4 gånger. KAT-metoden används helst i slutet av träningspasset
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+53
+
+--- Sida 54 ---
+Sammanfattning på fokusområden för rörlighet
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+De flesta barn har en naturlig Ungdomar i puberteten växer Här ska man upprätthålla
+rörlighet men i dagens moderna väldigt mycket under relativt den allmänna rörligheten och
+samhälle där många barn rör kort tid och därför behövs myck- optimera den grenspeciella
+sig allt mindre bör dynamisk et av både dynamisk och statisk rörligheten för respektive
+rörlighetsträning vara en del av rörlighetsträning. gren. De aktiva som har en god
+träningen i denna fas. rörlighet bör inte träna detta
+I denna fas kan även grenspeciell
+moment lika mycket.
+rörlighetsträning behövas i
+exempelvis spjut eller häck.
+De aktiva som har en god
+rörlighet bör inte träna detta
+moment lika mycket.
+5 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 55 ---
+Koordination
+Koordination är förmågan att samordna kroppsrörelser i
+förhållande till varandra och till aktuell omgivning.
+En bred koordinativ bas är avgörande för den långsiktiga grenspecifika utvecklingen och minskar risken för
+rörelsestereotyper, så kallade barriärer.
+Det finns hela tiden ett sampel mellan utveckling av de övriga fysiska grundegenskaperna och koordinativ
+utveckling (teknik). Vi kan ta en längdhoppare som exempel: om längdhopparen förbättrar sin hastighet i
+ansatsen så krävs koordinativa förändringar i uthoppet för att en bättre idrottsprestation ska kunna uppnås.
+Det går inte att optimera resultaten genom att ensidigt förbättra
+en fysisk egenskap, exempelvis styrka, om inte denna kan överföras
+till en teknisk koordinativ utveckling.
+Bra koordinativa egenskaper gör att mer tid kan läggas på att utveckla de andra fyra fysiska egenskaperna.
+Ett exempel: om en aktiv har god koordination så har hen lättare att lära sig hur en tekniskt korrekt frivändning
+ska utföras – en övning som hen sedan kan använda för att förbättra sin explosiva styrka.
+Undergrupper av koordination
+Koordination delas in i sju olika undergrupper:
+• Orienteringsförmåga • Rytmisk förmåga
+• Timing och kopplingsförmåga • Reaktionsförmåga
+• Differentieringsförmåga • Anpassnings- och variationsförmåga
+• Balans eller jämviktsförmåga
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+55
+
+--- Sida 56 ---
+Orienteringsförmåga (kropps- och rumsuppfattning)
+Orienteringsförmågan handlar om att bestämma och förändra sin kroppsposition och sina kroppsrörelser
+i rummet, till exempel i stavhopp.
+Timing och kopplingsförmåga
+Timing innebär att man samordnar kroppsdelarnas rörelser till en praktisk helhetsrörelse som till exempel
+i kulstötning.
+Differentieringsförmåga
+Differentieringsförmåga handlar om att kontrollera och inrikta sig på bestämda rörelser, antingen hel- eller
+delrörelser. Detta görs utifrån noggrannhet i utförandet av rörelsen och utifrån rörelsens styrkemässiga, snabb-
+hetsmässiga eller rumsliga förlopp.
+Balans eller jämnviktsförmåga
+Balans handlar om att lyckas inta, hålla eller återta jämviktstillstånd, och här är det viktigt att ha en uppfattning
+om kroppens tyngdpunktsläge.
+Rytmisk förmåga
+Rytmisk förmåga innebär att anpassa rörelserna till en bestämd rytm som i exempelvis häcklöpning, eller att
+hitta en praktisk egen rytm som i löpning eller kast.
+Reaktionsförmåga
+Reaktionsförmågan innebär att snabbt starta bestämda rörelsemönster på en signal eller vid en plötslig förändring
+i situationen.
+Anpassnings- och variationsförmåga
+Anpassningsförmåga innebär att man medvetet varierar och förändrar sina rörelser till en pågående eller ny
+situation. En diskuskastare till exempel, kan lära sig att kasta i olika delar av sektorn genom att vrida start-
+positionen i ringen för att på bästa sätt utnyttja vindens riktning.
+Det är lätt att i träning fastna i stereotypa rörelsemönster, vilket kan skapa utvecklingsbarriärer. Det är därför
+mycket viktigt att variera och förändra givna förutsättningar. Exempel beskrivs i tabellen på nästa sida.
+5 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 57 ---
+Förändring/variation av rörelseutförandet i väg-, tids- och rumsförloppet
+EXEMPEL
+Förändrad rörelseriktning Sprint i kurva, kan även göras i motsatt riktning
+Längdutsprång i olika uthoppsvinklar
+Prickkastning med spjut
+Förändring i hastighet och rytm Tempoväxlingar i sprint
+Hopp med kortare/längre ansats
+Kast med lättare/tyngre redskap
+Förändrad kraftinsats Motståndslöpning
+Hopp över olika höjder
+Kast med olika vikter
+Förändrat rörelseutslag Kast med avkortad ansats
+Splithopp i längd
+Förändrade yttre villkor Löpning i terräng
+Häcklopp med olika häckavstånd
+Kast med annorlunda redskap
+Höjdhopp från låda
+Öva ”fel” sida Start med ”fel” ben
+Hopp med ”fel” ben
+Kast med ”fel” arm
+Förändring/variation av Löpning med olika armarbeten
+rörelsedetalj Rotation i diskus med käpp bakom nacken
+Upphopp med rakt pendelben
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+57
+
+--- Sida 58 ---
+Sammanfattning på fokusområden för koordination
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+I denna fas är det viktigt att arbeta med En mer grenspeciell koordinativ Finslipa tekniken till
+många rörelsemönster hämtade både från träning inleds genom att forma perfektion.
+friidrottens tränings- och tävlingsövningar grundtekniken (de viktigaste
+Automatisera och
+och från andra idrotter. Den prepubertala rörelserna) i friidrottens olika
+individanpassa tekniken
+fasen är ”guldåldern” för koordinativ grenar/grengrupper.
+samt utveckla den
+utveckling. Träningen av de koordinativa
+Exempel på övningar: personliga stilen.
+egenskaperna visar sig framför allt i
+• Hel- och delmetod
+den senare delen av den friidrottsliga
+i friidrottsgrenen
+utvecklingen.
+• Hopp-, löp-, häck- och
+Exempel på träningsformer:
+kastkoordination
+• Friidrottens alla grenar
+• Gymnastik
+• Dans
+• Koordinationsbanor
+5 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 59 ---
+Teknik
+Teknik är sättet att lösa en bestämd rörelseuppgift på bästa praktiska
+och effektiva sätt som har lärts in genom träning.
+Tekniken för en idrottsgren representerar en så kallad idealtyp, men för varje aktiv formas tekniken utifrån
+idealtypen och den aktives individuella förutsättningar till en personlig stil.
+Sambandet mellan teknisk och fysisk utveckling
+Om balansen mellan fysik och teknisk förmåga inte är optimal kan den aktive hamna i en stagnation av
+resultatutvecklingen (se vidare s.65).
+Under den idrottsliga utvecklingen måste de fysiska prestationsfaktorerna
+och det tekniska kunnandet utvecklas parallellt.
+Teknikens betydelse
+Möjligheten för en aktiv att nå bästa möjliga tekniska utveckling bestäms i första hand av det genetiska arvet
+och av en stor rörelseerfarenhet, både allmän koordination och grundteknik i aktuell gren(ar).
+Tekniken har olika betydelse i olika grenar:
+• I snabbstyrkegrenar är tekniskt kunnande på hög nivå nödvändigt för att kunna genomföra snabba
+rörelser med maximal kraftutveckling.
+• I uthållighetsgrenar har tekniken främst en uppgift att vara energisparande.
+Genom en god teknik kan den aktive hålla en hög prestationsnivå
+långt upp i åren trots att hen inte längre har lika hög fysisk kapacitet.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+59
+
+--- Sida 60 ---
+Kriterier och/eller kännetecken
+på den idrottsliga tekniken
+Den tekniska träningen har som syfte att få den aktuella färdighetsnivån att närma sig idealtypen för tekniken.
+Utformningen på tekniken bestäms av det aktuella träningstillståndet; en nybörjares teknik kan till exempel vara
+mycket olik den färdiga elitidrottarens eftersom fysiska egenskaper som styrka och snabbhet är betydligt mindre
+utvecklade. För elitidrottaren kan i stället den aktuella färdighetsnivån stämma överens med den tekniska ideal-
+typen, och är det så kan en ytterligare höjning av prestationen bara nås genom att den aktive fortsätter att för-
+bättra sin personliga stil. Det första steget i att framställa en idealtypisk teknikmodell sker genom att man delar
+upp helhetsrörelsen i olika faser – ett längdhopp till exempel består av ansats-, uthopp-, flyg-, och landningsfaser.
+Tekniken beskrivs ibland med hjälp av kvalitativa och kvantitativa kännetecken. De kvalitativa kännetecknen
+innebär verbala beskrivningar av rörelser som inte är mätbara eller som inte går att kvantifiera. De kvantitativa
+kännetecknen däremot är mer objektiva eftersom de går att mäta i antal eller med olika mått.
+För att framställa kvantitativa kännetecken används biomekanik som bland annat kan:
+• visa på den objektiva tekniken
+• beskriva kinematiska och dynamiska kännetecken
+• belysa praktiska tekniska varianter
+• bestämma ledande tekniska kännetecken.
+Dessa faktorer ligger till grund för urvalet av träningsövningar. Vid bestämning av rörelsens kvantitativa
+aspekter skiljer man på kinematiska och dynamiska kännetecken (se nedan).
+Kinematiska kännetecken (lägesbeskrivning i tid och rum):
+TID Tidsbestämning av exempelvis rörelsefaserna, frekvens, stödfasen i upphoppsmomentet.
+LÄNGD Exempelvis steglängd, hopplängd, accelerationssträckans längd.
+RIKTNING Lägesbeskrivning av olika kroppsdelars axlar uttryckt i ledvinklar, längdbeskrivning mellan en
+längdaxel och en yttre referens exempelvis uthoppsvinkel.
+HASTIGHET Exempelvis hastigheten på ansatsens sista steg.
+6 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 61 ---
+Dynamiska kännetecken (rörelserytmer):
+ACCELERATIONSVÄG Längd och riktning på accelerationen för att få optimal kraft.
+KRAFT OCH BROMS- För att exempelvis få ett explosivt uthopp i längdhopp, måste den excentriska fasen,
+IMPULSER amortisationsfasen och frånskjutsfasen få ett optimalt förlopp.
+KOORDINATION AV Endast ”timingen” av olika delimpulser ger summan av den totala kraften.
+DELIMPULSER
+VRIDMOMENT Ett mått på en krafts förmåga att vrida ett objekt kring en viss axel med hjälp av
+hävstångsverkan, alltså längre hävstång ger större kraft.
+Sammanfattning av de kvantitativa aspekterna på idrottslig teknik.
+Idrottslig teknik
+Teknikförloppets faser
+Kinematiska kännetecken Dynamiska kännetecken
+(i tid och rum) (rörelserytmer)
+• tid • accelerationsväg
+• längd • kraft- och bromsimpulser
+• riktning • koordination av delimpulser
+• hastighet • vridmoment
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+61
+
+--- Sida 62 ---
+Helhetsmetod och delmetod
+Teknisk skolning inom friidrott följer vanligtvis den deduktiva
+metoden (delmetoden), vilket innebär att målet för den tekniska
+inlärningen är en idealteknik. Den deduktiva metoden innebär
+en stegvis utveckling, det vill säga att inlärningen är uppdelad
+i bestämda delmoment som stegras från enklare till mer
+avancerade övningar som till slut leder till den specifika
+helhetsövningen. Varje delmoment betonar något
+i helhetsövningen.
+Med den induktiva metoden (helhetsmetoden)
+menas att den aktiva själv listar ut och
+skapar en teknikmodell, som till
+exempel Dick Fosbury som
+skapade flopptekniken
+i höjd.
+Exempel på olika delövningar som stödjer träning av helhetsövningen.
+I den tekniska inlärningsprocessen används både helhetsmetoden och delmetoden. Delmetoden kan användas
+när man vill koncentrera sig på en viss fas i helhetsförloppet. Helhetsmetoden sker med övningar som närmar
+sig tävlingsövningen.
+När du använder dig av helhetsmetoden vid teknikinlärning är det viktigt
+att du endast betonar ett tekniskt moment i rörelseförloppet då den aktive
+har svårt att tänka på flera detaljer samtidigt. När det gäller delmetoden
+betonar du den del av rörelsen som utförs isolerat.
+I yngre åldrar är helhetsmetoden att föredra, dels på grund av att den medför snabbare inlärning av grov-
+koordination, dels eftersom den skapar motivation; barn vill gärna utföra grenen i sin helhet, och dels kan
+övningarna i nybörjarträningen vara väldigt förenklade (grovteknik).
+Vid en ökad färdighetsnivå måste både helhets- och delmetoden användas för att tekniken ska utvecklas.
+6 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 63 ---
+Tekniska inlärningsmetoder
+Den tekniska inlärningsprocessen går genom fyra olika faser eller etapper.
+1. Förståelse och föreställning
+Genom att få se någon utföra grenen i sin helhet, i verkligheten eller
+på film, får den aktive en första bild av grenens helhetsutförande.
+2. Grovkoordination
+Det är viktigt att ungdomarna får prova grenen
+i sin helhet, till exempel kasta diskus. Det gäller att
+förmedla en föreställning om hur rörelserna ska
+kännas och att lära ut de tekniska grundformerna.
+En bra pedagogik i det här läget är en kort förklaring och/eller en demonstration.
+Du kan varken förvänta dig eller begära att tekniken är fulländad vid det här stadiet,
+utan ofta har den aktive kraftinsatser på fel ställen, störningar i tidsförloppet, kantigt
+utförande, inte tillräckligt rörelseomfång, fel hastighet eller så saknas precision.
+3. Finkoordination
+Vid den finkoordinativa fasen är träningen inriktad mot
+måltekniken med detaljerade rörelsehänvisningar och
+korrigeringar. Möjligheten att förbättra finkoordinationen
+ökas om den aktive har kunskaper om tekniken.
+4. Stabilisering och automatisering
+Här utformas den personliga stilen, det vill säga individens
+bäst anpassade, effektiva och automatiserade teknik. Utifrån
+idrottsgrenens specifika krav koncentreras träningen på kritiska
+punkter i rörelseförloppet.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+63
+
+--- Sida 64 ---
+Allmän teknikskolning
+Vid den allmänna teknikskolningen gäller metoden om den allsidiga träningen där man strävar efter en bred
+koordinativ bas. Här handlar det om att den aktive ska lära sig många enkla tekniker eller rörelsefärdigheter
+som senare underlättar inlärning av speciella och komplexa tekniker.
+Koordinationen ska utvecklas genom att den aktive lär in ett varierat och
+allmänt rörelseförråd som även består av grenlika grundläggande övningar.
+I friidrott är dessa grundformer löpning, hopp, kast och stöt.
+Träningsövningar som hoppsa, mångsteg och hopp över hinder bidrar till exempel till god koordination av
+insatser med upphoppsben-, pendelben- och armar, och därmed förbereds en framtida skolning av grentekniker
+i hoppgrenarna.
+Speciell teknikskolning
+Den speciella teknikskolningen bygger på rörelseerfarenheter från den allmänna teknikskolningen, och
+enskilda delar av det för varje idrottsgrens specifika teknikmönstret fulländas och sätts ihop till den slutliga
+tävlingsövningen.
+Praktiska inlärningsmetoder för den speciella teknikskolningen
+Praktiska inlärningsmetoder innebär att man tränar helhetstekniken eller dess olika faser, till exempel genom
+att träna ansats, upphopp, ribbpassage eller landning i höjdhopp. Som tränare kan du hjälpa den aktive att
+lära in ett rörelsemönster genom att leda en kroppsdel i en specifik rörelse, till exempel leda armen i en
+spjutkaströrelse.
+Teoretiska inlärningsmetoder för den speciella teknikskolningen
+Ideomotorisk träning innebär att ”tänka teknik”, exempelvis
+kan träningsmedel som texter om teknik användas för att
+skapa en idé om hur rörelsen ska se ut.
+Observativ träning är träningsmedel såsom
+videoinspelningar, film, demonstrationer,
+bildserier eller liknande.
+Muntlig information innebär oftast
+teknikcoachning av rörelsebeskrivning,
+rörelseförklaring och rörelseanvisning.
+6 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 65 ---
+Metodiska grundsatser
+Det är viktigt att tidigt lära in rätt rörelseteknik då det är svårt
+att ändra ett automatiserat (invant) rörelsemönster.
+Förändrade fysiska förändringar påverkar rörelsesystemet. Det är därför viktigt att kontinuerligt utveckla
+tekniken utifrån nya fysiska förutsättningar.
+Tänk på att!
+• Det är viktigt att både tränare och aktiv har kunskap om hur en rörelseteknik ska utföras
+för att underlätta teknikinlärningen.
+• En bred allmän rörelsebank underlättar inlärning av grenspeciell teknik.
+• Använd flera sinnen (syn, hörsel och känsla) när du förklarar och visar övningen och låt alltid
+den aktive göra övningen. Här kan även filmning vara till hjälp.
+• Träna tekniken ofta för att automatisera rörelsemönstret.
+• En speciell teknik kräver speciella träningsövningar och speciella fysiska förberedelser.
+Den tekniska träningen ska först och främst ske i ett utvilat tillstånd. Det kan i vissa fall finnas en poäng
+i att frångå det; en mångkampare till exempel utför inte alla grenar under tävling i ett utvilat tillstånd och
+bör därför träna teknik i ett så tävlingslikt tillstånd som möjligt.
+Antalet upprepningar ska anpassas efter den aktives fysiska förutsättningar och koncentrationsförmåga
+eftersom ett uttröttat centralt nervsystem ger en försämrad koordinativ inlärningsförmåga.
+Stagnation som problem i den tekniska utvecklingen
+Under en träningsprocess förekommer stagnationsperioder eller så kallade platåer i den tekniska utvecklingen,
+det vill säga utvecklingen stannar av ett tag. Stagnation kan bland annat bero på
+• övercoachning
+• överkrav genom psykisk eller fysisk trötthet
+• brist på information
+• brist på motivation
+• fysiska brister.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+65
+
+--- Sida 66 ---
+Nedan följer en kort beskrivning av dessa orsaker till stagnation, samt presenteras exempel på motåtgärder.
+Övercoachning
+Tränaren ger för mycket information och för många tekniska
+detaljer under teknikträningen, vilket gör att den aktive har
+svårt att tänka på och utföra flera tekniska moment samtidigt.
+Detta leder till en försämrad teknisk inlärning.
+Motåtgärd: Det är viktigt att du som tränare har en metodik
+i inlärningsprocessen där du arbetar med få instruktioner i taget.
+Överkrav genom psykisk eller fysisk trötthet
+Vid intensiv teknikskolning kan ”motorisk trötthetsregression” uppstå,
+om den aktive är fysisk och/eller mentalt trött.
+Motåtgärd: Ta en kortare eller längre paus från teknikträningen
+Brist på information
+Den tekniska utvecklingen kan bli fördröjd genom en felaktig rörelseföreställning hos tränaren och/eller den
+aktive, vilket leder till att korrigeringar och anvisningar inte ger önskat resultat.
+Motåtgärd: Kunskap om det tekniska utförandet måste finnas hos både tränaren och den aktive. Kommunicera
+med den aktive genom frågor för att kontrollera att hen har förstått och tänker rätt om de tekniska detaljerna.
+Om det däremot är tränaren som saknar tillräcklig kunskap kan det vara bra att till exempel ta hjälp av en
+mentor eller fylla kunskapsluckorna genom att gå en utbildning.
+Brist på motivation
+Att inställning och motivation hos den aktive ändras kan bero på många olika saker, exempelvis otillräcklig
+uppmärksamhet, utvecklingsstagnation eller psykisk ohälsa, vilket kan påverka den tekniska processen på
+ett negativt sätt. Bristen på motivation kan också ligga utanför den aktive själv, till exempel hos tränaren,
+gruppen eller omgivningen.
+Motåtgärd: Utvalda pedagogiska åtgärder som till exempel motiverande samtal.
+6 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 67 ---
+Fysiska brister
+Om det finns brister i den fysiska förmågan är det svårt att utveckla det
+tekniska kunnandet.
+Den fysiska och tekniska förmågan
+måste utvecklas parallellt.
+Motåtgärd: Betoning på allmänna och speciella förbättringar av de fysiska
+prestationsfaktorerna.
+Rörelsekorrigering i den tekniska skolningen
+Rörelsekorrigering har stor betydelse i teknikträningen och har till uppgift att förändra rörelsen för att
+den ska närma sig idealtekniken. Detta sker genom både grov- och finkoordination. Tränaren måste vara
+uppmärksam på fel redan i nybörjarstadiet och se till att förändringar sker i små steg, att korrigera ett fel
+i taget.
+När en rörelse väl har blivit stabiliserad och blivit
+vad man kallar en ”stereotyp” är det både svårt
+och tidskrävande att ändra på rörelsen.
+Två typer av felkorrigeringar
+Det finns två typer av felkorrigeringar: korrigering genom snabbinformation och korrigering av redan
+automatiserad felaktig teknik.
+Korrigering genom snabbinformation
+Korrigering genom snabbinformation är särskilt effektiv och innebär att tränaren ger muntliga instruktioner
+som kan förstärkas med filmning. Korrigeringen ska då komma i nära anslutning till att rörelsen utförs, eftersom
+informationen är effektivare ju tidigare efter rörelsen den följer. Den är särskilt effektiv när den aktive har en
+chans att rätta till den redan i nästa upprepning, och det är också möjligt att ge instruktioner under själva
+rörelsens utförande eller att avbryta rörelsen om den aktive gör grova fel.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+67
+
+--- Sida 68 ---
+Korrigering av redan automatiserad felaktig teknik
+Automatiserade rörelser är mycket svåra att ändra på, vilket kan innebära att tränarens tekniska instruktioner
+till den aktive ger dålig effekt. Omskolning av teknik sker effektivast genom att följa nedanstående fyra faser.
+När rörelsefel är orsaken till en prestationsstagnation är det
+nödvändigt med en teknisk omskolning. Till en början kan
+detta medföra en prestationsförsämring.
+Omlärning sker i följande fyra faser.
+Fas 1
+Den aktive måste mycket bestämt koncentrera sig på den nya tekniken så att inte den gamla tekniken
+tar över, vilket sker automatiskt.
+Fas 2
+Den gamla tekniken luckras upp och är inte längre upprepningsbar, men den nya tekniken är ännu inte
+stabil. Blandningen av gammal och ny teknik leder till en prestationsförsämring.
+Fas 3
+Skillnaden mellan den gamla och den nya tekniken börjar framträda; de blandas inte längre ihop och
+en prestationsstegring börjar. Den nya tekniken framträder bara vid hög koncentration och under bra
+förhållanden. Vid en stressituation, exempelvis en tävling, är det däremot lätt att falla tillbaka till den
+gamla tekniken.
+Fas 4
+Den nya tekniken fungerar även under stress. Den kan nu automatiseras och stabiliseras.
+Metodiska former för omskolning kan vara träning av delfaser, övning med minskad hastighet och kraftinsats
+och även övning under särskilt gynnsamma förhållanden. I vissa fall då det är för svårt att bryta ned den
+gamla tekniken kan man också fundera på att till exempelvis byta hoppben.
+6 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 69 ---
+Kontroller och tester
+När man kontrollerar den tekniska färdigheten bedömer man noggrannheten i utförandet av rörelsen.
+Det mänskliga ögat är begränsat när det gäller uppfattningsförmågan, vilket innebär att även en person som
+är tränad i att se tekniska fel inte fullständigt kan observera en rörelse, utan måste göra vissa antaganden
+utifrån sina kunskaper om en rörelse och dess orsak och verkan.
+Hjälpmedel som filmning och teknikspecifika tester är därför nödvändiga för att kunna göra en noggrann
+bedömning av den tekniska färdigheten. Hjälpmedel spelar även en stor roll för den aktive då hen får hjälp
+att upptäcka hur rörelser och deras förutsättningar kan förbättras och ändras.
+Om en aktiv inte själv lägger märke till sina tekniska fel och
+inte heller får information om felen kan hen inte förbättra sin teknik.
+Sammanfattning på fokusområden för teknik
+PREPUBERTAL FAS PUBERTAL FAS POSTPUBERTAL FAS
+Målet är en allsidig träning med en bred En mer grenspeciell teknik- Finslipa tekniken till
+koordinativ bas. Här handlar det om att träning inleds genom att forma perfektion. Automatisera
+lära sig ett stort antal enkla tekniker grundtekniken (de viktigaste och individanpassa tekniken
+eller rörelsefärdigheter. Den koordinativa rörelserna) i friidrottens olika samt utveckla den personliga
+förmågan utvecklas genom ett rikt och grenar/grengrupper. stilen.
+allmänt rörelseförråd. Grenlika grund-
+former ska läras in såsom löpning, hopp,
+kast och stöt.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+69
+
+--- Sida 70 ---
+Personlighetsegenskaper
+- Psykologi
+Att idrotta i syfte att nå toppresultat är egentligen en strävan att förverkliga sig själv med hjälp av idrott,
+och endast med hjälp av mycket goda personliga och mentala egenskaper kan en hög idrottsprestation uppnås.
+En personlighetsutveckling måste hela tiden pågå under den långsiktiga träningsprocessen och den måste även
+vara starkt sammankopplad med den fysiska träningen.
+Två olika målformuleringar med mental träning
+1. Personlighetsutveckling under träningsprocessen (allmänna förberedelser)
+I ett större perspektiv kan målet med att idrotta vara en personlighetsutveckling
+snarare än idrottsprestationen i sig.
+2. Mental stabilitet i tävlingssituationen (specifika förberedelser)
+I ett snävare perspektiv är syftet med den mentala träningen att kunna uppnå sin
+yttersta prestationsförmåga i tävling.
+Mental stabilitet
+Den mentala stabiliteten uttrycks i den aktives förmåga att fullständigt använda sina resurser under full
+kontroll av sitt spänningstillstånd. Den mentala stabiliteten kan bara prövas på riktigt i en tävlingssituation.
+Att delta i tävlingar är en viktig metod för mental träning.
+I tävlingssituationen gäller det att hitta ett balanserat förhållande mellan självstyrande och temperamentsfulla
+egenskaper, och i träningssituationerna ska de självstyrande egenskaperna dominera.
+7 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 71 ---
+SJÄLVSTYRANDE EGENSKAPER TEMPERAMENTSFULLA EGENSKAPER
+• Självbehärskning • Impulsivitet
+• Ihärdighet • ”Retbarhet” (att reta sig på uppkomna situationer till exempel
+att provoceras av en annan person eller uppkommen situation)
+• Viljestyrka
+Det finns även metoder som ska förbereda den aktive för tävlingssituationer:
+Autogen träning: Uppnå mental avspänning genom meditationsliknande övningar, exempelvis genom
+att ta ett par djupa andetag.
+Desensibilisering: Bearbeta tankemässigt situationer som kan verka stressande.
+Modellträning: Träna på ett sätt som efterliknar tävlingssituationen.
+De mentala egenskaperna
+De mentala egenskaperna utvecklas genom påverkan av inre stimuli och stimuli i den yttre miljön. Påverkan
+från den yttre miljön kan exempelvis komma från föräldrar, kompisar, lärare, tränare eller publik.
+Exempel på mentala egenskaper:
+• Iakttagelse- och uppmärksamhetsförmåga • Emotionella faktorer (känslor, temperament)
+• Koncentrationsförmåga • Motivationsfaktorer (behov, drivkrafter)
+• Intellektuell förmåga
+Exempel på mer bestämda målformuleringar i träningsprocessen för utvecklingen
+av de mentala egenskaperna:
+• Strävan mot mål, målmedveten, • Principfasthet
+att ha målbilder • Optimism, framstegstro
+• Initiativförmåga • Beredskap för motgångar
+• ”Kunskapstörst”, längtan efter insikt • Självförtroende
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+71
+
+--- Sida 72 ---
+De mentala egenskaperna kan under träning uttryckas i beteendeformer som
+• flit, energi • noggrannhet, samvetsgrannhet
+• ihärdighet, envishet • självbehärskning
+• punktlighet • nyfikenhet.
+Inställning, självständighet och självkontroll
+Inställning
+Den aktives inställning uttrycker motiven för att bedriva idrott. Inställningen utgår från begrepp såsom
+• ideal, värderingar
+• intressen
+• ambitioner.
+Inställningen formuleras av den aktive själv genom inre motivation, men är egentligen resultatet av yttre
+påverkan som till exempel inlärning och uppfostran. Aktiva som har svagare mentala egenskaper ändrar
+lättare inställning till sitt idrottande medan aktiva med goda mentala egenskaper visar en mer stabil
+inställning. Har man en felaktig inställning till sitt idrottande är höga prestationer svåra att åstadkomma.
+Självständighet
+Självständighet innebär att själv kunna styra och värdera sina handlingar i ett idrottsligt sammanhang.
+Självständighet grundar sig på kunskaper som i träningsprocessen i första hand förmedlas av tränaren,
+eller av andra personer som står den aktive nära.
+En hög grad av självständighet hos den aktive är av betydelse för att hen ska
+• kunna delta i planeringen och utformningen av träningen
+• kunna genomföra träningspass utan yttre styrning
+• kunna bedöma hälsotillståndet
+• kunna handskas med yttre faktorer som påverkar träningen som
+till exempel kost, hygien, mediciner, alkohol och droger
+• klara skötsel av idrottsredskap och kläder
+• kunna planera och klara av de allmänna procedurerna vid
+förberedelse och genomförande av tävlingar
+• klara av att värdera sin sociala situation när det gäller exempelvis
+skola eller arbete
+• kunna hantera media, manager, fysioterapeuter och sponsorer.
+7 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 73 ---
+Metoder för att utveckla självständighet:
+• Självständigt genomförande av träningspass och tävlingar, att ”få klara sig själv”.
+• Deltagande i tränings- och tävlingsplanering.
+• Undervisande moment, diskussioner och dialoger före, under eller efter träningspass.
+• Planering före tävling och analys av tävlingsinsatsen.
+• Iordningställande av redskap och annan utrustning.
+• Ta ansvar för medicinsk uppföljning.
+• Speciella tematräffar.
+• Självstudier.
+Självkontroll
+Den aktive bör själv kunna utvärdera hur hen reagerar på träningen och jämföra detta med de förväntade
+effekterna, det vill säga ha god självkontroll av träningen.
+Som tränare avgör du vanligen träningens belastning utifrån ”yttre iakttagelser”.
+När den aktive kan bidra med sina ”inre iakttagelser” ökar möjligheterna till
+en på bästa sätt individuellt anpassad belastning. Detta förutsätter att du
+som tränare har en god kommunikation med den aktive.
+Förmågan till goda själviakttagelser av tekniska och taktiska färdigheter är också av stor betydelse. Vid
+självkontroll av belastningen ska den aktive kunna bedöma och uppleva hur tekniska och taktiska färdigheter
+klaras av i såväl tränings- som tävlingssituationen.
+Inlärningsprocessen är en självstyrande inre verksamhet som endast den aktive själv kan kontrollera; tränare
+eller andra utomstående kan bara skapa förutsättningar för inlärning. Exempel på själviakttagande är att den
+aktive själv ska kunna känna hur hen klarar av att utföra tekniska övningar.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+73
+
+--- Sida 74 ---
+Allmänna och speciella kunskaper
+Allmänna kunskaper:
+• Medicin (hälsa, första hjälpen)
+• Sociala villkor (till exempel skola och arbete)
+• Samhällets stöd till idrotter (idrottsgymnasium och postgymnasiala utbildningar)
+• Idrottens organisation
+• Rådgivning
+• Utvecklings-, inlärnings- och socialpsykologi
+• Sociologi (den idrottande i samhället)
+• Antidoping och dess regelverk
+Speciella kunskaper:
+• Teknik
+• Taktiska uppfattningar
+• Fackspråk och begrepp
+• Självkontroll och iakttagelser (till exempel dagbok, hälsokontroller och sömn)
+• Fysiologi, idrottsmedicin
+• Träningsplanering
+• Återhämtande åtgärder
+• Redskapens egenskaper och konstruktion
+7 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 75 ---
+Träningens grundprinciper
+Optimal mottaglighetsålder
+Stegrad prestation
+Kontinuerlig belastning
+Stegrad belastning
+Träningens
+Varierad belastning
+grundprinciper
+Systematik
+Mångsidighet
+Individualisering
+Specialisering
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+75
+
+--- Sida 76 ---
+Det är väldigt viktigt att känna till och arbeta efter träningens grundprinciper eftersom de är avgörande för
+att kunna styra den aktive hela vägen upp till hens idrottsliga topprestation. Grundprinciperna visar vilken
+väg träningen ska följa och hur den huvudsakligen ska utformas under alla stadier i utvecklingen. Träningens
+grundprinciper ska gälla både långsiktigt (så att de berör hela utvecklingsförloppet) och kortsiktigt (så att de
+berör träningens utformning av enskilda träningspass och under perioder på upp till flera veckor).
+Grundprinciperna baseras på
+• kunskaper om människans biologiska, mentala och sociala utveckling
+• kunskaper om varje idrottsgrens uppbyggnad (prestationsstruktur) och utveckling (kravprofil)
+• erfarenheter om framgångsrika effekter i träningsprocessen (beprövad erfarenhet).
+Hur dessa principer konkret påverkar träningens utformning avgörs även av
+• målsättningar från RF, SOK, kommun, förbund eller förening
+• resurser i form av träningsanläggningar
+• tränarens personliga skicklighet och filosofi.
+Då kan man tala om ett så kallat träningssystem.
+Många olika träningssystem kan leda till samma slutmål, men
+varje träningssystem måste regleras av träningens grundprinciper
+för att ge den aktive en möjlig väg till framgång.
+Mer specifika träningssystem hör hemma i de grenspeciella träningslärorna, som alltså behandlar de enskilda
+friidrottsgrenarna
+Bristande tillämpning
+Att inte tillämpa grundprinciperna i träningssystemet på bästa sätt är den främsta anledningen till idrottsliga
+problem som tidig stagnation, skador, fysisk och mental obalans, förlorad motivation, långsam utvecklingstakt
+och ”felvald” idrottsgren.
+7 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 77 ---
+Principen om optimal mottaglighetsålder
+Schemat nedan bygger på optimeringsteorin och visar ett system som handlar om när de olika
+fysiska egenskaperna bör tränas och utvecklas. Det gäller att genomföra rätt träning i rätt ålder.
+INTENSITET PREPUBERTALT PUBERTALT POSTPUBERTALT
+BARN UNGDOM VUXEN
+UTHÅLLIGHET
+Aerob
+Anaerob alaktatisk
+Anarob laktatisk
+STYRKA
+Grund
+Snabb
+Maximal
+Uthållig
+SNABBHET
+Reaktion
+Acceleration
+Maximal
+Frekvens
+Aktion
+RÖRLIGHET
+Allmän
+Specifik
+KOORDINATION
+Allmän
+Grenspecifik
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+77
+
+--- Sida 78 ---
+Olika fysiska prestationsfaktorer tränas bäst i olika utvecklingsstadier, det vill säga vid olika mottaglighets-
+åldrar. Det är till exempel viktigt att träna koordination när den är som mest träningsbar, alltså prepubertalt,
+eftersom det är ”koordinationens guldålder”. Det är däremot inte fel att exempelvis träna aerob uthållighet
+eller accelerationer prepubertalt, men mottagligheten för dessa träningstyper är inte optimal.
+Vissa träningsfaktorer är direkt olämpliga att träna innan
+kroppen växt klart, som till exempel anaerob laktatisk uthållighet
+(mjölksyraträning) eller maximal styrka.
+Observera!
+Flickor i allmänhet har ett något snabbare mognadsförlopp än pojkar (1–2 år).
+Även inom respektive kön finns stora fysiska mognadsskillnader (4–5 år)
+Principen om prestationsstegring
+- ”Superkompensation”
+Vid träning (belastningsretning) minskar organismens funktionsförmåga och detta leder till trötthet och
+nedbrytning. Under vilan efter träningen återhämtar sig organismen och anpassar sig så att prestations-
+förmågan blir högre än den var tidigare; detta kallas superkompensation. Varje sådan prestationsstegring
+uppnås därför främst genom en bra balans i träningen, mellan belastning och efterföljande återhämtning.
+För att den aktive ska kunna nå en stegrad prestationsförmåga
+måste belastning och återhämtning ses som en enhet.
+Belastning och återhämtning
+Exempel på belastningstyper:
+• Aerob energiprocess
+• Anaerob energiprocess
+• Påverkan på neuromuskulära systemet
+7 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 79 ---
+Exempel på former för återhämtningsprocessen:
+Direkt återhämtning sker direkt under träning genom den ständiga ATP-resyntesen. Vid teknik- och snabb-
+hetsträning med kortvariga belastningar och flera minuters paus, sker denna typ av återhämtning. En direkt
+återhämtning sker också vid lågintensiva aeroba belastningar.
+Snabb återhämtning sker efter träning med främst anaerob belastning, där ATP-resyntesen inte räcker till
+att klara energiförbrukningen. Denna återhämtning tar 1,5–3 timmar.
+Fullständig återhämtning innebär, förutom påfyllning av glykogenförråd, till exempel återbildning av äggvit-
+estrukturer, förnyade hormon- och enzymaktiviteter, återställda vitamin-, vatten- och elektrolytvärden, samt
+syra/bas-balans. En fullständig återhämtning tar 24–48 timmar.
+Åtgärder för återhämtning
+Flera åtgärder kan stödja återhämtningsprocessen och tidsmässigt förkorta den, till exempel:
+• Kost • Varmbad och bastu
+• Sömn • Mental träning, avslappning
+• Fysioterapeutisk behandling, • Omväxling i miljö och klimat,
+exempelvis massage exempelvis träningsläger
+Återhämtningsprocessen och tider för olika belastningstyper
+ÅTERHÄMTNINGS- AEROB BLANDAD ANAEROB STYRKE- NEURO-
+PROCESSER AEROB OCH ALAKTATISK TRÄNING MUSKULÄR
+ANAEROB OCH LAKTATISK
+INTENSITET LÅG MEDEL/HÖG HÖG/MAXIMAL MAXIMAL MAXIMAL
+Direkt återhämtning Vid 60-70%
+intensitet
+Snabb återhämtning 1,5 - 2 2 - 3 timmar
+(mycket ofullständig) timmar
+90-95% återhämtning 2-4 timmar 6-12 timmar 12 - 24 18 - 36
+(ofullständig men god timmar timmar
+prestationsförmåga)
+Fullständig återhämtning 6 - 36 12 - 72 tim- 2 - 3 dygn 2 - 4 dygn 2 - 3 dygn
+till jämvikt för ämnes- timmar mar
+omsättning (höjd presta-
+tionsförmåga)
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+79
+
+--- Sida 80 ---
+Belastning Stegrad prestation
+Återhämtning
+Uttröttning
+Bild 1. Grundprincipen för stegrad prestation Bild 2. Om återhämtningen blir för Bild 3. Långsammare stegrad
+lång återgår prestationsförmågan prestationsförmåga
+till ursprunglig nivå
+Bild 4. Snabbare stegrad prestationsförmåga Bild 5. Ackumulerad prestationsförmåga Bild 6. Nedgång av prestationsförmågan
+vid ofullständig återhämtning (överträning)
+Genom kurvor som illustrerar träningscykler kan man visa hur olika förhållanden mellan belastningar
+och tiden för återhämtning kan leda till olika prestationsförändringar.
+Principen om kontinuerlig belastning
+Den kontinuerliga belastningen leder till en pågående stegring av träningstillståndet upp till individens
+förutsättningar och anlag, det vill säga det genetiska taket. Kontinuerlig innebär i detta sammanhang flera
+träningspass per vecka och träning som pågår året runt. I barn- och ungdomsstadierna gäller det att först
+och främst garantera kontinuerlig belastning där formen för belastningen är av mindre betydelse. Spontana
+fysiska aktiviteter, skolidrott och friidrottsverksamhet stöder och kompletterar varandra och ger tillsammans
+en önskad kontinuerlig belastning. Ungdomsträningen stegras genom att öka antalet träningspass per vecka
+och år, och detta innebär att kontinuiteten förbättras.
+För att lyckas uppnå ett högre träningstillstånd krävs en viss mängd
+kontinuerlig träning. Har man väl uppnått ett träningstillstånd
+är det enklare att komma tillbaka till den nivån efter skada,
+sjukdom eller planerade träningsuppehåll.
+Om kontinuiteten i träningen förloras sjunker i stället prestationsförmågan. Hur snabbt prestationssänkningen
+sker beror på hur prestationsstegringen uppnåtts; snabb förbättring går snabbt tillbaka och långsam förbättring
+går långsamt tillbaka.
+8 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 81 ---
+Principen om belastningsstegring - ”Progressivitet”
+För en långsiktig prestationsförbättring krävs att man ständigt
+höjer träningens belastningskrav.
+Belastningsfaktorer
+Träningsbelastning innebär summan av alla de träningsfaktorer som påverkar kroppen. Varje ökat prestations-
+steg kopplas till nya, högre och mer målinriktade belastningskrav.
+Belastningsfaktorerna är enligt följande:
+• Träningstid och frekvens (antal pass och timmar per tidsenhet, t.ex. vecka eller månad)
+• Omfång (mängd)
+• Intensitet (antal % av max)
+• Kvalitet på övningsutförandet (teknisk skicklighet)
+• Specifika träningsövningar (direkt prestationshöjande)
+Belastningsfaktorerna är inte konstanta under utvecklingen:
+• I början av idrottsutvecklingen finns ett klart samband mellan träningsomfång och prestation.
+• Allmän koordination och dess fysiska förutsättningar utvecklas främst genom ökat omfång,
+det vill säga ökad träningsmängd.
+• Vid utveckling av tekniska färdigheter och deras grundläggande koordinativa fysiska förutsättningar
+behöver främst omfånget ökas, men mer utpräglade färdigheter utvecklas genom ökad intensitet
+och kvaliteten.
+Det är viktigt för progressiviteten att hitta nya belastningsmetoder
+och öka träningsbelastningen. Utveckling uppnås i första hand
+genom nya, högre och mer målinriktade belastningskrav.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+81
+
+--- Sida 82 ---
+Principen om varierad belastning och pulsering
+En variationsrik träningsbelastning är en förutsättning för en fortsatt idrottslig utveckling.
+Variationen påverkas av:
+• Användning av belastningsfaktorerna
+• Övningsvalet
+• Koordinativa åtgärder
+• Skiftande tyngdpunkt på träningsinnehållet
+Om träningens krav under en längre tid är konstanta och ensidiga kommer utvecklingen förr eller senare
+att upphöra och den aktive kommer att uppleva stagnation. Exempel på stagnationsfenomen är ”teknisk
+stereotyp”, ”styrkebarriär” och ”snabbhetsbarriär”.
+’ = minuter
+20’ 30’ 10’ 30’ 20’ tp tp tp vila tp tp vila 1:a mån 2:a mån 3:e mån
+må ti ons to fr lö sö
+Bild 1. Ett träningspass (tp) Bild 2. En träningsvecka Bild 3. En träningsperiod på 3 månader
+okt febr april aug
+Bild 4. Ett årsförlopp med två Bild 5. Helhetsförloppet av
+tävlingsperioder idrottarens utveckling
+Träningens variation kan beskrivas cykliska kurvor, vilket dessa figurer är exempel på.
+8 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 83 ---
+Principer för variation
+I ungdomsträning är belastningen relativt låg, vilket innebär att ”pulseringen” (variationerna som man ser
+i kurvorna) inte blir så tydlig. Trots en begränsad pulsering kan man genom ett allsidigt innehåll och många
+olika övningsformer ändå uppnå en naturlig variation i träningen.
+För att den aktive ska kunna nå en hög idrottslig prestation krävs också hög belastning.
+Högprestationsstadiet är det stadie där träningen är som mest ensidig
+och specialiserad, vilket innebär att det krävs stora variationer i pulseringen.
+Högintensiva belastningar måste varvas med lågintensiva.
+• Variation i träningen skapas genom god balans mellan allmän och speciell träning, och genom att den
+idrottsliga utvecklingen indelas i stadier och perioder.
+• För att säkerställa utvecklingen är inte bara belastningen utan även återhämtningen en förutsättning.
+• Trots en systematisk höjning av träningsbelastningen finns låg, medel och hög belastning i varje etapp,
+och det är denna variation som kallas pulsering.
+Periodisk variation och pulsering
+Träningen kan inte ligga på gränsen för den aktives högsta belastningsbarhet under ett helt år, det vill säga
+hen kan inte vara i ständig toppform. Det måste finnas en växling mellan belastning och avlastning, alltså
+mellan ökat omfång och sänkt intensitet gentemot minskat omfång och höjd intensitet. På det sättet blir det
+också möjligt att uppnå toppform vid ett bestämt tillfälle, vid den aktives säsongsmål. En sådan uppdelning
+gör det möjligt för den aktive att genomföra en god träning utan att bli övertränad. För barn och yngre
+ungdomar blir det naturliga avbrott i träningen under till exempel skollov.
+Pulsering
+Inom en mesocykel, vilket innebär en period på 2–6 veckor, kan man pulsera träningsbelastningen genom
+att till exempel ha lätta, medel eller tunga veckor. Dessa veckor sammansätts sedan på olika sätt till ett
+pulseringsmönster.
+Medel Tung Lätt osv Tung Medel Lätt osv
+Exempel på pulseringsmönster
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+83
+
+--- Sida 84 ---
+Växlande belastning
+För komplexa idrotter, till exempel mångkamp, har växande belastning en särskild betydelse. Eftersom många
+olika träningsfaktorer måste finnas med kan det hända att flera likartade belastningsdoseringar kommer direkt
+efter varandra och att återhämtningen då inte blir fullständig. Tränaren bör ha detta i åtanke när träningen
+planeras så att den aktive inte blir övertränad eller skadad.
+När man utformar komplexa träningspass måste man vara noga med ordningsföljden på de olika träningsfaktorerna:
+• I inledningen av träningspasset genomförs övningar som kräver ett neuromuskulärt utvilat tillstånd, till
+exempel koordinations- och teknikövningar, snabbhetsövningar och snabbstyrke- eller maximalstyrkeövningar.
+• I den avslutande delen av träningspasset genomförs övningar av uthållighets- eller grundstyrkekaraktär.
+Principen om systematik
+Utvecklingen av varje enskild prestationsfaktor följer en relativ stabil och lagbunden ordning, och träningen
+måste läggas upp mot denna bakgrund.
+Som tränare ska du ta hänsyn till och nyttja ordningsföljderna eftersom detta
+leder till en långsiktig utveckling. Det går inte att ta genvägar.
+Felaktig ordningsföljd medför ett falskt utvecklingsförlopp och en alltför tidig stagnation. Det innebär att den
+aktive kan bli väldigt duktig som ungdom men försämrar samtidigt sina möjligheter att utvecklas till seniorelit.
+Följande punkter avgör valet av ordningsföljd:
+• Övningsvalet.
+• Ordningsföljden på övningarna.
+• Ordningsföljden på tyngdpunkten i träningen.
+• Träningsutformningen som bestäms av olika träningsmoment, till exempel pass, metoder, intensitet
+och omfång.
+När kravprofiler i olika utvecklingsstadier utformas används kunskapen om ordningsföljderna.
+Exempel på systematik av övningsvalet:
+• Varje träningsövning har sin effekt.
+• Verkningsgraden är störst under den första tiden övningen används, och sedan avtar den gradvis.
+• Om högverkande träning inleds för tidigt i utvecklingen uppnås en snabb resultatutveckling som sedan
+leder till tidig stagnation.
+• När övningarna sätts in i en bestämd ordningsföljd ökar möjligheten till en långsiktig utveckling.
+8 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 85 ---
+Principen om mångsidighet
+I alla utvecklingsetapper krävs att förhållandet mellan allmän och speciell träning är specifikt inriktade
+mot ett mål. För att uttrycka vikten av balans mellan allmän och speciell träning används begreppet
+mångsidighet.
+Allmän och speciell träning
+Allmän träning
+Teknik/koordination i alla friidrottens grenar
+Speciell träning gren/grengrupp
+GRUNDSTADIET UPPBYGGNADSSTADIET PRESTATIONSSSTADIET HÖGPRESTATIONS-
+STADIET
+Förhållandet allmän/speciell träning
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+85
+
+--- Sida 86 ---
+Speciell träning
+Speciell träning är direkt anpassad till de krav på prestationsfaktorer som är karakteristiska för just den
+grenen eller grengruppen.
+Typiska kännetecken för speciell träning:
+• Hög belastning
+• Högsta kvalitet i övningsutförandet
+• Hög träningseffekt på varje prestationsfaktor
+• Mycket noggrant fastläggande av belastningsfaktorerna
+Speciell träning är målinriktad och resultatgivande och kräver
+en bra fysisk grund samt god återhämtning.
+Allmän träning
+Med allmän träning menas all övrig träning som inte är speciell träning. Nedan följer punkter som beskriver
+hur allmän träning bedrivs:
+• En bred grund- och uppbyggnadsträning inriktar sig på alla de träningsfaktorer som är viktiga
+för utvecklingsstadierna.
+• Förberedande träning med låg- och medelbelastning genomförs under uppbyggnadsstadiet.
+Dessa utförs som en förberedelse för kommande prestationsegenskaper.
+• Den allmänna träning som utförs under prestationsstadiet sker främst under förberedelseperioden;
+den förbereder eller kompletterar den speciella träningen.
+Den allmänna och speciella träningen stöder och kompletterar varandra. Några exempel:
+• Med stegrad utveckling ökar den speciella träningen.
+• Även högprestationsstadiet kräver allmän träning, men den ska då utföras i bestämd relation till
+den speciella träningen.
+• Vid hög belastning krävs en god återhämtning vilket gör att träningen kompletteras med låg- och
+medelbelastning.
+I alla utvecklingsstadier är det viktigt att hela tiden
+uppmärksamma vad den allmänna träningen har för
+positiv betydelse för den speciella träningen.
+8 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 87 ---
+Allsidighet
+Allsidighet är ett begrepp som är speciellt aktuell under ungdomsåren.
+Allsidighet innebär:
+• Utveckling av samtliga fysiska, personliga och psykiska egenskaper som är lämpliga för åldern.
+• Skolning av friidrottens alla grenar och deras koordinativa förberedande övningar.
+• Allmän höjning av prestationsförmågan genom andra idrotter och deras träningsformer.
+Principen om individualisering
+Den naturliga utvecklings- och mognadshastigheten är olika för varje enskild aktiv och regleras av arvsanlagen.
+Träningen för unga aktiva bör inte läggas upp efter kalenderår eftersom ungdomar i samma ålder kan ha
+en fysisk utvecklingsskillnad på upp till fem år. Under den mångåriga träningsprocessen krävs hela tiden en
+ökande hänsyn till de individuella olikheterna.
+Du som tränare ska vara uppmärksam på att även ungdomar med långsam
+utveckling kan nå samma nivå som de som utvecklas snabbt.
+På grund av detta är korrelationen mellan de aktiva i till exempel ett mästerskap för 17-åringar mindre, än
+mellan aktiva i ett mästerskap för 22-åringar, när det gäller vilka aktiva som senare etablerar sig i senioreliten.
+Ungdomar som är tidigt utvecklade får också en tidigare stagnation. Det finns även skillnader mellan gren-
+grupperna där särskilt kast och i viss mån långdistanslöpning och mångkamp har ett längre utvecklingsförlopp.
+I träningen är det viktigt att uppmuntra de sent utvecklade ungdomarna så de inte slutar för tidigt.
+Individualisering kan åstadkommas genom följande punkter:
+• Uppmärksamhet på varje aktivs individualitet och mognadsnivå.
+• Övergång från gruppträning till individuellt utformad träning.
+• Övergång från en allmän fysisk träning och träning av alla friidrottens grenar mot en mer individualiserad
+fysisk träning inriktad på en specifik friidrottsgren. Detta innebär att individen väljer det hen är bra på
+eller tycker är roligt.
+• Inledningsvis gäller det att vara uppmärksam på individens svagheter, och i ett senare skede läggs fokus
+på individens starka sidor.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+87
+
+--- Sida 88 ---
+Principen om specialisering
+Specialisering innebär att träningen är anpassad för en gren, och specialiseringen i träningen ökar
+kontinuerligt under den idrottsliga utvecklingens olika stadier. Träningsbakgrund och mognad hos den
+aktive avgör när specialiseringsförloppet ändrar karaktär. Genom bedömning av främst talang, men även
+av intresse och resurser, avgörs inom vilken riktning bland idrottsgrenarna specialiseringen ska ske.
+Begrepp och stadier
+GRUNDSTADIET UPPBYGGNADSSTADIET PRESTATIONSSTADIET HÖGPRESTATIONSSTADIET
+Ingen specialisering Inledande specialisering Fördjupad specialisering Fullständig specialisering
+Alla grenar Grengrupp Få grenar En gren
+Grov bedömning Finare bedömning Förfinad bedömning
+Prepubertalt Pubertalt Postpubertalt
+Ungdom Vuxen
+Ungdomsträning
+Under ungdomsträningen ska det bara finnas en låg grad av specialisering, vilket uppnås genom att träna både
+friidrottens mångfald av grenar och andra idrottsformer.
+Man bör prioritera användandet av ett brett övningsurval som är allmänt betonat och ett helhetsutförande av
+alla friidrottens grenar. Träningens totala belastning måste vara optimal så att möjligheter finns för att senare
+öka belastningen.
+För tidig specialisering i ungdomsåren medför risk för stagnation
+och förlorad motivation när den aktive blir äldre.
+8 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 89 ---
+Prestations- och högprestationsstadiet
+Den specialiserade träningen bygger på väl genomförda förberedelser under ungdomsträningen och är
+inriktad på en utveckling av de prestationsfaktorer som är resultatgivande för den aktuella grenen.
+Dessa faktorer avgör valet av metoder och medel.
+Specialiseringens greninriktning avgör träningens mångsidighet, det vill säga vilket förhållande som ska
+finnas mellan allmän och speciell träning. Specialisering utesluter inte tävlingar i andra grenar, utan ett
+bredare tävlande kan tvärtom vara en fördel för högprestationer i specialgrenen.
+Om specialisering kan också följande påpekas:
+• Det krävs i de flesta fall en mångårig, målinriktad förberedelse och specialisering för att den aktive
+ska nå sin högsta prestationsgräns, som bestäms av det genetiska taket.
+• Den inledande specialiseringen pågår i 3–6 år och tiden från den fördjupade specialiseringen till hög-
+prestation ligger på 3–8 år. Individuella faktorer och grenarnas karaktär kan påverka utvecklingstiden.
+• Förberedelseträningen är av mer allmän karaktär, vilket innebär att flera egenskaper kommer till
+uttryck i samma övning, medan den specialiserade träningen inriktas på att förfina de olika prestations-
+egenskaperna.
+• Till den specialiserade träningen hör utveckling av de dominerande prestationsfaktorerna, exempelvis
+maximal styrka och snabbstyrka för en sprinter.
+• Under högprestationsstadiet får de komplexa övningarna störst betydelse när det gäller att samman-
+koppla de olika prestationsegenskaperna. Denna tyngdpunkt på träningen betonas främst under årets
+tävlingsförberedande perioder och tävlingsperioder.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+89
+
+--- Sida 90 ---
+Pedagogiska principer
+Målmedvetenhet
+Åskådlighet
+Pedagogiska
+principer
+Anspråksnivå
+Utvärdering
+De krav som ställs på den aktive ska vara sådana att hen med en viss ansträngning kan motsvara dem.
+• Tränarens krav måste ses mot den aktives kunnande.
+• Kraven ska ständigt växla mellan att vara lätta, medelsvåra och svåra.
+• Kraven ska följa de pedagogiska principerna enligt nedan:
+- från enkel till svår
+- från lättare till tyngre
+- från enkel till komplicerad
+- från bekant till obekant
+Målmedvetenhet
+Den aktive ska vara målmedveten och självständig för att kunna lösa alla uppgifter hen ställs inför
+i träningsprocessen. Det är viktigt att
+• vara målmedveten, särskilt viktigt vid inlärande moment
+• ha en egen inre drivkraft och målmedvetenhet för att få en större effekt av träningen
+• ha en “riktig” inställning till framgång och misslyckande.
+Målmedvetenhet ökar med ökande kunskaper om till exempel
+träningsprocesser, principer och teknik.
+9 0
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 91 ---
+Åskådlighet
+Åskådlighet är ett sätt att skapa inre föreställningar hos den aktive och det är betydelsefullt i alla
+utvecklingsstadier. Genom att använda flera olika metoder för åskådlighet, exempelvis förklaringar
+med ord, bilder och ljud, får man bästa möjliga resultat.
+Anspråksnivå
+Den grad av skicklighet som den aktive sätter upp som mål för sitt idrottande. Aktiva tenderar att anpassa
+sin anspråksnivå så att den antingen ligger något över eller något under den prestationsnivå som hen för
+tillfället har lyckats uppnå.
+Utvärdering
+Utvärdering innebär att tolka och bedöma den idrottsliga utvecklingen, genom att
+• jämföra uppnådda och förväntade värden
+• genomföra kontroller och värderingar under träning.
+Den pedagogiska processen - ”Planeringen”
+Den aktive kan utvecklas optimalt genom att följa en planerad träningsprocess, vilken tränaren formar
+utifrån träningsläran. Detta arbete är en pedagogisk process.
+Dina kunskaper och erfarenheter i samspel med den aktive
+och hens förmåga att lära känna sig själv, avgör hur väl
+den aktive uppnår sina målsättningar.
+Tränarens arbete består i att fatta en rad pedagogiska beslut som grundar sig på
+• idrottsteoretiska kunskaper och erfarenheter
+• kunskaper om den aktives inre påverkan (idrottsliga och psykologiska)
+• kunskaper om den aktives yttre påverkan (som t.ex. skola, arbete, familj)
+• kunskaper om människan och samhället (allmänbildning och livserfarenhet).
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+91
+
+--- Sida 92 ---
+De pedagogiska besluten bestäms genom ett pedagogiskt arbetsförlopp:
+1. Diagnos av träningstillstånd och anlagsinriktning.
+2. Fastställande av korta och långsiktiga träningsmål.
+3. Utformning av en träningsplan.
+4. Styrning och skolning av den aktive under träningens genomförande.
+5. Utvärdering av träningen genom mallen reflexion-analys-förändring.
+Utvärdering
+Planering
+Praktik
+Träningstillstånd Mål
+9 2
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 93 ---
+Träningens mål
+Ett träningsmål är ett träningstillstånd som den aktive ska ha uppnått efter en bestämd tid. Det kan vara en
+förändring eller en stabilisering. Exempel på träningsmål: stöta 20 meter i kula, slå svenskt rekord eller vinna
+ett mästerskap. Ett träningsmål kan också vara saker som att må bra och klara av tävlingsnervositet. Dessa
+målbeskrivningar representerar den aktives sätt att förverkliga sig själv i idrott och kan kallas övergripande
+mål eller riktmål. Det är också viktigt att sätta upp delmål på vägen mot det övergripande målet eftersom
+det bidrar till en mer noggrann analys av träningens krav. Detta innebär i sin tur att finmål, eller så kallade
+målfaktorer, kan bestämmas, vilka uttrycker det nya träningstillstånd som ska uppnås. När målfaktorerna
+fastställts kan tränaren utforma den exakta träningsplanen.
+Övergripande mål Riktmål
+Delmål Delmål Grovmål
+Delmål Delmål Finmål
+Träningsmålens olika karaktär och deras rangordning framgår av denna modell
+Övergripande mål
+Ett övergripande mål, eller en vision, kan vara ett relativt abstrakt mål som att till exempel nå landslaget
+eller vinna EM-guld, men det kan också vara väldigt konkreta mål som till exempel att hoppa 7 meter
+i längdhopp. De övergripande målen tillåter alternativa delmål.
+Delmål
+Delmål är konkreta formuleringar av förutsättningarna Kortsiktiga mål är mål för en kortare
+eller villkoren för att uppnå det övergripande målet. tidsperiod på upp till ett år.
+Långsiktiga mål är mål för flera
+Målfaktorer
+år framåt. De kan vara mål för
+Målfaktorer är beståndsdelarna i den idrottsliga olika stadier eller en olympisk
+prestationen, det vill säga de träningsbara prestations- cykel, men de kan också vara
+faktorerna som ska utvecklas för att delmålen ska nås. övergripande mål för den
+Exempelvis kan den aktive behöva förbättra sin teknik idrottsliga utvecklingen.
+eller fysik.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+93
+
+--- Sida 94 ---
+Mål för ungdomsträning
+För ungdomar ska de idrottsliga målen ha andra former än för senioreliten. Målen skulle kunna sättas upp
+i form av att exempelvis vara med i ett lag på Kraftmätningen, Lag-USM, Stafett-SM eller att träna ett
+antal dagar i veckan.
+Det kan finnas en fara i att sätta upp resultatmål för ungdomar beroende på
+• deras lägre träningstillstånd
+• svårigheten att förutsäga talanginriktning och utvecklingshastighet
+• risken för negativa psykiska effekter av yttre krav och förväntningar
+• risken för tidig specialisering.
+Det är viktigt att inte sätta för höga resultatmål för
+ungdomar då detta kan leda till en för tidig specialisering
+vilket kan ge en för tidig stagnation.
+Övergripande mål, delmål och målfaktorer
+Samtliga målbeskrivningar kan formuleras tillsammans med den aktive även om tränarens styrning slutligen
+avgör hur den kommer att se ut.
+Exempel på övergripande mål för ungdomar:
+• Att tävla i olika individuella tävlingar (självständighet)
+• Att tillsammans med andra delta i stafetter och lagtävlingar (gemenskap)
+• Att öka prestationsförmågan (prestationsmotivation)
+De övergripande målen för äldre ungdomar kan vara mer resultatbaserade, som till exempel att kvala till
+olika ungdomsmästerskap eller ungdomslandskamper.
+Ett exempel på delmål är att genomföra ett relativt bestämt träningsinnehåll. En lämplig form av delmål
+kan vara allsidig grundträning respektive uppbyggnadsträning som inriktar sig specifikt på den valda gren-
+gruppen.
+Målfaktorerna blir det konkreta innehållet i varje grengrupp. Målfaktorerna är dock huvudsakligen
+formulerade för en grupp aktiva och inte för enskilda individer.
+9 4
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 95 ---
+Träningsinnehåll och träningsmedel
+Träningens innehåll
+• utgörs av de prestationsbestämmande faktorerna och deras delfaktorer
+• är alltid anpassat till träningsmålen
+• kan förändras beroende på utvecklingsstadium och årsperiod.
+Träningsmedel är:
+• Övningar och träningsformer, till exempel löpformer, vertikala eller horisontella hopp, kulkast
+eller frivändning med skivstång.
+• Information, till exempel pedagogiska hjälpmedel som film, video, bildserier och visualisering.
+• Organisationsformer – alla uppställningsformer, till exempel stationsformer och säkerhetsåtgärder vid kast.
+• Redskap, till exempel häckar, kulor, skivstänger och sandsäckar.
+• Medicinska hjälpmedel, till exempel tejpning och skoinlägg.
+Olika träningsmedel kan användas för samma träningsmål och ett träningsmedel kan användas för olika
+träningsmål. Träningsmedel är även utbytbara.
+Modell för planering av träningsprocessen
+Träningen är en planerad och systematisk process. Planeringen ska utgå från målen eftersom dessa talar om
+vad träningen ska leda till. Träning är en process som ska föra den aktive från hens aktuella träningstillstånd
+till ett nytt, målbestämt träningstillstånd.
+Träningen ska alltid
+• planeras
+• genomföras
+• kontrolleras (i viktiga moment)
+• utvärderas och regleras (förbättras).
+Tränaren styr planering av träningsprocessen, och planeringen ska i sin tur följa ett bestämt arbetsförlopp som
+innehåller ett antal pedagogiska beslut.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+95
+
+--- Sida 96 ---
+Steg 1 – Diagnos/analys av träningstillstånd
+Steg 1 innebär diagnos eller analys av nuvarande träningstillstånd genom idrottsmedicinska, biomekaniska,
+idrottspsykologiska, sociologiska och fysiska bedömningar och tester. Utöver detta tillkommer även prognoser
+om talang för enskild idrottsgren eller för grengrupper.
+Baserat på dessa bedömningar placeras den aktive i ett av följande träningsstadier, oberoende av ålder:
+• Grundstadiet
+• Uppbyggnadsstadiet
+• Prestationsstadiet och högprestationsstadiet
+Den slutliga åtgärden i steg 1 är att formulera lämpliga mål:
+• Övergripande mål
+• Delmål
+• Målfaktorer
+Steg 2 – Fastställande av kort- och långsiktiga träningsmål
+I steg 2 ska träningen fastläggas och man bestämmer följande:
+• Målgrupp
+- grupp
+- enskild
+• Giltighetstid
+- flerårsplan (makrocykel)
+- ettårsplan (makrocykel)
+- periodplan (makrocykel)
+- plan för mindre etapper (mesocykel 2–6 veckor)
+- veckoplan (mikrocykel 7–10 dagar)
+- dagsplan, detaljplan
+9 6
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 97 ---
+När man bestämmer giltighetstiden är det även viktigt att man fastställer den totala belastningen
+för varje tidsplan, och detta ska uttryckas i antalet träningsenheter eller träningstimmar.
+• Plan för till exempel tävlingar, tester och träningsläger.
+• Träningsinnehåll samt fastställning av prestationsfaktorerna och deras delfaktorer med tillhörande
+belastningsvärden, som alltså är de olika faktorernas omfång och intensitet.
+• Träningsmedel och val av:
+- övningar och träningsformer
+- organisationsformer
+- redskap
+• Träningsmetoder:
+- belastningsmetoder
+- återhämtningsmetoder
+Träningsmetoderna styrs av träningsmålen.
+Utformning av de sex punkterna under steg 2 ska följa träningens grundprinciper som är:
+- optimal mottaglighetsålder
+- stegrad prestation – ”Superkompensation”
+- kontinuerlig belastning
+- stegrad belastning – ”progressivitet”
+- varierad belastning och pulsering
+- systematik
+- mångsidighet
+- individualisering
+- specialisering
+Steg 3 - Genomförande
+I steg 3 ska träningen genomföras, det vill säga nu sätter den egentliga, praktiska träningen igång.
+Tränaren ska under träningen använda sig av lämpliga undervisande, pedagogiska och psykologiska
+åtgärder.
+Det krävs även uppmärksamhet på störande moment som till exempel skada eller dåligt väder, och
+hänsynstagande till tillfälliga uppkomna situationer som exempelvis krävande skolarbete eller trängsel
+i träningslokalen.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+97
+
+--- Sida 98 ---
+Steg 4 - Dokumentation
+Steg 4 innebär att subjektiva iakttagelser och bedömningar ska göras före och efter träning och tävling,
+liksom kontroller i form av tester eller prestationsdiagnoser där tävlingar utgör den viktigaste kontroll-
+funktionen. Alla uppgifter bör dokumenteras skriftligen i exempelvis en träningsdagbok.
+Steg 5 - Utvärdering
+I steg 5 ska tränings- och tävlingsresultaten utvärderas och jämföras med motsvarande målbeskrivning.
+Dessa jämförelser kan som snabbinformation direkt påverka träningens genomförande eller reglera själva
+träningsplanen.
+Diagnos av rådande träningstillstånd
+Fastställa träningsstadium med tillhörande mål
+Träningsplan
+Träningens Pedagogiska
+Innehåll Belastnings- Störande Situations- Reglering
+Metoder genom- och psykologiska
+Medel principer moment förändringar
+förande principer
+Snabb-
+information
+Subjektiva bedömningar
+Test
+Iakttagelser Tävlingar
+Prestationsdiagnos
+Dokumentation
+Normjämförelser Utvärdering
+Plan för fortlöpande planering, genomförande och utvärdering av träning.
+9 8
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 99 ---
+Översikt - Träningsmedel
+Uthållighetsegenskaper
+• Aerob uthållighet
+• Anaerob alaktatisk uthållighet
+• Anaerob laktatisk uthållighet
+FYSISK EGENSKAP ÖVNINGAR STRÄCKA/ TID INTENSITET PAUS
+AEROB • distanslöpning lång låg ingen
+UTHÅLLIGHET • fartlek medel medel ingen
+• intervaller kort till medel medel kort
+lång
+• grundstyrka exempelvis cirkel- medel kort
+träning kan stödja utvecklingen
+av aerob uthållighet
+ANAEROB • korta högintensiva intervaller 10-60m hög kort till medel
+ALAKTATISK
+• stafetter, exempelvis kurirstafett
+UTHÅLLIGHET
+• hypertrofi (muskeltillväxt) kan medel medel kort
+stödja utvecklingen av den
+alaktatiska uthålligheten
+ANAEROB • sprintuthållighet 60-150 m hög medel till lång
+LAKTATISK
+• snabbhetsuthållighet 150-400m hög medel till lång
+UTHÅLLIGHET
+• korttidsuthållighet 400-800m hög kort till medel
+• uthållig styrka kan stödja medel hög kort
+utvecklingen av anaerob
+laktatisk uthållighet
+Grundsatser för uthållighet
+• Aerob uthållighet planeras antingen i början eller i slutet av träningspasset medan anaerob uthållighet
+oftast planeras i slutet av komplexa träningspass då flera fysiska egenskaper tränas.
+• Löpsträckorna förlängs och farten hålls relativt konstant eller löpsträckorna förkortas medan farten ökas.
+• Optimala pauser är en förutsättning för upprepningsbar intensitet.
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+99
+
+--- Sida 100 ---
+Styrkeegenskaper
+• Grundstyrka
+• Snabbstyrka
+• Maximal styrka
+• Uthållig styrka
+FYSISK EGENSKAP ÖVNINGAR ARBETSTID INTENSITET PAUS
+GRUNDSTYRKA • stations- och cirkelträning i medel till låg till me- kort
+huvudsak med den egna kropps- lång delhög
+vikten som belastning
+• löp-, hopp-, kast- och häck-
+övningar för grundläggande
+styrkeutveckling
+• gymnastikövningar
+SNABBSTYRKA • teknik i friidrottens snabb- kort hög och relativt lång
+(REAKTIV OCH styrkegrenar som hopp, sprint snabb
+EXPLOSIV STYRKA) och kast
+• horisontella och vertikala hopp
+• kaststyrka med exempelvis
+medicinboll
+• skivstångsövningar som
+exempelvis frivändning, ryck
+och överstöt
+MAXIMAL STYRKA • skivstångsövningar som kort hög men lång till
+exempelvis knäböj, marklyft långsam medel
+och bänkpress över 90% av
+1 RM eller andra övningar som
+rekryterar många motoriska
+enheter
+• Förberedande maximal styrka medel medel medel
+genomförs med en lägre
+belastning än 90%
+UTHÅLLIG STYRKA • stations- och cirkelträning lång till relativt hög kort till medel
+• löp-, hopp-, kast- och häck- medellång kraftinsats
+övningar för uthållig styrke- under
+utveckling relativt
+lång tid
+1 00
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA
+
+--- Sida 101 ---
+Grundsatser för styrketräning
+• Grundstyrka planeras i slutet av träningspasset medan snabbstyrka och maximal styrka planeras
+i början eller mitten av träningspasset då detta kräver ett mer utvilat tillstånd.
+• För maximal styrka respektive förberedande maximal styrka används huvudsakligen skivstång.
+Här stegrar man intensiteten respektive övervinnande av yttre motstånd under träningspasset.
+Intensiteten är mellan 60-100% av 1 RM.
+• Maximal styrketräning måste planeras långsiktigt och förberedas genom omfångsrik allmän
+styrketräning.
+• Vid all form av lyft är det viktigt med en god teknik för att optimera effekten av träningen och att
+minska risken för skador.
+Snabbhetsegenskaper
+• Reaktionssnabbhet • Frekvenssnabbhet
+• Aktionssnabbhet • Maximal snabbhet
+• Accelerationssnabbhet
+FYSISK EGENSKAP ÖVNINGAR STRÄCKA INTENSITET PAUS
+REAKTIONS- OCH • impulsövningar på kommando, kort max kort
+AKTIONSSNABBHET exempelvis ställa sig upp på
+klapp eller reaktionsstart
+• stafettväxlingsstart (dvs reagera
+på märket)
+• kulkast
+ACCELERATIONS- • stående och liggande start 10-50m max 1-5´
+SNABBHET • start till stafettväxling (1´/10m)
+FREKVENS- • frekvensformer: exempelvis 10-30 m max 1-3´
+SNABBHET FÖR löpning över koner
+UNGDOM
+• flygande sprint 10-30 m max 3-7´
+MAXIMAL
+SNABBHET • test- och tävlingslopp 30-60 m max lång
+• sprint i överhastighet: t ex i med- 30.60 m max lång
+lutning, medvind eller med drag
+• kast i överhastighet: exempelvis
+kast med lättare redskap max kort/medel
+FRIIDROTTENS
+ALLMÄNNA TRÄNINGSLÄRA
+101
+
+--- Sida 102 ---
+Grundsatser för snabbhetsträning
+• Före snabbhetsträning ska en ordentlig uppvärmning av muskulaturen genomföras.
+• Snabbhetsträning planeras in i den första delen av träningspasset, då det centrala nervsystemet
+är utvilat.
+• All snabbhetsträning ska utföras tekniskt korrekt och avspänt.
+1 02
+F R I I D R O T TENS
+ALLMÄNNA
+TRÄNINGSLÄRA

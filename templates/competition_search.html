@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Sök tävlingsresultat{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Sök tävlingsresultat</h1>
+    <p>Sök bland resultat från friidrottsstatistik.se</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="get" action="{{ url_for('search_competition_results') }}" class="search-form">
+            <div class="form-group">
+                <label for="q">Sök idrottare</label>
+                <div class="search-input-group">
+                    <input type="text" id="q" name="q"
+                           value="{{ query }}"
+                           placeholder="Ange namn..."
+                           class="form-control"
+                           autocomplete="off">
+                    <button type="submit" class="btn btn-primary">Sök</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if query %}
+<div class="card">
+    <div class="card-header">
+        <h2>Sökresultat för "{{ query }}"</h2>
+        <span class="badge">{{ results|length }} träffar</span>
+    </div>
+    <div class="card-body">
+        {% if results %}
+        <div class="search-results">
+            {% for athlete in results %}
+            <div class="result-item">
+                <div class="result-name">{{ athlete.name }}</div>
+                <div class="result-details">
+                    {% if athlete.birth_year %}Född {{ athlete.birth_year }} · {% endif %}
+                    {{ athlete.club }}
+                </div>
+                <div class="result-stats">
+                    {{ athlete.result_count }} resultat
+                </div>
+                <a href="{{ url_for('api_competition_results', name=athlete.name) }}?birth_year={{ athlete.birth_year }}&club={{ athlete.club }}"
+                   class="btn btn-sm">Visa resultat</a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <p>Inga idrottare hittades som matchar "{{ query }}".</p>
+            <p class="help-text">Tips: Kontrollera stavningen eller prova med förnamn eller efternamn.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<style>
+.search-form {
+    max-width: 500px;
+}
+
+.search-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.search-input-group input {
+    flex: 1;
+}
+
+.search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary, #252525);
+    border-radius: 8px;
+}
+
+.result-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    min-width: 200px;
+}
+
+.result-details {
+    flex: 1;
+    color: var(--text-secondary, #888);
+}
+
+.result-stats {
+    color: var(--primary-color, #4ade80);
+    font-weight: 500;
+    min-width: 100px;
+    text-align: right;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary, #888);
+}
+
+.help-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666);
+}
+
+@media (max-width: 768px) {
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-name {
+        min-width: auto;
+    }
+
+    .result-stats {
+        min-width: auto;
+        text-align: left;
+    }
+}
+</style>
+{% endblock %}

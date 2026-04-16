@@ -21,13 +21,6 @@ class User:
     coach_code: Optional[str] = None  # Endast för coaches
     connected_coach_id: Optional[int] = None  # Endast för athletes
 
-    # Strava-integration
-    strava_access_token: Optional[str] = None
-    strava_refresh_token: Optional[str] = None
-    strava_expires_at: Optional[int] = None
-    strava_athlete_id: Optional[int] = None
-    strava_athlete_name: Optional[str] = None
-
     def check_password(self, password: str) -> bool:
         """Verifiera lösenord."""
         return self.password_hash == self._hash_password(password)
@@ -79,10 +72,11 @@ class AuthStore:
         )
 
         # Demo idrottare (kopplade till coach)
+        # Ordningen matchar user_ids i app.py init_demo_data
         athletes_data = [
-            ("emma@demo.se", "Emma Lindström"),
-            ("oscar@demo.se", "Oscar Bergman"),
-            ("maja@demo.se", "Maja Eriksson"),
+            ("ebba@demo.se", "Ebba 3"),              # user_id 2 - demo för Garmin-tempomodell
+            ("hugo@demo.se", "Hugo Kündig"),         # user_id 3 - demo för tävlingsresultat
+            ("daniel@demo.se", "Daniel"),            # user_id 4 - demo för Garmin-tempomodell
         ]
 
         for email, name in athletes_data:
@@ -171,68 +165,6 @@ class AuthStore:
         if not athlete or not athlete.connected_coach_id:
             return None
         return self.get_user(athlete.connected_coach_id)
-
-    # ============================================================
-    # STRAVA INTEGRATION
-    # ============================================================
-
-    def connect_strava(self, user_id: int, access_token: str, refresh_token: str,
-                       expires_at: int, athlete_id: int, athlete_name: str) -> bool:
-        """Spara Strava-koppling för en användare."""
-        user = self.get_user(user_id)
-        if not user:
-            return False
-
-        user.strava_access_token = access_token
-        user.strava_refresh_token = refresh_token
-        user.strava_expires_at = expires_at
-        user.strava_athlete_id = athlete_id
-        user.strava_athlete_name = athlete_name
-        return True
-
-    def disconnect_strava(self, user_id: int) -> bool:
-        """Ta bort Strava-koppling för en användare."""
-        user = self.get_user(user_id)
-        if not user:
-            return False
-
-        user.strava_access_token = None
-        user.strava_refresh_token = None
-        user.strava_expires_at = None
-        user.strava_athlete_id = None
-        user.strava_athlete_name = None
-        return True
-
-    def update_strava_tokens(self, user_id: int, access_token: str,
-                             refresh_token: str, expires_at: int) -> bool:
-        """Uppdatera Strava-tokens efter refresh."""
-        user = self.get_user(user_id)
-        if not user:
-            return False
-
-        user.strava_access_token = access_token
-        user.strava_refresh_token = refresh_token
-        user.strava_expires_at = expires_at
-        return True
-
-    def get_strava_tokens(self, user_id: int) -> Optional[dict]:
-        """Hämta Strava-tokens för en användare."""
-        user = self.get_user(user_id)
-        if not user or not user.strava_access_token:
-            return None
-
-        return {
-            'access_token': user.strava_access_token,
-            'refresh_token': user.strava_refresh_token,
-            'expires_at': user.strava_expires_at,
-            'athlete_id': user.strava_athlete_id,
-            'athlete_name': user.strava_athlete_name
-        }
-
-    def is_strava_connected(self, user_id: int) -> bool:
-        """Kolla om användaren har kopplat Strava."""
-        user = self.get_user(user_id)
-        return user is not None and user.strava_access_token is not None
 
 
 # Global auth store instance

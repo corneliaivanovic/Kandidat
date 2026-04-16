@@ -27,6 +27,276 @@
         </div>
     </div>
 
+    {% if athlete.training_mode == 'ai' %}
+    <section class="card" style="margin-bottom: 24px; background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-left: 4px solid #0ea5e9;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div>
+                <h2 style="margin:0;">🤖 AI-träningsplanering</h2>
+                <p style="margin:6px 0 0; color:#475569; font-size:0.92em;">
+                    {{ athlete.name }} använder AI-genererat schema i fas <strong>{{ athlete.training_phase }}</strong>
+                    med {{ athlete.training_days_per_week }} dagar/vecka.
+                </p>
+                {% if last_planned_date %}
+                <p style="margin:4px 0 0; color:#64748b; font-size:0.82em;">
+                    Schema planerat till: {{ last_planned_date.strftime('%d %b %Y') }}
+                </p>
+                {% endif %}
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="btn" style="font-size:0.9em; background:#ecfeff; color:#0f766e;">
+                    📆 Veckoplan
+                </a>
+                <button onclick="document.getElementById('coachAiProfileModal').style.display='flex'" class="btn" style="font-size:0.9em; background:#e0f2fe; color:#0c4a6e;">
+                    ⚙️ AI-underlag
+                </button>
+                <button onclick="document.getElementById('coachScheduleModal').style.display='flex'" class="btn btn-primary">
+                    🔄 Förnya månadsschema
+                </button>
+            </div>
+        </div>
+        {% if schedule_expiring_soon %}
+        <div style="margin-top:12px; padding:10px 12px; background:#fef3c7; border:1px solid #f59e0b; border-radius:8px; color:#78350f; font-size:0.88em;">
+            Schemat tar slut om {{ days_until_schedule_end }} dagar. Förnya planen för att undvika luckor i träningsupplägget.
+        </div>
+        {% endif %}
+    </section>
+
+    <div id="coachAiProfileModal" class="ai-modal-overlay">
+        <div class="ai-modal-panel">
+            <h3>⚙️ Uppdatera AI-underlag</h3>
+            <p class="ai-modal-intro">Dessa uppgifter används både för bättre träningsplanering och för att uppskatta tempo i passen. Endast födelseår och träningsvana är obligatoriska.</p>
+            <form action="{{ url_for('update_ai_profile', athlete_id=athlete.id) }}" method="POST" class="ai-profile-form">
+                <input type="hidden" name="return_to" value="athlete_detail">
+                <div class="ai-profile-section">
+                    <div class="ai-profile-section-title">Grunduppgifter</div>
+                    <div class="ai-profile-grid">
+                        <div class="form-group">
+                            <label for="coach_ai_birth_year">Födelseår</label>
+                            <input type="number" id="coach_ai_birth_year" name="birth_year" min="1950" max="2025" required value="{{ athlete.birth_year }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_club">Klubb (frivilligt)</label>
+                            <input type="text" id="coach_ai_club" name="club" value="{{ athlete.club or '' }}" placeholder="T.ex. Örgryte IS">
+                            <small class="form-hint">Om klubb finns kan systemet försöka matcha tävlingsresultat automatiskt.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_experience">Träningsvana</label>
+                            <select id="coach_ai_experience" name="training_experience_level" required>
+                                <option value="">Välj träningsvana</option>
+                                <option value="jag är ny till att träna" {% if athlete.training_experience_level == 'jag är ny till att träna' %}selected{% endif %}>Jag är ny till att träna</option>
+                                <option value="mindre än 6 månader" {% if athlete.training_experience_level == 'mindre än 6 månader' %}selected{% endif %}>Mindre än 6 månader</option>
+                                <option value="6 månader till 1 år" {% if athlete.training_experience_level == '6 månader till 1 år' %}selected{% endif %}>6 månader till 1 år</option>
+                                <option value="1–3 år" {% if athlete.training_experience_level == '1–3 år' %}selected{% endif %}>1–3 år</option>
+                                <option value="mer än 3 år" {% if athlete.training_experience_level == 'mer än 3 år' %}selected{% endif %}>Mer än 3 år</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_running_focus">Vilken löpgren tränar du främst? (frivilligt)</label>
+                            <select id="coach_ai_running_focus" name="running_focus">
+                                <option value="">Välj löpgren</option>
+                                <option value="sprint" {% if athlete.running_focus == 'sprint' %}selected{% endif %}>Sprint</option>
+                                <option value="medel" {% if athlete.running_focus == 'medel' %}selected{% endif %}>Medeldistans</option>
+                                <option value="distans" {% if athlete.running_focus == 'distans' %}selected{% endif %}>Distans</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_weekly_training_amount">Nuvarande träningsmängd (frivilligt)</label>
+                            <input type="text" id="coach_ai_weekly_training_amount" name="weekly_training_amount" value="{{ athlete.weekly_training_amount or '' }}" placeholder="T.ex. 4 pass eller 35 km">
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_primary_goal">Huvudmål (frivilligt)</label>
+                            <select id="coach_ai_primary_goal" name="primary_goal">
+                                <option value="">Välj mål</option>
+                                <option value="komma igång" {% if athlete.primary_goal == 'komma igång' %}selected{% endif %}>Komma igång</option>
+                                <option value="förbättra kondition" {% if athlete.primary_goal == 'förbättra kondition' %}selected{% endif %}>Förbättra kondition</option>
+                                <option value="förbättra tid" {% if athlete.primary_goal == 'förbättra tid' %}selected{% endif %}>Förbättra tid</option>
+                                <option value="tävla" {% if athlete.primary_goal == 'tävla' %}selected{% endif %}>Tävla</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="coach_ai_injury_constraints">Skador eller begränsningar (frivilligt)</label>
+                            <textarea id="coach_ai_injury_constraints" name="injury_constraints" rows="2">{{ athlete.injury_constraints or '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="ai-profile-section">
+                    <div class="ai-profile-section-title">Löp- och tempounderlag</div>
+                    <div class="ai-profile-grid">
+                <div id="coachAiDistanceFields" class="full-width" style="display:none;">
+                    <div class="ai-profile-grid">
+                    <div class="form-group">
+                        <label for="coach_ai_best_5k_time">Bästa 5 km-tid (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_5k_time" name="best_5k_time" value="{{ athlete.best_5k_time or '' }}" placeholder="T.ex. 22:30">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_best_alt_distance">Alternativ distans (frivilligt)</label>
+                        <select id="coach_ai_best_alt_distance" name="best_alt_distance">
+                            <option value="">Välj distans</option>
+                            <option value="1500 m" {% if athlete.best_alt_distance == '1500 m' %}selected{% endif %}>1500 m</option>
+                            <option value="3 km" {% if athlete.best_alt_distance == '3 km' %}selected{% endif %}>3 km</option>
+                            <option value="10 km" {% if athlete.best_alt_distance == '10 km' %}selected{% endif %}>10 km</option>
+                            <option value="annan" {% if athlete.best_alt_distance == 'annan' %}selected{% endif %}>Annan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_best_alt_time">Tid på alternativ distans (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_alt_time" name="best_alt_time" value="{{ athlete.best_alt_time or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_easy_pace">Lugnt tempo (frivilligt)</label>
+                        <input type="text" id="coach_ai_easy_pace" name="easy_pace" value="{{ athlete.easy_pace or '' }}" placeholder="T.ex. 5:45 min/km">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_threshold_pace">Tröskeltempo (frivilligt)</label>
+                        <input type="text" id="coach_ai_threshold_pace" name="threshold_pace" value="{{ athlete.threshold_pace or '' }}">
+                    </div>
+                    </div>
+                </div>
+                <div id="coachAiSprintFields" class="full-width" style="display:none;">
+                    <div class="ai-profile-grid">
+                    <div class="form-group">
+                        <label for="coach_ai_best_60m_time">Bästa 60 m-tid (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_60m_time" name="best_60m_time" value="{{ athlete.best_60m_time or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_best_100m_time">Bästa 100 m-tid (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_100m_time" name="best_100m_time" value="{{ athlete.best_100m_time or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_best_200m_time">Bästa 200 m-tid (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_200m_time" name="best_200m_time" value="{{ athlete.best_200m_time or '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="coach_ai_primary_sprint_event">Huvudsprintdistans (frivilligt)</label>
+                        <select id="coach_ai_primary_sprint_event" name="primary_sprint_event">
+                            <option value="">Välj distans</option>
+                            <option value="60 m" {% if athlete.primary_sprint_event == '60 m' %}selected{% endif %}>60 m</option>
+                            <option value="100 m" {% if athlete.primary_sprint_event == '100 m' %}selected{% endif %}>100 m</option>
+                            <option value="200 m" {% if athlete.primary_sprint_event == '200 m' %}selected{% endif %}>200 m</option>
+                        </select>
+                    </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="coach_ai_training_surface">Vanlig träningsmiljö (frivilligt)</label>
+                    <select id="coach_ai_training_surface" name="training_surface">
+                        <option value="">Välj miljö</option>
+                        <option value="bana" {% if athlete.training_surface == 'bana' %}selected{% endif %}>Bana</option>
+                        <option value="väg" {% if athlete.training_surface == 'väg' %}selected{% endif %}>Väg</option>
+                        <option value="terräng" {% if athlete.training_surface == 'terräng' %}selected{% endif %}>Terräng</option>
+                        <option value="kuperat" {% if athlete.training_surface == 'kuperat' %}selected{% endif %}>Kuperat</option>
+                        <option value="löpband" {% if athlete.training_surface == 'löpband' %}selected{% endif %}>Löpband</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="coach_ai_tempo_model_runner_key">Tempo-profil från Garmin-modellen (frivilligt)</label>
+                    <select id="coach_ai_tempo_model_runner_key" name="tempo_model_runner_key">
+                        <option value="">Ingen vald profil</option>
+                        {% for runner_name in tempo_model_runners %}
+                        <option value="{{ runner_name }}" {% if athlete.tempo_model_runner_key == runner_name %}selected{% endif %}>{{ runner_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="form-hint">Använd bara en profil om den matchar samma löpare i den delade Garmin-modellen.</small>
+                </div>
+                <div class="form-group full-width">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="has_external_training_data" {% if athlete.has_external_training_data %}checked{% endif %}>
+                        <span class="checkbox-text">
+                            Extern träningsdata finns tillgänglig
+                            <small>Annan träningsdata kan ge bättre individanpassning senare.</small>
+                        </span>
+                    </label>
+                </div>
+                <div class="form-group full-width">
+                    <label for="coach_ai_response_notes">Övrigt AI:n bör veta (frivilligt)</label>
+                    <textarea id="coach_ai_response_notes" name="response_notes" rows="2">{{ athlete.response_notes or '' }}</textarea>
+                </div>
+                    </div>
+                </div>
+                <div class="ai-profile-actions">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Spara AI-underlag</button>
+                    <button type="button" onclick="document.getElementById('coachAiProfileModal').style.display='none'" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="coachScheduleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div style="background:white; border-radius:12px; padding:24px; max-width:420px; width:90%; margin:20px;">
+            <h3 style="margin-top:0;">🤖 Förnya AI-schema</h3>
+            <p style="color:#6b7280; font-size:0.88em; margin-top:-8px;">
+                Genererar 4 veckor med coachlika löppass för {{ athlete.name }}.
+            </p>
+            <form action="{{ url_for('generate_ai_schedule', athlete_id=athlete.id) }}" method="POST">
+                <div class="form-group">
+                    <label for="coach_modal_phase">Träningsfas</label>
+                    <select id="coach_modal_phase" name="training_phase">
+                        <option value="grundträning" {% if athlete.training_phase == 'grundträning' %}selected{% endif %}>Grundträning</option>
+                        <option value="uppbyggnad" {% if athlete.training_phase == 'uppbyggnad' %}selected{% endif %}>Uppbyggnad</option>
+                        <option value="tävling" {% if athlete.training_phase == 'tävling' %}selected{% endif %}>Tävlingsperiod</option>
+                        <option value="återhämtning" {% if athlete.training_phase == 'återhämtning' %}selected{% endif %}>Återhämtning</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="coach_modal_days">Dagar per vecka</label>
+                    <select id="coach_modal_days" name="training_days">
+                        <option value="3" {% if athlete.training_days_per_week == 3 %}selected{% endif %}>3 dagar</option>
+                        <option value="4" {% if athlete.training_days_per_week == 4 %}selected{% endif %}>4 dagar</option>
+                        <option value="5" {% if athlete.training_days_per_week == 5 %}selected{% endif %}>5 dagar</option>
+                        <option value="6" {% if athlete.training_days_per_week == 6 %}selected{% endif %}>6 dagar</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top:12px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-weight:500;">
+                        <input type="checkbox" name="use_rag" value="true" checked id="coachUseRagCheckbox"
+                            style="width:16px; height:16px; accent-color:#4f46e5; cursor:pointer;">
+                        🧠 Använd AI-kunskapsbas (RAG)
+                    </label>
+                </div>
+                <div id="coachDocSelector" style="margin-top:10px; padding:12px; background:#f8f7ff; border-radius:8px; border:1px solid #e0e7ff;">
+                    <p style="font-size:0.82em; font-weight:600; color:#4f46e5; margin:0 0 8px 0;">📚 Välj kunskapsdokument:</p>
+                    <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; margin-bottom:8px;">
+                        <input type="checkbox" name="rag_documents" value="loptranare"
+                            {% if 'loptranare' in (athlete.rag_documents or ['loptranare']) %}checked{% endif %}
+                            style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
+                        <span>
+                            <strong style="font-size:0.82em;">Löptränare (2025)</strong>
+                            <span style="display:block; font-size:0.75em; color:#6b7280;">80/20-regeln, nyckelpass, intensitetszoner</span>
+                        </span>
+                    </label>
+                    <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; margin-bottom:8px;">
+                        <input type="checkbox" name="rag_documents" value="friidrottslara"
+                            {% if 'friidrottslara' in (athlete.rag_documents or ['friidrottslara']) %}checked{% endif %}
+                            style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
+                        <span>
+                            <strong style="font-size:0.82em;">Friidrottens träningslära (2017)</strong>
+                            <span style="display:block; font-size:0.75em; color:#6b7280;">Allmän träningsteori och belastningsprinciper</span>
+                        </span>
+                    </label>
+                    <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
+                        <input type="checkbox" name="rag_documents" value="uppbyggnad"
+                            {% if 'uppbyggnad' in (athlete.rag_documents or ['uppbyggnad']) %}checked{% endif %}
+                            style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
+                        <span>
+                            <strong style="font-size:0.82em;">Träning i uppbyggnadsstadiet</strong>
+                            <span style="display:block; font-size:0.75em; color:#6b7280;">Medel- och långdistans i uppbyggnadsfas</span>
+                        </span>
+                    </label>
+                </div>
+                <script>
+                document.getElementById('coachUseRagCheckbox').addEventListener('change', function() {
+                    document.getElementById('coachDocSelector').style.display = this.checked ? 'block' : 'none';
+                });
+                </script>
+                <div style="display:flex; gap:10px; margin-top:16px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Generera månadsschema</button>
+                    <button type="button" onclick="document.getElementById('coachScheduleModal').style.display='none'" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Quick navigation -->
     <div class="athlete-quick-nav">
         <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="quick-nav-link">
@@ -43,6 +313,10 @@
             {% if athlete.has_active_injury() %}
             <span class="alert-dot"></span>
             {% endif %}
+        </a>
+        <a href="{{ url_for('athlete_competition_results', athlete_id=athlete.id) }}" class="quick-nav-link">
+            <span class="nav-icon">🏆</span>
+            <span>Tävlingsresultat</span>
         </a>
         {% if current_user and current_user.is_coach() %}
         <a href="{{ url_for('athlete_ai_chat', athlete_id=athlete.id) }}" class="quick-nav-link ai-chat-link">
@@ -130,6 +404,194 @@
             {% endfor %}
         </div>
     </section>
+
+    {% if athlete.training_mode == 'ai' %}
+    <section class="card upcoming-section" style="margin-bottom:24px;">
+        <div class="month-grid-header">
+            <div>
+                <h2>Kommande AI-pass</h2>
+                <p>Kalenderöversikt över den nuvarande AI-planen. Klicka på ett pass för att öppna detaljer.</p>
+            </div>
+            <div class="month-grid-actions">
+                {% if prev_month %}
+                <a href="{{ url_for('athlete_detail', athlete_id=athlete.id, month=prev_month.strftime('%Y-%m')) }}" class="btn btn-small btn-outline">← Föregående månad</a>
+                {% endif %}
+                <span class="week-badge neutral">{{ month_label }}</span>
+                {% if next_month %}
+                <a href="{{ url_for('athlete_detail', athlete_id=athlete.id, month=next_month.strftime('%Y-%m')) }}" class="btn btn-small btn-outline">Nästa månad →</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="month-grid-weekdays">
+            <span>Mån</span>
+            <span>Tis</span>
+            <span>Ons</span>
+            <span>Tor</span>
+            <span>Fre</span>
+            <span>Lör</span>
+            <span>Sön</span>
+        </div>
+        <div class="month-grid">
+            {% for week_row in month_grid %}
+                {% for day in week_row %}
+                <div class="month-day-cell {% if not day.in_month %}is-outside{% endif %} {% if day.is_today %}is-today{% endif %}">
+                    <div class="month-day-number">{{ day.date.day }}</div>
+                    <div class="month-day-sessions">
+                        {% for session in day.sessions %}
+                        <button type="button"
+                                class="month-session-pill intensity-pill-{{ session.planned_intensity }}"
+                                data-open-modal="coach-calendar-session-modal-{{ session.id }}">
+                            <span class="month-session-name">{{ session.session_name }}</span>
+                            {% if session.is_key_session %}
+                            <span class="month-session-key">★</span>
+                            {% endif %}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </section>
+
+    {% for session in calendar_session_views %}
+    <div id="coach-calendar-session-modal-{{ session.id }}" class="session-modal" aria-hidden="true">
+        <div class="session-modal-backdrop" data-close-modal="coach-calendar-session-modal-{{ session.id }}"></div>
+        <div class="session-modal-panel" role="dialog" aria-modal="true" aria-labelledby="coach-calendar-session-title-{{ session.id }}">
+            <button type="button" class="session-modal-close" data-close-modal="coach-calendar-session-modal-{{ session.id }}">×</button>
+            <div class="session-modal-header">
+                <div>
+                    <div class="session-modal-badges">
+                        <span class="session-status-badge {{ session.status }}">{{ session.status_label }}</span>
+                        <span class="week-badge neutral">{{ session.planned_intensity }}</span>
+                        {% if session.is_key_session %}
+                        <span class="week-badge key">★ Nyckelpass</span>
+                        {% endif %}
+                    </div>
+                    <h2 id="coach-calendar-session-title-{{ session.id }}">{{ session.session_name }}</h2>
+                    <p class="session-modal-meta">{{ session.date.strftime('%A %d %B') }} · {{ session.planned_duration }} min · {{ session.session_type }}</p>
+                </div>
+            </div>
+            <div class="session-modal-content">
+                <section class="modal-info-block">
+                    <h3>Passdetaljer</h3>
+                    {% if session.description_lines %}
+                        {% for line in session.description_lines %}
+                        <p>{{ line }}</p>
+                        {% endfor %}
+                    {% else %}
+                    <p>Ingen detaljerad passbeskrivning finns sparad ännu.</p>
+                    {% endif %}
+                </section>
+                <section class="modal-info-grid">
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Veckofokus</span>
+                        <strong>{{ session.week_theme or athlete.training_phase }}</strong>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Fas</span>
+                        <strong>{{ session.training_phase or athlete.training_phase }}</strong>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Planstatus</span>
+                        <strong>{{ session.plan_status }}</strong>
+                    </div>
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Källor</span>
+                        <strong>{{ session.sources or 'Inga externa källor' }}</strong>
+                    </div>
+                    {% if session.tempo_source_label %}
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Tempo</span>
+                        <strong>{{ session.tempo_source_label }}</strong>
+                    </div>
+                    {% endif %}
+                    {% if session.tempo_assumptions %}
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Tempoantaganden</span>
+                        <strong>{{ session.tempo_assumptions }}</strong>
+                    </div>
+                    {% endif %}
+                </section>
+                {% if session.coach_explanation %}
+                <section class="modal-info-block">
+                    <h3>Coachförklaring</h3>
+                    <p>{{ session.coach_explanation }}</p>
+                </section>
+                {% endif %}
+                <section class="modal-edit-block">
+                    <h3>Åtgärder</h3>
+                    <div class="modal-action-row">
+                        <a href="{{ url_for('week_plan', athlete_id=athlete.id, week=session.date.isoformat(), month=selected_month.strftime('%Y-%m')) }}" class="btn btn-outline">Öppna i veckoplan</a>
+                        {% if session.log_id %}
+                        <a href="{{ url_for('view_log', log_id=session.log_id) }}" class="btn btn-outline">Visa loggat pass</a>
+                        {% endif %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <script>
+        (function() {
+            const runningFocus = document.getElementById('coach_ai_running_focus');
+            const distanceFields = document.getElementById('coachAiDistanceFields');
+            const sprintFields = document.getElementById('coachAiSprintFields');
+            if (!runningFocus || !distanceFields || !sprintFields) return;
+
+            function updateCoachAiProfileFields() {
+                const value = runningFocus.value;
+                distanceFields.style.display = (value === 'medel' || value === 'distans') ? 'block' : 'none';
+                sprintFields.style.display = value === 'sprint' ? 'block' : 'none';
+            }
+
+            runningFocus.addEventListener('change', updateCoachAiProfileFields);
+            updateCoachAiProfileFields();
+        })();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalTriggers = document.querySelectorAll('[data-open-modal]');
+            const closeTriggers = document.querySelectorAll('[data-close-modal]');
+
+            function openModal(id) {
+                const modal = document.getElementById(id);
+                if (!modal) return;
+                modal.classList.add('is-visible');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+            }
+
+            function closeModal(id) {
+                const modal = document.getElementById(id);
+                if (!modal) return;
+                modal.classList.remove('is-visible');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+            }
+
+            modalTriggers.forEach(function (trigger) {
+                trigger.addEventListener('click', function () {
+                    openModal(trigger.getAttribute('data-open-modal'));
+                });
+            });
+
+            closeTriggers.forEach(function (trigger) {
+                trigger.addEventListener('click', function () {
+                    closeModal(trigger.getAttribute('data-close-modal'));
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key !== 'Escape') return;
+                document.querySelectorAll('.session-modal.is-visible').forEach(function (modal) {
+                    closeModal(modal.id);
+                });
+            });
+        });
+        </script>
+    </section>
+    {% endif %}
 
     <!-- Träningshistorik -->
     <section class="training-history">

@@ -55,6 +55,16 @@ class PlannedSession:
     coach_notes: str = ""
     completed: bool = False
     log_id: Optional[int] = None  # Koppling till faktisk logg
+    source: str = "coach"  # "ai" eller "coach"
+    is_key_session: bool = False
+    week_theme: str = ""
+    training_phase: str = ""
+    estimated_low_minutes: int = 0
+    estimated_medium_minutes: int = 0
+    estimated_high_minutes: int = 0
+    intensity_distribution_source: str = ""
+    tempo_source: str = ""
+    tempo_assumptions: str = ""
 
     def to_dict(self):
         return {
@@ -69,7 +79,17 @@ class PlannedSession:
             "exercises": self.exercises,
             "coach_notes": self.coach_notes,
             "completed": self.completed,
-            "log_id": self.log_id
+            "log_id": self.log_id,
+            "source": self.source,
+            "is_key_session": self.is_key_session,
+            "week_theme": self.week_theme,
+            "training_phase": self.training_phase,
+            "estimated_low_minutes": self.estimated_low_minutes,
+            "estimated_medium_minutes": self.estimated_medium_minutes,
+            "estimated_high_minutes": self.estimated_high_minutes,
+            "intensity_distribution_source": self.intensity_distribution_source,
+            "tempo_source": self.tempo_source,
+            "tempo_assumptions": self.tempo_assumptions,
         }
 
 
@@ -262,6 +282,30 @@ class Athlete:
     name: str
     birth_year: int
     discipline: str  # "sprint", "medel", "distans", "hopp", "kast", "mångkamp"
+    club: str = ""  # Klubbtillhörighet för matchning med tävlingsresultat
+    training_mode: str = "coach"  # "coach" = tränare lägger in pass, "ai" = AI genererar schema
+    training_days_per_week: int = 4  # Antal träningsdagar per vecka (för AI-schema)
+    training_phase: str = "grundträning"  # "grundträning", "uppbyggnad", "tävling", "återhämtning"
+    rag_documents: list = field(default_factory=lambda: ["loptranare", "friidrottslara", "uppbyggnad"])
+    running_focus: str = ""  # "sprint", "medel", "distans" - separat från friidrottsgren
+    training_experience_level: str = ""  # nivå för träningsvana
+    weekly_training_amount: str = ""
+    primary_goal: str = ""
+    injury_constraints: str = ""
+    best_5k_time: str = ""
+    best_alt_distance: str = ""
+    best_alt_time: str = ""
+    easy_pace: str = ""
+    threshold_pace: str = ""
+    training_surface: str = ""
+    tempo_model_runner_key: str = ""
+    response_notes: str = ""
+    has_external_training_data: bool = False
+    best_60m_time: str = ""
+    best_100m_time: str = ""
+    best_200m_time: str = ""
+    primary_sprint_event: str = ""
+    # Vilka PDF-dokument som används i RAG-sökningen (se DOCUMENT_REGISTRY i rag_knowledge.py)
     logs: list[TrainingLog] = field(default_factory=list)
     planned_sessions: list[PlannedSession] = field(default_factory=list)
     week_programs: list[WeekProgram] = field(default_factory=list)
@@ -364,6 +408,28 @@ class Athlete:
             "name": self.name,
             "birth_year": self.birth_year,
             "discipline": self.discipline,
+            "club": self.club,
+            "training_mode": self.training_mode,
+            "training_days_per_week": self.training_days_per_week,
+            "training_phase": self.training_phase,
+            "running_focus": self.running_focus,
+            "training_experience_level": self.training_experience_level,
+            "weekly_training_amount": self.weekly_training_amount,
+            "primary_goal": self.primary_goal,
+            "injury_constraints": self.injury_constraints,
+            "best_5k_time": self.best_5k_time,
+            "best_alt_distance": self.best_alt_distance,
+            "best_alt_time": self.best_alt_time,
+            "easy_pace": self.easy_pace,
+            "threshold_pace": self.threshold_pace,
+            "training_surface": self.training_surface,
+            "tempo_model_runner_key": self.tempo_model_runner_key,
+            "response_notes": self.response_notes,
+            "has_external_training_data": self.has_external_training_data,
+            "best_60m_time": self.best_60m_time,
+            "best_100m_time": self.best_100m_time,
+            "best_200m_time": self.best_200m_time,
+            "primary_sprint_event": self.primary_sprint_event,
             "total_logs": len(self.logs)
         }
 
@@ -385,14 +451,39 @@ class DataStore:
         self.next_custom_template_id = 1
         self.custom_templates: dict[int, CustomSessionTemplate] = {}  # id -> template
 
-    def create_athlete_for_user(self, user_id: int, name: str, birth_year: int, discipline: str) -> Athlete:
+    def create_athlete_for_user(self, user_id: int, name: str, birth_year: int, discipline: str,
+                                club: str = "", training_mode: str = "coach",
+                                training_days_per_week: int = 4, training_phase: str = "grundträning",
+                                **ai_profile) -> Athlete:
         """Skapa en idrottarprofil kopplad till en användare."""
         athlete = Athlete(
             id=self.next_athlete_id,
             user_id=user_id,
             name=name,
             birth_year=birth_year,
-            discipline=discipline
+            discipline=discipline,
+            club=club,
+            training_mode=training_mode,
+            training_days_per_week=training_days_per_week,
+            training_phase=training_phase,
+            running_focus=ai_profile.get("running_focus", ""),
+            training_experience_level=ai_profile.get("training_experience_level", ""),
+            weekly_training_amount=ai_profile.get("weekly_training_amount", ""),
+            primary_goal=ai_profile.get("primary_goal", ""),
+            injury_constraints=ai_profile.get("injury_constraints", ""),
+            best_5k_time=ai_profile.get("best_5k_time", ""),
+            best_alt_distance=ai_profile.get("best_alt_distance", ""),
+            best_alt_time=ai_profile.get("best_alt_time", ""),
+            easy_pace=ai_profile.get("easy_pace", ""),
+            threshold_pace=ai_profile.get("threshold_pace", ""),
+            training_surface=ai_profile.get("training_surface", ""),
+            tempo_model_runner_key=ai_profile.get("tempo_model_runner_key", ""),
+            response_notes=ai_profile.get("response_notes", ""),
+            has_external_training_data=ai_profile.get("has_external_training_data", False),
+            best_60m_time=ai_profile.get("best_60m_time", ""),
+            best_100m_time=ai_profile.get("best_100m_time", ""),
+            best_200m_time=ai_profile.get("best_200m_time", ""),
+            primary_sprint_event=ai_profile.get("primary_sprint_event", "")
         )
         self.athletes[athlete.id] = athlete
         self.athletes_by_user[user_id] = athlete
@@ -459,7 +550,17 @@ class DataStore:
                             template_id: str, session_name: str, session_type: str,
                             planned_duration: int, planned_intensity: str,
                             exercises: list[dict] = None,
-                            coach_notes: str = "") -> Optional[PlannedSession]:
+                            coach_notes: str = "",
+                            source: str = "coach",
+                            is_key_session: bool = False,
+                            week_theme: str = "",
+                            training_phase: str = "",
+                            estimated_low_minutes: int = 0,
+                            estimated_medium_minutes: int = 0,
+                            estimated_high_minutes: int = 0,
+                            intensity_distribution_source: str = "",
+                            tempo_source: str = "",
+                            tempo_assumptions: str = "") -> Optional[PlannedSession]:
         """Lägg till ett planerat pass."""
         athlete = self.get_athlete(athlete_id)
         if not athlete:
@@ -475,7 +576,17 @@ class DataStore:
             planned_duration=planned_duration,
             planned_intensity=planned_intensity,
             exercises=exercises or [],
-            coach_notes=coach_notes
+            coach_notes=coach_notes,
+            source=source,
+            is_key_session=is_key_session,
+            week_theme=week_theme,
+            training_phase=training_phase,
+            estimated_low_minutes=estimated_low_minutes,
+            estimated_medium_minutes=estimated_medium_minutes,
+            estimated_high_minutes=estimated_high_minutes,
+            intensity_distribution_source=intensity_distribution_source,
+            tempo_source=tempo_source,
+            tempo_assumptions=tempo_assumptions,
         )
         athlete.planned_sessions.append(planned)
         self.next_planned_session_id += 1
@@ -497,6 +608,32 @@ class DataStore:
                     del athlete.planned_sessions[i]
                     return True
         return False
+
+    def clear_future_ai_sessions(self, athlete_id: int, from_date: date = None) -> int:
+        """
+        Ta bort alla kommande AI-genererade pass för en idrottare.
+        Används innan ett nytt schema genereras för att undvika dubbletter.
+
+        Args:
+            athlete_id: Idrottarens ID
+            from_date:  Från och med vilket datum (default: idag)
+
+        Returns:
+            Antal borttagna pass
+        """
+        if from_date is None:
+            from_date = date.today()
+
+        athlete = self.athletes.get(athlete_id)
+        if not athlete:
+            return 0
+
+        before = len(athlete.planned_sessions)
+        athlete.planned_sessions = [
+            ps for ps in athlete.planned_sessions
+            if not (ps.date >= from_date and getattr(ps, 'source', 'coach') == 'ai')
+        ]
+        return before - len(athlete.planned_sessions)
 
     # ============================================================
     # KOMMENTARER

@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Tävlingsresultat - {{ athlete.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🏆 Tävlingsresultat</h1>
+    <p>{{ athlete.name }} {% if athlete.birth_year %}({{ athlete.birth_year }}){% endif %}</p>
+</div>
+
+{% if not summary.found %}
+<div class="card">
+    <div class="card-body">
+        <div class="empty-state">
+            <h3>Inga resultat hittades</h3>
+            <p>Vi kunde inte hitta några tävlingsresultat för <strong>{{ athlete.name }}</strong>.</p>
+            <p class="help-text">
+                Kontrollera att namn, födelseår och klubb matchar uppgifterna i friidrottsstatistik.se
+            </p>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<!-- Sammanfattning -->
+<div class="results-summary">
+    <div class="summary-card">
+        <span class="summary-value">{{ summary.total_results }}</span>
+        <span class="summary-label">Resultat</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-value">{{ summary.events|length }}</span>
+        <span class="summary-label">Grenar</span>
+    </div>
+    <div class="summary-card">
+        <span class="summary-value">{{ summary.personal_bests|length }}</span>
+        <span class="summary-label">Personliga rekord</span>
+    </div>
+</div>
+
+<!-- Personliga rekord -->
+<div class="card">
+    <div class="card-header">
+        <h2>🥇 Personliga rekord</h2>
+    </div>
+    <div class="card-body">
+        {% if summary.personal_bests %}
+        <div class="pb-grid">
+            {% for event, pb in summary.personal_bests.items() %}
+            <div class="pb-card">
+                <div class="pb-event">{{ event }}</div>
+                <div class="pb-result">{{ pb.result }}</div>
+                <div class="pb-details">{{ pb.venue }} · {{ pb.date }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">Inga personliga rekord registrerade.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Alla resultat -->
+<div class="card">
+    <div class="card-header">
+        <h2>📋 Alla resultat</h2>
+        <span class="badge">{{ results|length }} st</span>
+    </div>
+    <div class="card-body">
+        {% if results %}
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Gren</th>
+                    <th>Resultat</th>
+                    <th>Plats</th>
+                    <th>Typ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr>
+                    <td>{{ result.date }}</td>
+                    <td>{{ result.event }}</td>
+                    <td class="result-value">{{ result.result }}</td>
+                    <td>{{ result.venue }}</td>
+                    <td>
+                        {% if result.indoor %}
+                        <span class="tag indoor">Inne</span>
+                        {% else %}
+                        <span class="tag outdoor">Ute</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Inga resultat att visa.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endif %}
+
+<div class="back-link">
+    <a href="{{ url_for('athlete_detail', athlete_id=athlete.id) }}">← Tillbaka till {{ athlete.name }}</a>
+</div>
+
+<style>
+/* Resultat-specifik styling */
+.results-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: var(--card-bg, #1e1e1e);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color, #333);
+}
+
+.summary-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-color, #4ade80);
+}
+
+.summary-label {
+    color: var(--text-secondary, #888);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+/* Personliga rekord grid */
+.pb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.pb-card {
+    background: var(--bg-secondary, #252525);
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border-left: 4px solid var(--primary-color, #4ade80);
+}
+
+.pb-event {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #888);
+    margin-bottom: 0.5rem;
+}
+
+.pb-result {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color, #4ade80);
+}
+
+.pb-details {
+    font-size: 0.8rem;
+    color: var(--text-secondary, #666);
+    margin-top: 0.5rem;
+}
+
+/* Resultattabell */
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color, #333);
+}
+
+.results-table th {
+    background: var(--bg-secondary, #252525);
+    font-weight: 600;
+    color: var(--text-secondary, #888);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.results-table tr:hover {
+    background: var(--bg-secondary, #252525);
+}
+
+.result-value {
+    font-weight: bold;
+    color: var(--primary-color, #4ade80);
+}
+
+/* Tags */
+.tag {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.tag.indoor {
+    background: #3b82f6;
+    color: white;
+}
+
+.tag.outdoor {
+    background: #22c55e;
+    color: white;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary, #888);
+}
+
+.empty-state h3 {
+    margin-bottom: 1rem;
+}
+
+.help-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666);
+}
+
+.back-link {
+    margin-top: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .results-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .pb-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .results-table {
+        font-size: 0.85rem;
+    }
+
+    .results-table th,
+    .results-table td {
+        padding: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
