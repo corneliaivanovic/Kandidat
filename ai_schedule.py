@@ -13,7 +13,7 @@ from datetime import date, timedelta
 from typing import Optional
 import re
 import traceback
-from tempo_model import predict_session_tempo
+from tempo_model import TEMPO_SURFACE_CHOICES, get_surface_profile, predict_session_tempo
 
 
 # ============================================================
@@ -478,6 +478,17 @@ def _format_rep_range(distance_m: int, low_seconds_per_km: float, high_seconds_p
     return f"{_format_seconds(low * factor)}–{_format_seconds(high * factor)} per {label}"
 
 
+def _parse_pace_range_text(text: str) -> tuple[Optional[float], Optional[float]]:
+    matches = re.findall(r"(\d+):(\d{2})", text or "")
+    if not matches:
+        return None, None
+    values = [int(minutes) * 60 + int(seconds) for minutes, seconds in matches]
+    if len(values) == 1:
+        return float(values[0]), float(values[0])
+    low, high = sorted(values[:2])
+    return float(low), float(high)
+
+
 def _choose_performance_anchor(athlete_info: dict, running_type: str) -> tuple[Optional[int], Optional[float], str]:
     best_5k = _parse_time_to_seconds(athlete_info.get("best_5k_time", ""))
     if best_5k:
@@ -512,6 +523,8 @@ def _build_pace_model(athlete_info: dict, running_type: str) -> dict:
         "running_type": running_type,
         "training_surface": athlete_info.get("training_surface", ""),
         "tempo_model_runner_key": athlete_info.get("tempo_model_runner_key", ""),
+        "tempo_model_personal_offset_seconds": float(athlete_info.get("tempo_model_personal_offset_seconds", 0.0) or 0.0),
+        "tempo_model_offset_samples": int(athlete_info.get("tempo_model_offset_samples", 0) or 0),
         "has_external_training_data": bool(athlete_info.get("has_external_training_data")),
     }
     easy_pace_raw = (athlete_info.get("easy_pace") or "").strip()
@@ -621,7 +634,9 @@ def _garmin_pace_hint_for_session(
 ) -> tuple[str, str, str]:
     runner_key = (pace_model.get("tempo_model_runner_key") or "").strip()
     has_external_data = bool(pace_model.get("has_external_training_data"))
-    if not runner_key and not has_external_data:
+    personal_offset_seconds = float(pace_model.get("tempo_model_personal_offset_seconds", 0.0) or 0.0)
+    personal_offset_samples = int(pace_model.get("tempo_model_offset_samples", 0) or 0)
+    if not runner_key and not has_external_data and personal_offset_samples <= 0:
         return "", "", ""
 
     prediction = predict_session_tempo(
@@ -631,6 +646,7 @@ def _garmin_pace_hint_for_session(
         description=description,
         training_surface=pace_model.get("training_surface", ""),
         runner_key=runner_key,
+        personal_offset_seconds=personal_offset_seconds,
     )
     assumptions = [
         f"passmedel-IF {prediction['if']:.2f}",
@@ -641,6 +657,13 @@ def _garmin_pace_hint_for_session(
         assumptions.append(f"rep-justering {prediction['rep_adjustment']:.3f}x")
     if runner_key:
         assumptions.append(f"profil {runner_key}")
+    if personal_offset_samples >= 3 and abs(prediction.get("personal_offset_seconds", 0.0)) > 0.01:
+        assumptions.append(
+            f"personlig offset {prediction.get('personal_offset_seconds', 0.0):+.0f}s/km "
+            f"från {personal_offset_samples} loggade pass"
+        )
+    elif personal_offset_samples > 0:
+        assumptions.append(f"kalibrering pågår ({personal_offset_samples}/3 loggade pass)")
     assumptions_text = ", ".join(assumptions)
     pace_text = _format_pace_range(
         prediction["low_seconds_per_km"],
@@ -649,13 +672,94 @@ def _garmin_pace_hint_for_session(
     return f"Tempo ungefär {pace_text}.", prediction["source"], assumptions_text
 
 
+def _surface_delta_seconds(surface_key: str, baseline_surface_key: str = "plan_vag") -> float:
+    baseline_up, baseline_down = get_surface_profile(baseline_surface_key)
+    target_up, target_down = get_surface_profile(surface_key)
+    return (target_up - baseline_up) * 1.0270 + (target_down - baseline_down) * 2.6847
+
+
+def _build_surface_tempo_options(
+    session_name: str,
+    session_type: str,
+    intensity: str,
+    description: str,
+    pace_model: dict,
+    pace_source: str,
+) -> list[dict]:
+    if pace_model.get("running_type") not in {"medel", "distans"}:
+        return []
+
+    options = []
+    if pace_source.startswith("garmin_model"):
+        runner_key = (pace_model.get("tempo_model_runner_key") or "").strip()
+        personal_offset_seconds = float(pace_model.get("tempo_model_personal_offset_seconds", 0.0) or 0.0)
+        for surface_key, label, gradient in TEMPO_SURFACE_CHOICES:
+            prediction = predict_session_tempo(
+                session_name=session_name,
+                session_type=session_type,
+                intensity=intensity,
+                description=description,
+                training_surface=surface_key,
+                runner_key=runner_key,
+                personal_offset_seconds=personal_offset_seconds,
+            )
+            options.append({
+                "surface_key": surface_key,
+                "label": label,
+                "gradient": gradient,
+                "pace_text": _format_pace_range(
+                    prediction["low_seconds_per_km"],
+                    prediction["high_seconds_per_km"],
+                ),
+            })
+        return options
+
+    profile = _session_pace_profile(session_name, session_type, intensity, description)
+    main_work_text = profile["main_work_text"]
+    rep_distance = profile["rep_distance"]
+    is_threshold_like = profile["is_threshold_like"]
+
+    base_low = None
+    base_high = None
+    if any(token in main_work_text for token in ["återhämtnings", "lugn", "zon 1", "zon 2", "aerob zon"]):
+        base_text = pace_model.get("easy_text", "")
+        base_low, base_high = _parse_pace_range_text(base_text)
+    elif is_threshold_like:
+        base_text = pace_model.get("threshold_text", "")
+        base_low, base_high = _parse_pace_range_text(base_text)
+    elif rep_distance:
+        if rep_distance <= 300 and pace_model.get("pace_1500"):
+            base_low, base_high = pace_model["pace_1500"] * 0.99, pace_model["pace_1500"] * 1.03
+        elif rep_distance <= 600 and pace_model.get("pace_3000"):
+            base_low, base_high = pace_model["pace_3000"] * 0.99, pace_model["pace_3000"] * 1.02
+        elif rep_distance >= 800 and pace_model.get("pace_5000"):
+            base_low, base_high = pace_model["pace_5000"] * 0.99, pace_model["pace_5000"] * 1.02
+    elif intensity == "låg" and pace_model.get("easy_text"):
+        base_low, base_high = _parse_pace_range_text(pace_model["easy_text"])
+    elif intensity == "hög" and pace_model.get("threshold_text"):
+        base_low, base_high = _parse_pace_range_text(pace_model["threshold_text"])
+
+    if base_low is None or base_high is None:
+        return []
+
+    for surface_key, label, gradient in TEMPO_SURFACE_CHOICES:
+        delta = _surface_delta_seconds(surface_key)
+        options.append({
+            "surface_key": surface_key,
+            "label": label,
+            "gradient": gradient,
+            "pace_text": _format_pace_range(base_low + delta, base_high + delta),
+        })
+    return options
+
+
 def _pace_hint_for_session(
     session_name: str,
     session_type: str,
     intensity: str,
     description: str,
     pace_model: dict,
-) -> tuple[str, str, str]:
+) -> tuple[str, str, str, list[dict]]:
     profile = _session_pace_profile(session_name, session_type, intensity, description)
     text = profile["text"]
     main_work_text = profile["main_work_text"]
@@ -680,25 +784,56 @@ def _pace_hint_for_session(
             pace_model=pace_model,
         )
         if garmin_hint:
-            return garmin_hint, garmin_source, garmin_assumptions
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, garmin_source
+            )
+            return garmin_hint, garmin_source, garmin_assumptions, options
 
     if any(token in main_work_text for token in ["återhämtnings", "lugn", "zon 1", "zon 2", "aerob zon"]):
         if pace_model.get("easy_text"):
-            return f"Tempo ungefär {pace_model['easy_text']}.", "race_based_heuristic", ""
+            source = "race_based_heuristic"
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, source
+            )
+            return f"Tempo ungefär {pace_model['easy_text']}.", source, "", options
     if is_threshold_like:
         if pace_model.get("threshold_text"):
-            return f"Tempo ungefär {pace_model['threshold_text']}.", "race_based_heuristic", ""
+            source = "race_based_heuristic"
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, source
+            )
+            return f"Tempo ungefär {pace_model['threshold_text']}.", source, "", options
     if rep_distance:
         if rep_distance <= 300 and pace_model.get("pace_1500"):
-            return f"Tempo ungefär {_format_pace_range(pace_model['pace_1500'] * 0.99, pace_model['pace_1500'] * 1.03)}.", "race_based_heuristic", ""
+            source = "race_based_heuristic"
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, source
+            )
+            return f"Tempo ungefär {_format_pace_range(pace_model['pace_1500'] * 0.99, pace_model['pace_1500'] * 1.03)}.", source, "", options
         if rep_distance <= 600 and pace_model.get("pace_3000"):
-            return f"Tempo ungefär {_format_pace_range(pace_model['pace_3000'] * 0.99, pace_model['pace_3000'] * 1.02)}.", "race_based_heuristic", ""
+            source = "race_based_heuristic"
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, source
+            )
+            return f"Tempo ungefär {_format_pace_range(pace_model['pace_3000'] * 0.99, pace_model['pace_3000'] * 1.02)}.", source, "", options
         if rep_distance >= 800 and pace_model.get("pace_5000"):
-            return f"Tempo ungefär {_format_pace_range(pace_model['pace_5000'] * 0.99, pace_model['pace_5000'] * 1.02)}.", "race_based_heuristic", ""
+            source = "race_based_heuristic"
+            options = _build_surface_tempo_options(
+                session_name, session_type, intensity, description, pace_model, source
+            )
+            return f"Tempo ungefär {_format_pace_range(pace_model['pace_5000'] * 0.99, pace_model['pace_5000'] * 1.02)}.", source, "", options
     if intensity == "låg" and pace_model.get("easy_text"):
-        return f"Tempo ungefär {pace_model['easy_text']}.", "race_based_heuristic", ""
+        source = "race_based_heuristic"
+        options = _build_surface_tempo_options(
+            session_name, session_type, intensity, description, pace_model, source
+        )
+        return f"Tempo ungefär {pace_model['easy_text']}.", source, "", options
     if intensity == "hög" and pace_model.get("threshold_text"):
-        return f"Håll ungefär {pace_model['threshold_text']} på längre arbetsblock.", "race_based_heuristic", ""
+        source = "race_based_heuristic"
+        options = _build_surface_tempo_options(
+            session_name, session_type, intensity, description, pace_model, source
+        )
+        return f"Håll ungefär {pace_model['threshold_text']} på längre arbetsblock.", source, "", options
 
     garmin_hint, garmin_source, garmin_assumptions = _garmin_pace_hint_for_session(
         session_name=session_name,
@@ -708,8 +843,11 @@ def _pace_hint_for_session(
         pace_model=pace_model,
     )
     if garmin_hint:
-        return garmin_hint, garmin_source, garmin_assumptions
-    return "", "", ""
+        options = _build_surface_tempo_options(
+            session_name, session_type, intensity, description, pace_model, garmin_source
+        )
+        return garmin_hint, garmin_source, garmin_assumptions, options
+    return "", "", "", []
 
 
 def _append_pace_hint_to_description(description: str, pace_hint: str, pace_source: str = "") -> str:
@@ -900,6 +1038,8 @@ def _build_athlete_info(athlete: object) -> dict:
         "threshold_pace",
         "training_surface",
         "tempo_model_runner_key",
+        "tempo_model_personal_offset_seconds",
+        "tempo_model_offset_samples",
         "response_notes",
         "best_60m_time",
         "best_100m_time",
@@ -1050,7 +1190,7 @@ def generate_week_schedule(
 
             description = session_data.get("description", "")
             description = _normalize_pace_text_to_min_per_km(description)
-            pace_hint, pace_source, pace_assumptions = _pace_hint_for_session(
+            pace_hint, pace_source, pace_assumptions, pace_surface_options = _pace_hint_for_session(
                 session_name=session_data.get("name", ""),
                 session_type=session_data.get("type", ""),
                 intensity=session_data.get("intensity", ""),
@@ -1091,6 +1231,7 @@ def generate_week_schedule(
                 intensity_distribution_source=distribution["source"],
                 tempo_source=pace_source,
                 tempo_assumptions=pace_assumptions,
+                tempo_surface_options=pace_surface_options,
             )
             if session:
                 created_sessions.append(session)
@@ -1133,7 +1274,7 @@ def generate_week_schedule(
             name, session_type, duration, intensity, description = workout
             description = _normalize_pace_text_to_min_per_km(description)
 
-            pace_hint, pace_source, pace_assumptions = _pace_hint_for_session(
+            pace_hint, pace_source, pace_assumptions, pace_surface_options = _pace_hint_for_session(
                 session_name=name,
                 session_type=session_type,
                 intensity=intensity,
@@ -1180,6 +1321,7 @@ def generate_week_schedule(
                 intensity_distribution_source=distribution["source"],
                 tempo_source=pace_source,
                 tempo_assumptions=pace_assumptions,
+                tempo_surface_options=pace_surface_options,
             )
             if session:
                 created_sessions.append(session)
@@ -1312,7 +1454,7 @@ def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_
 
                             description = session_data.get("description", "")
                             description = _normalize_pace_text_to_min_per_km(description)
-                            pace_hint, pace_source, pace_assumptions = _pace_hint_for_session(
+                            pace_hint, pace_source, pace_assumptions, pace_surface_options = _pace_hint_for_session(
                                 session_name=session_data.get("name", ""),
                                 session_type=session_data.get("type", ""),
                                 intensity=session_data.get("intensity", ""),
@@ -1353,6 +1495,7 @@ def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_
                                 intensity_distribution_source=distribution["source"],
                                 tempo_source=pace_source,
                                 tempo_assumptions=pace_assumptions,
+                                tempo_surface_options=pace_surface_options,
                             )
                             if session:
                                 all_sessions.append(session)

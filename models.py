@@ -20,6 +20,7 @@ class TrainingLog:
     rpe: int  # Rate of Perceived Exertion (1-10)
     comment: str = ""
     planned_session_id: Optional[int] = None  # Koppling till planerat pass
+    actual_pace_seconds_per_km: Optional[float] = None
 
     @property
     def load(self) -> int:
@@ -36,7 +37,8 @@ class TrainingLog:
             "rpe": self.rpe,
             "comment": self.comment,
             "load": self.load,
-            "planned_session_id": self.planned_session_id
+            "planned_session_id": self.planned_session_id,
+            "actual_pace_seconds_per_km": self.actual_pace_seconds_per_km,
         }
 
 
@@ -65,6 +67,7 @@ class PlannedSession:
     intensity_distribution_source: str = ""
     tempo_source: str = ""
     tempo_assumptions: str = ""
+    tempo_surface_options: list[dict] = field(default_factory=list)
 
     def to_dict(self):
         return {
@@ -90,6 +93,7 @@ class PlannedSession:
             "intensity_distribution_source": self.intensity_distribution_source,
             "tempo_source": self.tempo_source,
             "tempo_assumptions": self.tempo_assumptions,
+            "tempo_surface_options": self.tempo_surface_options,
         }
 
 
@@ -299,6 +303,8 @@ class Athlete:
     threshold_pace: str = ""
     training_surface: str = ""
     tempo_model_runner_key: str = ""
+    tempo_model_personal_offset_seconds: float = 0.0
+    tempo_model_offset_samples: int = 0
     response_notes: str = ""
     has_external_training_data: bool = False
     best_60m_time: str = ""
@@ -424,6 +430,8 @@ class Athlete:
             "threshold_pace": self.threshold_pace,
             "training_surface": self.training_surface,
             "tempo_model_runner_key": self.tempo_model_runner_key,
+            "tempo_model_personal_offset_seconds": self.tempo_model_personal_offset_seconds,
+            "tempo_model_offset_samples": self.tempo_model_offset_samples,
             "response_notes": self.response_notes,
             "has_external_training_data": self.has_external_training_data,
             "best_60m_time": self.best_60m_time,
@@ -478,6 +486,8 @@ class DataStore:
             threshold_pace=ai_profile.get("threshold_pace", ""),
             training_surface=ai_profile.get("training_surface", ""),
             tempo_model_runner_key=ai_profile.get("tempo_model_runner_key", ""),
+            tempo_model_personal_offset_seconds=float(ai_profile.get("tempo_model_personal_offset_seconds", 0.0) or 0.0),
+            tempo_model_offset_samples=int(ai_profile.get("tempo_model_offset_samples", 0) or 0),
             response_notes=ai_profile.get("response_notes", ""),
             has_external_training_data=ai_profile.get("has_external_training_data", False),
             best_60m_time=ai_profile.get("best_60m_time", ""),
@@ -517,7 +527,8 @@ class DataStore:
 
     def add_log(self, athlete_id: int, log_date: date, session_type: str,
                 duration: int, rpe: int, comment: str = "",
-                planned_session_id: Optional[int] = None) -> Optional[TrainingLog]:
+                planned_session_id: Optional[int] = None,
+                actual_pace_seconds_per_km: Optional[float] = None) -> Optional[TrainingLog]:
         """Lägg till en loggpost för en idrottare."""
         athlete = self.get_athlete(athlete_id)
         if not athlete:
@@ -531,7 +542,8 @@ class DataStore:
             duration_minutes=duration,
             rpe=rpe,
             comment=comment,
-            planned_session_id=planned_session_id
+            planned_session_id=planned_session_id,
+            actual_pace_seconds_per_km=actual_pace_seconds_per_km,
         )
         athlete.add_log(log)
         self.next_log_id += 1
@@ -560,7 +572,8 @@ class DataStore:
                             estimated_high_minutes: int = 0,
                             intensity_distribution_source: str = "",
                             tempo_source: str = "",
-                            tempo_assumptions: str = "") -> Optional[PlannedSession]:
+                            tempo_assumptions: str = "",
+                            tempo_surface_options: list[dict] = None) -> Optional[PlannedSession]:
         """Lägg till ett planerat pass."""
         athlete = self.get_athlete(athlete_id)
         if not athlete:
@@ -587,6 +600,7 @@ class DataStore:
             intensity_distribution_source=intensity_distribution_source,
             tempo_source=tempo_source,
             tempo_assumptions=tempo_assumptions,
+            tempo_surface_options=tempo_surface_options or [],
         )
         athlete.planned_sessions.append(planned)
         self.next_planned_session_id += 1

@@ -26,7 +26,7 @@ from competition_results import (
     search_athletes
 )
 from ai_schedule import generate_week_schedule, generate_schedule_for_weeks, generate_month_schedule
-from tempo_model import TEMPO_MODEL_RUNNERS
+from tempo_model import TEMPO_MODEL_RUNNERS, parse_pace_to_seconds_per_km, calibrate_runner_offset_from_logs
 
 # Skapa Flask app
 app = Flask(__name__,
@@ -78,11 +78,35 @@ def _parse_ai_profile_from_form(form) -> dict:
     return profile
 
 
+def _parse_actual_pace_from_form(form) -> float | None:
+    return parse_pace_to_seconds_per_km(form.get("actual_pace", ""))
+
+
+def _format_pace_seconds_per_km(value: float | None) -> str:
+    if value is None:
+        return ""
+    total_seconds = int(round(float(value)))
+    minutes = total_seconds // 60
+    seconds = total_seconds % 60
+    return f"{minutes}:{seconds:02d} min/km"
+
+
+def _refresh_athlete_tempo_calibration(athlete) -> dict:
+    calibration = calibrate_runner_offset_from_logs(athlete)
+    athlete.tempo_model_personal_offset_seconds = calibration["offset_seconds"] if calibration["is_calibrated"] else 0.0
+    athlete.tempo_model_offset_samples = calibration["sample_count"]
+    return calibration
+
+
 def _apply_ai_profile_to_athlete(athlete, form) -> dict:
     """Spara AI-profilfält på athlete och returnera normaliserat dict."""
+    previous_runner_key = getattr(athlete, "tempo_model_runner_key", "")
     profile = _parse_ai_profile_from_form(form)
     for field, value in profile.items():
         setattr(athlete, field, value)
+    if profile.get("tempo_model_runner_key", "") != previous_runner_key:
+        athlete.tempo_model_personal_offset_seconds = 0.0
+        athlete.tempo_model_offset_samples = 0
     return profile
 
 
@@ -90,6 +114,7 @@ def _apply_ai_profile_to_athlete(athlete, form) -> dict:
 def inject_shared_template_context():
     return {
         "tempo_model_runners": TEMPO_MODEL_RUNNERS,
+        "format_pace_seconds_per_km": _format_pace_seconds_per_km,
     }
 
 
@@ -161,6 +186,8 @@ def _build_session_view(session, today: date) -> dict:
     tempo_source = getattr(session, "tempo_source", "") or note_meta.get("Tempo", "")
     tempo_source_label = {
         "garmin_model_offset": "Garmin-modell med personlig profil",
+        "garmin_model_offset_calibrated": "Garmin-modell med profil + personlig kalibrering",
+        "garmin_model_calibrated": "Garmin-modell med personlig kalibrering",
         "garmin_model_population": "Garmin-modell",
         "race_based_heuristic": "Profil-/tävlingsbaserad uppskattning",
     }.get(tempo_source, tempo_source)
@@ -194,6 +221,7 @@ def _build_session_view(session, today: date) -> dict:
         "tempo_source": tempo_source,
         "tempo_source_label": tempo_source_label,
         "tempo_assumptions": getattr(session, "tempo_assumptions", ""),
+        "tempo_surface_options": getattr(session, "tempo_surface_options", []) or [],
         "status": status,
         "status_label": {
             "completed": "Genomfort",
@@ -428,7 +456,7 @@ def init_demo_data():
                 "running_focus": "distans",
                 "training_experience_level": "mer än 3 år",
                 "weekly_training_amount": "5 pass eller 45 km",
-                "training_surface": "väg",
+                "training_surface": "plan_vag",
                 "tempo_model_runner_key": "Ebba 3",
                 "has_external_training_data": True,
             },
@@ -458,7 +486,7 @@ def init_demo_data():
                 "running_focus": "medel",
                 "training_experience_level": "mer än 3 år",
                 "weekly_training_amount": "5 pass eller 50 km",
-                "training_surface": "väg",
+                "training_surface": "plan_vag",
                 "tempo_model_runner_key": "Daniel",
                 "has_external_training_data": True,
             },
@@ -956,9 +984,25 @@ def add_log(athlete_id: int):
         rpe = int(request.form['rpe'])
         comment = request.form.get('comment', '')
         planned_id = request.form.get('planned_session_id', type=int)
+        actual_pace_seconds_per_km = _parse_actual_pace_from_form(request.form)
 
-        db.add_log(athlete_id, log_date, session_type, duration, rpe, comment, planned_id)
+        db.add_log(
+            athlete_id,
+            log_date,
+            session_type,
+            duration,
+            rpe,
+            comment,
+            planned_id,
+            actual_pace_seconds_per_km=actual_pace_seconds_per_km,
+        )
+        calibration = _refresh_athlete_tempo_calibration(athlete)
         invalidate_cache(athlete_id)  # Rensa cache så AI-sammanfattningen uppdateras
+        if actual_pace_seconds_per_km and calibration["is_calibrated"]:
+            flash(
+                f"Personlig tempooffset uppdaterad från {calibration['sample_count']} loggade pass.",
+                'success',
+            )
         flash('Träningspasset har loggats!', 'success')
         return redirect(url_for('dashboard'))
 
@@ -982,6 +1026,7 @@ def quick_log(athlete_id: int):
     planned_id = request.form.get('planned_session_id', type=int)
     rpe = request.form.get('rpe', type=int, default=5)
     comment = request.form.get('comment', '')
+    actual_pace_seconds_per_km = _parse_actual_pace_from_form(request.form)
 
     planned_session = db.get_planned_session(planned_id)
     if not planned_session:
@@ -995,10 +1040,17 @@ def quick_log(athlete_id: int):
         planned_session.planned_duration,
         rpe,
         comment,
-        planned_id
+        planned_id,
+        actual_pace_seconds_per_km=actual_pace_seconds_per_km,
     )
 
+    calibration = _refresh_athlete_tempo_calibration(athlete)
     invalidate_cache(athlete_id)  # Rensa cache så AI-sammanfattningen uppdateras
+    if actual_pace_seconds_per_km and calibration["is_calibrated"]:
+        flash(
+            f"Personlig tempooffset uppdaterad från {calibration['sample_count']} loggade pass.",
+            'success',
+        )
     flash('Pass loggat!', 'success')
     redirect_url = request.form.get('redirect_url', '').strip()
     return redirect(redirect_url or url_for('dashboard'))
@@ -1319,6 +1371,7 @@ def update_planned_session(session_id: int):
         planned_session.intensity_distribution_source = distribution["source"]
         planned_session.tempo_source = ""
         planned_session.tempo_assumptions = ""
+        planned_session.tempo_surface_options = []
         flash('Passet uppdaterades.', 'success')
     except ValueError:
         flash('Kontrollera datum och duration innan du sparar.', 'error')

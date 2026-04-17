@@ -255,6 +255,16 @@
                             <strong>{{ session.tempo_assumptions }}</strong>
                         </div>
                         {% endif %}
+                        {% if session.tempo_surface_options %}
+                        <div class="modal-info-card">
+                            <span class="modal-info-label">Tempoalternativ per underlag</span>
+                            <div class="surface-tempo-list">
+                                {% for option in session.tempo_surface_options %}
+                                <div><strong>{{ option.label }}</strong>: {{ option.pace_text }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </section>
 
                     {% if session.coach_explanation %}
@@ -354,6 +364,10 @@
                                 <div class="form-group full-width">
                                     <label for="comment_{{ session.id }}">Kommentar</label>
                                     <textarea id="comment_{{ session.id }}" name="comment" rows="3" placeholder="Hur kändes passet?"></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="actual_pace_{{ session.id }}">Faktiskt medeltempo (frivilligt)</label>
+                                    <input type="text" id="actual_pace_{{ session.id }}" name="actual_pace" placeholder="t.ex. 5:20 min/km">
                                 </div>
                             </div>
                             <div class="modal-action-row">

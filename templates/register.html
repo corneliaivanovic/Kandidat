@@ -255,11 +255,10 @@
                             <label for="training_surface">Var tränar du oftast? (frivilligt)</label>
                             <select id="training_surface" name="training_surface">
                                 <option value="">Välj miljö</option>
-                                <option value="bana" {% if request.form.get('training_surface') == 'bana' %}selected{% endif %}>Bana</option>
-                                <option value="väg" {% if request.form.get('training_surface') == 'väg' %}selected{% endif %}>Väg</option>
-                                <option value="terräng" {% if request.form.get('training_surface') == 'terräng' %}selected{% endif %}>Terräng</option>
-                                <option value="kuperat" {% if request.form.get('training_surface') == 'kuperat' %}selected{% endif %}>Kuperat</option>
-                                <option value="löpband" {% if request.form.get('training_surface') == 'löpband' %}selected{% endif %}>Löpband</option>
+                                <option value="bana" {% if request.form.get('training_surface') == 'bana' %}selected{% endif %}>Bana (0,0 m/km)</option>
+                                <option value="plan_vag" {% if request.form.get('training_surface') == 'plan_vag' or request.form.get('training_surface') == 'väg' %}selected{% endif %}>Plan väg (5,5 m/km)</option>
+                                <option value="kuperat" {% if request.form.get('training_surface') == 'kuperat' or request.form.get('training_surface') == 'terräng' %}selected{% endif %}>Kuperat (15,0 m/km)</option>
+                                <option value="valdigt_kuperat" {% if request.form.get('training_surface') == 'valdigt_kuperat' %}selected{% endif %}>Väldigt kuperat (30,0 m/km)</option>
                             </select>
                         </div>
 
@@ -271,7 +270,7 @@
                                 <option value="{{ runner_name }}" {% if request.form.get('tempo_model_runner_key') == runner_name %}selected{% endif %}>{{ runner_name }}</option>
                                 {% endfor %}
                             </select>
-                            <small class="form-hint">Välj bara en profil om du vet att den matchar samma löpare i den delade Garmin-modellen.</small>
+                            <small class="form-hint">Välj bara en profil om du vet att den matchar samma löpare i den delade Garmin-modellen. Annars kan en personlig offset byggas upp från flera loggade pass med verkligt medeltempo.</small>
                         </div>
 
                         <div class="form-group">

@@ -45,11 +45,21 @@ _RUNNER_OFFSETS = {
 
 _SURFACE_PROFILE = {
     "bana": (0.0, 0.0),
+    "plan_vag": (5.5, 5.5),
+    "kuperat": (15.0, 15.0),
+    "valdigt_kuperat": (30.0, 30.0),
+    # Bakåtkompatibilitet för äldre sparade värden
     "löpband": (0.0, 0.0),
-    "väg": (5.0, 5.0),
-    "terräng": (20.0, 20.0),
-    "kuperat": (35.0, 35.0),
+    "väg": (5.5, 5.5),
+    "terräng": (15.0, 15.0),
 }
+
+TEMPO_SURFACE_CHOICES = [
+    ("bana", "Bana", 0.0),
+    ("plan_vag", "Plan väg", 5.5),
+    ("kuperat", "Kuperat", 15.0),
+    ("valdigt_kuperat", "Väldigt kuperat", 30.0),
+]
 
 
 def _extract_rep_distance(text: str) -> Optional[int]:
@@ -68,8 +78,30 @@ def _extract_main_work_text(description: str) -> str:
     return (description or "").lower()
 
 
+def parse_pace_to_seconds_per_km(raw_value: str) -> Optional[float]:
+    value = (raw_value or "").strip().lower().replace("/km", "").replace("min/km", "")
+    if not value:
+        return None
+
+    match = re.search(r"(?P<minutes>\d{1,2})[:.](?P<seconds>\d{2})", value)
+    if match:
+        minutes = int(match.group("minutes"))
+        seconds = int(match.group("seconds"))
+        if seconds >= 60:
+            return None
+        return float(minutes * 60 + seconds)
+
+    try:
+        numeric = float(value.replace(",", "."))
+    except ValueError:
+        return None
+    if numeric <= 0:
+        return None
+    return numeric * 60.0
+
+
 def get_surface_profile(training_surface: str) -> tuple[float, float]:
-    return _SURFACE_PROFILE.get((training_surface or "").strip().lower(), (5.0, 5.0))
+    return _SURFACE_PROFILE.get((training_surface or "").strip().lower(), (5.5, 5.5))
 
 
 def infer_if(
@@ -127,6 +159,7 @@ def predict_seconds_per_km(
     stigning_per_km: float,
     nedfor_per_km: float,
     runner_key: str = "",
+    personal_offset_seconds: float = 0.0,
 ) -> dict:
     runner_offset = _RUNNER_OFFSETS.get((runner_key or "").strip(), 0.0)
     base_seconds = (
@@ -135,11 +168,21 @@ def predict_seconds_per_km(
         + (_STIGNING_COEF * float(stigning_per_km))
         + (_NEDFOR_COEF * float(nedfor_per_km))
     )
-    final_seconds = max(150.0, base_seconds + runner_offset)
-    source = "garmin_model_offset" if runner_offset else "garmin_model_population"
+    total_offset = runner_offset + float(personal_offset_seconds or 0.0)
+    final_seconds = max(150.0, base_seconds + total_offset)
+    if runner_offset and personal_offset_seconds:
+        source = "garmin_model_offset_calibrated"
+    elif personal_offset_seconds:
+        source = "garmin_model_calibrated"
+    elif runner_offset:
+        source = "garmin_model_offset"
+    else:
+        source = "garmin_model_population"
     return {
         "seconds_per_km": final_seconds,
-        "offset_seconds": runner_offset,
+        "offset_seconds": total_offset,
+        "runner_offset_seconds": runner_offset,
+        "personal_offset_seconds": float(personal_offset_seconds or 0.0),
         "source": source,
     }
 
@@ -151,6 +194,7 @@ def predict_session_tempo(
     description: str,
     training_surface: str = "",
     runner_key: str = "",
+    personal_offset_seconds: float = 0.0,
 ) -> dict:
     if_val = infer_if(session_name, session_type, intensity, description)
     stigning, nedfor = get_surface_profile(training_surface)
@@ -159,6 +203,7 @@ def predict_session_tempo(
         stigning_per_km=stigning,
         nedfor_per_km=nedfor,
         runner_key=runner_key,
+        personal_offset_seconds=personal_offset_seconds,
     )
 
     text = " ".join([
@@ -222,3 +267,71 @@ def predict_session_tempo(
         "rep_adjustment": rep_adjustment,
     })
     return prediction
+
+
+def calibrate_runner_offset_from_logs(
+    athlete,
+    min_samples: int = 3,
+) -> dict:
+    """Räkna personlig offset från loggade pass med verkligt medeltempo."""
+    samples: list[dict] = []
+    runner_key = (getattr(athlete, "tempo_model_runner_key", "") or "").strip()
+
+    for log in getattr(athlete, "logs", []):
+        actual_pace = getattr(log, "actual_pace_seconds_per_km", None)
+        if not actual_pace or not getattr(log, "planned_session_id", None):
+            continue
+
+        planned_session = next(
+            (session for session in getattr(athlete, "planned_sessions", []) if session.id == log.planned_session_id),
+            None,
+        )
+        if not planned_session:
+            continue
+
+        description = ""
+        for exercise in getattr(planned_session, "exercises", []) or []:
+            description = (exercise.get("description") or exercise.get("details") or "").strip()
+            if description:
+                break
+
+        if_val = infer_if(
+            planned_session.session_name,
+            planned_session.session_type,
+            planned_session.planned_intensity,
+            description,
+        )
+        stigning_per_km, nedfor_per_km = get_surface_profile(getattr(athlete, "training_surface", ""))
+        generic_prediction = predict_seconds_per_km(
+            if_val=if_val,
+            stigning_per_km=stigning_per_km,
+            nedfor_per_km=nedfor_per_km,
+            runner_key=runner_key,
+            personal_offset_seconds=0.0,
+        )
+        offset_seconds = float(actual_pace) - float(generic_prediction["seconds_per_km"])
+        samples.append({
+            "log_id": log.id,
+            "actual_pace_seconds_per_km": float(actual_pace),
+            "predicted_seconds_per_km": float(generic_prediction["seconds_per_km"]),
+            "offset_seconds": offset_seconds,
+            "if": if_val,
+            "stigning_per_km": stigning_per_km,
+            "nedfor_per_km": nedfor_per_km,
+        })
+
+    if len(samples) < min_samples:
+        return {
+            "offset_seconds": 0.0,
+            "sample_count": len(samples),
+            "samples": samples,
+            "is_calibrated": False,
+        }
+
+    average_offset = sum(sample["offset_seconds"] for sample in samples) / len(samples)
+    return {
+        "offset_seconds": average_offset,
+        "sample_count": len(samples),
+        "samples": samples,
+        "is_calibrated": True,
+    }

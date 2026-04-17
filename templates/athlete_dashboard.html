@@ -101,6 +101,10 @@
                         <input type="text" name="comment" placeholder="Kort kommentar (valfritt)">
                     </div>
 
+                    <div class="quick-log-comment">
+                        <input type="text" name="actual_pace" placeholder="Medeltempo, t.ex. 5:20 min/km (frivilligt)">
+                    </div>
+
                     <button type="submit" class="btn btn-primary btn-large btn-block">
                         ✓ Markera som genomfört
                     </button>
@@ -356,11 +360,10 @@
                         <label for="ai_training_surface">Vanlig träningsmiljö (frivilligt)</label>
                         <select id="ai_training_surface" name="training_surface">
                             <option value="">Välj miljö</option>
-                            <option value="bana" {% if athlete.training_surface == 'bana' %}selected{% endif %}>Bana</option>
-                            <option value="väg" {% if athlete.training_surface == 'väg' %}selected{% endif %}>Väg</option>
-                            <option value="terräng" {% if athlete.training_surface == 'terräng' %}selected{% endif %}>Terräng</option>
-                            <option value="kuperat" {% if athlete.training_surface == 'kuperat' %}selected{% endif %}>Kuperat</option>
-                            <option value="löpband" {% if athlete.training_surface == 'löpband' %}selected{% endif %}>Löpband</option>
+                            <option value="bana" {% if athlete.training_surface == 'bana' or athlete.training_surface == 'löpband' %}selected{% endif %}>Bana (0,0 m/km)</option>
+                            <option value="plan_vag" {% if athlete.training_surface == 'plan_vag' or athlete.training_surface == 'väg' %}selected{% endif %}>Plan väg (5,5 m/km)</option>
+                            <option value="kuperat" {% if athlete.training_surface == 'kuperat' or athlete.training_surface == 'terräng' %}selected{% endif %}>Kuperat (15,0 m/km)</option>
+                            <option value="valdigt_kuperat" {% if athlete.training_surface == 'valdigt_kuperat' %}selected{% endif %}>Väldigt kuperat (30,0 m/km)</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -371,7 +374,7 @@
                             <option value="{{ runner_name }}" {% if athlete.tempo_model_runner_key == runner_name %}selected{% endif %}>{{ runner_name }}</option>
                             {% endfor %}
                         </select>
-                        <small class="form-hint">Används bara om profilen faktiskt motsvarar samma löpare i Garmin-modellen.</small>
+                        <small class="form-hint">Används bara om profilen faktiskt motsvarar samma löpare i Garmin-modellen. Annars kan personlig offset byggas upp från flera loggade pass med verkligt medeltempo.</small>
                     </div>
                     <div class="form-group full-width">
                         <label class="checkbox-label">
@@ -599,6 +602,16 @@
                             <strong>{{ session.tempo_assumptions }}</strong>
                         </div>
                         {% endif %}
+                        {% if session.tempo_surface_options %}
+                        <div class="modal-info-card">
+                            <span class="modal-info-label">Tempoalternativ per underlag</span>
+                            <div class="surface-tempo-list">
+                                {% for option in session.tempo_surface_options %}
+                                <div><strong>{{ option.label }}</strong>: {{ option.pace_text }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </section>
                     {% if session.coach_explanation %}
                     <section class="modal-info-block">
@@ -628,6 +641,10 @@
                                 <div class="form-group full-width">
                                     <label for="dashboard_comment_{{ session.id }}">Kommentar</label>
                                     <textarea id="dashboard_comment_{{ session.id }}" name="comment" rows="3" placeholder="Hur kändes passet?"></textarea>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="dashboard_actual_pace_{{ session.id }}">Faktiskt medeltempo (frivilligt)</label>
+                                    <input type="text" id="dashboard_actual_pace_{{ session.id }}" name="actual_pace" placeholder="t.ex. 5:20 min/km">
                                 </div>
                             </div>
                             <div class="modal-action-row">
@@ -675,6 +692,9 @@
                                 <span class="log-type">{{ log.session_type }}</span>
                                 <span class="log-duration">{{ log.duration_minutes }} min</span>
                                 <span class="log-rpe rpe-{{ log.rpe }}">RPE {{ log.rpe }}</span>
+                                {% if log.actual_pace_seconds_per_km %}
+                                <span class="log-duration">{{ format_pace_seconds_per_km(log.actual_pace_seconds_per_km) }}</span>
+                                {% endif %}
                             </div>
                             <div class="log-load">{{ log.load }} load</div>
                         </div>

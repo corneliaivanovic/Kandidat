@@ -36,6 +36,13 @@
                 <span class="stat-value">{{ log.load }}</span>
                 <span class="stat-label">Belastning</span>
             </div>
+            {% if log.actual_pace_seconds_per_km %}
+            <div class="stat-item">
+                <span class="stat-icon">🏃</span>
+                <span class="stat-value">{{ format_pace_seconds_per_km(log.actual_pace_seconds_per_km) }}</span>
+                <span class="stat-label">Medeltempo</span>
+            </div>
+            {% endif %}
         </div>
 
         {% if log.comment %}

@@ -3446,6 +3446,18 @@ footer {
     line-height: 1.4;
 }
 
+.surface-tempo-list {
+    display: grid;
+    gap: 6px;
+    color: var(--text-primary);
+    line-height: 1.45;
+}
+
+.surface-tempo-list strong {
+    display: inline;
+    font-size: 0.95rem;
+}
+
 .modal-edit-form .full-width,
 .quick-log-modal-form .full-width {
     grid-column: 1 / -1;
