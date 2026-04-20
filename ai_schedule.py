@@ -9,7 +9,8 @@ mallar om API:t inte är tillgängligt.
 Modulen genererar planerade pass (PlannedSession) direkt i databasen.
 """
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from pathlib import Path
 from typing import Optional
 import re
 import traceback
@@ -1380,7 +1381,115 @@ def _next_monday(from_date: Optional[date] = None) -> date:
     return today + timedelta(days=days_until_monday if days_until_monday > 0 else 7)
 
 
-def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_rag: bool = True) -> list:
+def _should_export_evaluation_plan(athlete) -> bool:
+    """Exportera bara planer för profiler med extern data/tempo-profil."""
+    return bool(
+        getattr(athlete, "has_external_training_data", False)
+        or (getattr(athlete, "tempo_model_runner_key", "") or "").strip()
+    )
+
+
+def _slugify_filename(value: str) -> str:
+    normalized = re.sub(r"[^a-z0-9]+", "_", (value or "").lower())
+    return normalized.strip("_") or "athlete"
+
+
+def _surface_options_text(surface_options: list[dict]) -> str:
+    if not surface_options:
+        return ""
+    lines = ["Tempovarianter per underlag:"]
+    for option in surface_options:
+        label = option.get("label") or option.get("surface") or "Underlag"
+        pace = option.get("pace_text") or option.get("text") or ""
+        if pace:
+            lines.append(f"- {label}: {pace}")
+    return "\n".join(lines)
+
+
+def _session_description_text(session) -> str:
+    exercises = getattr(session, "exercises", []) or []
+    if exercises:
+        description = exercises[0].get("description", "")
+        if description:
+            return description.strip()
+    return ""
+
+
+def _export_evaluation_plan_txt(athlete, sessions: list, start_date: date) -> Optional[Path]:
+    """
+    Skapa en lättläst txt-export för utvärdering av plan och tempo.
+    En ny fil skapas för varje genererat upplägg.
+    """
+    if not sessions or not _should_export_evaluation_plan(athlete):
+        return None
+
+    export_dir = Path(__file__).parent / "planutvarderingar"
+    export_dir.mkdir(exist_ok=True)
+
+    generated_at = datetime.now()
+    filename = (
+        f"{_slugify_filename(getattr(athlete, 'name', 'athlete'))}_"
+        f"{generated_at.strftime('%Y%m%d_%H%M%S')}.txt"
+    )
+    export_path = export_dir / filename
+
+    sessions_sorted = sorted(sessions, key=lambda item: (item.date, item.session_name))
+    phase = getattr(athlete, "training_phase", "") or "-"
+    running_focus = getattr(athlete, "running_focus", "") or getattr(athlete, "discipline", "") or "-"
+    runner_key = (getattr(athlete, "tempo_model_runner_key", "") or "").strip() or "-"
+    external_data = "Ja" if getattr(athlete, "has_external_training_data", False) else "Nej"
+
+    lines = [
+        "UTVARDERING AV AI-GENERERAD TRANINGSPLAN",
+        "=" * 48,
+        f"Namn: {getattr(athlete, 'name', '-')}",
+        f"Genererad: {generated_at.strftime('%Y-%m-%d %H:%M:%S')}",
+        f"Startdatum for planen: {start_date.strftime('%Y-%m-%d')}",
+        f"Fas: {phase}",
+        f"Lopinriktning: {running_focus}",
+        f"Extern data tillganglig: {external_data}",
+        f"Tempo-profil: {runner_key}",
+        "",
+    ]
+
+    current_week_label = None
+    for session in sessions_sorted:
+        week_start = session.date - timedelta(days=session.date.weekday())
+        week_end = week_start + timedelta(days=6)
+        week_label = f"VECKA {week_start.strftime('%Y-%m-%d')} - {week_end.strftime('%Y-%m-%d')}"
+        if week_label != current_week_label:
+            if current_week_label is not None:
+                lines.append("")
+            lines.extend([week_label, "-" * len(week_label)])
+            current_week_label = week_label
+
+        lines.append(f"{session.date.strftime('%A %Y-%m-%d')}".upper())
+        lines.append(f"Pass: {session.session_name}")
+        lines.append(
+            f"Typ: {session.session_type} | Intensitet: {session.planned_intensity} | "
+            f"Duration: {session.planned_duration} min"
+        )
+        if getattr(session, "tempo_assumptions", ""):
+            lines.append(f"Tempoantaganden: {session.tempo_assumptions}")
+        surface_text = _surface_options_text(getattr(session, "tempo_surface_options", []) or [])
+        if surface_text:
+            lines.append(surface_text)
+        description = _session_description_text(session)
+        if description:
+            lines.extend(["", "Passdetaljer:", description])
+        lines.append("")
+
+    export_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
+    return export_path
+
+
+def generate_month_schedule(
+    athlete,
+    db,
+    start_date: Optional[date] = None,
+    use_rag: bool = True,
+    export_for_evaluation: bool = False,
+) -> list:
     """
     Generera ett komplett månadsschema (4 veckor) för en atlet.
 
@@ -1500,6 +1609,10 @@ def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_
                             if session:
                                 all_sessions.append(session)
 
+                    if export_for_evaluation:
+                        exported_path = _export_evaluation_plan_txt(athlete, all_sessions, start_date)
+                        if exported_path:
+                            print(f"📝 Utvarderingsfil skapad: {exported_path}")
                     return all_sessions or []
 
         except Exception as e:
@@ -1510,7 +1623,7 @@ def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_
     if rag_failure_reason:
         print(f"ℹ️ Fallbackorsak: {rag_failure_reason}")
     try:
-        return generate_schedule_for_weeks(
+        fallback_sessions = generate_schedule_for_weeks(
             athlete,
             db,
             num_weeks=4,
@@ -1518,6 +1631,11 @@ def generate_month_schedule(athlete, db, start_date: Optional[date] = None, use_
             use_rag=False,
             fallback_reason_override=rag_failure_reason,
         ) or []
+        if export_for_evaluation:
+            exported_path = _export_evaluation_plan_txt(athlete, fallback_sessions, start_date)
+            if exported_path:
+                print(f"📝 Utvarderingsfil skapad: {exported_path}")
+        return fallback_sessions
     except Exception as e:
         print(f"⚠️ Veckovis fallback misslyckades för månadsplan: {e}")
         return []

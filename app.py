@@ -2222,7 +2222,12 @@ def generate_ai_schedule(athlete_id: int):
             print(f"  🗑 Rensade {removed} gamla AI-pass för {athlete.name}")
 
         # Generera alltid en fullständig månadsplan (4 veckor)
-        sessions = generate_month_schedule(athlete, db, use_rag=use_rag) or []
+        sessions = generate_month_schedule(
+            athlete,
+            db,
+            use_rag=use_rag,
+            export_for_evaluation=True,
+        ) or []
 
         all_fallback = bool(sessions) and all(
             "Planstatus: Regelbaserad fallback" in (getattr(session_obj, 'coach_notes', '') or '')
