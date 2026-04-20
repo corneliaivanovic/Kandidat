@@ -9,6 +9,8 @@ import hashlib
 import secrets
 import string
 
+from database import get_connection, init_db
+
 
 @dataclass
 class User:
@@ -50,10 +52,21 @@ class AuthStore:
     """Hantering av användare och autentisering."""
 
     def __init__(self):
-        self.users: dict[int, User] = {}
-        self.users_by_email: dict[str, User] = {}
-        self.next_user_id = 1
+        init_db()
         self._load_demo_users()
+
+    def _row_to_user(self, row) -> Optional[User]:
+        if not row:
+            return None
+        return User(
+            id=row["id"],
+            email=row["email"],
+            password_hash=row["password_hash"],
+            name=row["name"],
+            role=row["role"],
+            coach_code=row["coach_code"],
+            connected_coach_id=row["connected_coach_id"],
+        )
 
     def _generate_coach_code(self) -> str:
         """Generera en unik coach-kod (t.ex. ANNA-7X3K)."""
@@ -63,6 +76,9 @@ class AuthStore:
 
     def _load_demo_users(self):
         """Skapa demo-användare för test."""
+        if self.login("coach@demo.se", "demo123"):
+            return
+
         # Demo coach
         coach = self.register(
             email="coach@demo.se",
@@ -92,8 +108,7 @@ class AuthStore:
 
     def register(self, email: str, password: str, name: str, role: str) -> Optional[User]:
         """Registrera en ny användare."""
-        # Kolla om email redan finns
-        if email.lower() in self.users_by_email:
+        if self.get_user_by_email(email):
             return None
 
         # Skapa coach-kod om det är en coach
@@ -101,42 +116,62 @@ class AuthStore:
         if role == "coach":
             coach_code = self._generate_coach_code()
             # Se till att koden är unik
-            while any(u.coach_code == coach_code for u in self.users.values()):
+            while self.get_coach_by_code(coach_code):
                 coach_code = self._generate_coach_code()
 
-        user = User(
-            id=self.next_user_id,
-            email=email.lower(),
-            password_hash=User._hash_password(password),
-            name=name,
-            role=role,
-            coach_code=coach_code
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO users (email, password_hash, name, role, coach_code, connected_coach_id)
+            VALUES (?, ?, ?, ?, ?, NULL)
+            """,
+            (email.lower(), User._hash_password(password), name, role, coach_code),
         )
-
-        self.users[user.id] = user
-        self.users_by_email[user.email] = user
-        self.next_user_id += 1
-
-        return user
+        user_id = cur.lastrowid
+        conn.commit()
+        conn.close()
+        return self.get_user(user_id)
 
     def login(self, email: str, password: str) -> Optional[User]:
         """Logga in en användare."""
-        user = self.users_by_email.get(email.lower())
+        user = self.get_user_by_email(email)
         if user and user.check_password(password):
             return user
         return None
 
     def get_user(self, user_id: int) -> Optional[User]:
         """Hämta användare via ID."""
-        return self.users.get(user_id)
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+        conn.close()
+        return self._row_to_user(row)
+
+    def get_user_by_email(self, email: str) -> Optional[User]:
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM users WHERE email = ?", (email.lower(),)).fetchone()
+        conn.close()
+        return self._row_to_user(row)
+
+    def delete_user(self, user_id: int) -> bool:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        deleted = cur.rowcount > 0
+        conn.commit()
+        conn.close()
+        return deleted
 
     def get_coach_by_code(self, code: str) -> Optional[User]:
         """Hitta en coach via deras coach-kod."""
         code = code.upper().strip()
-        for user in self.users.values():
-            if user.is_coach() and user.coach_code == code:
-                return user
-        return None
+        conn = get_connection()
+        row = conn.execute(
+            "SELECT * FROM users WHERE role = 'coach' AND coach_code = ?",
+            (code,),
+        ).fetchone()
+        conn.close()
+        return self._row_to_user(row)
 
     def connect_athlete_to_coach(self, athlete_id: int, coach_code: str) -> bool:
         """Koppla en idrottare till en coach via coach-kod."""
@@ -149,15 +184,24 @@ class AuthStore:
         if not athlete.is_athlete() or not coach.is_coach():
             return False
 
-        athlete.connected_coach_id = coach.id
+        conn = get_connection()
+        conn.execute(
+            "UPDATE users SET connected_coach_id = ? WHERE id = ?",
+            (coach.id, athlete.id),
+        )
+        conn.commit()
+        conn.close()
         return True
 
     def get_athletes_for_coach(self, coach_id: int) -> list[User]:
         """Hämta alla idrottare kopplade till en coach."""
-        return [
-            user for user in self.users.values()
-            if user.is_athlete() and user.connected_coach_id == coach_id
-        ]
+        conn = get_connection()
+        rows = conn.execute(
+            "SELECT * FROM users WHERE role = 'athlete' AND connected_coach_id = ? ORDER BY name",
+            (coach_id,),
+        ).fetchall()
+        conn.close()
+        return [self._row_to_user(row) for row in rows]
 
     def get_coach_for_athlete(self, athlete_id: int) -> Optional[User]:
         """Hämta coachen för en idrottare."""

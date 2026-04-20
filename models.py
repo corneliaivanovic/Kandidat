@@ -8,6 +8,8 @@ from datetime import datetime, date, timedelta
 from typing import Optional
 import json
 
+from database import get_connection, init_db
+
 
 @dataclass
 class TrainingLog:
@@ -446,6 +448,7 @@ class DataStore:
     """Enkel in-memory datalagring (för prototyp)."""
 
     def __init__(self):
+        init_db()
         self.athletes: dict[int, Athlete] = {}
         self.athletes_by_user: dict[int, Athlete] = {}  # user_id -> Athlete
         self.log_comments: dict[int, list[LogComment]] = {}  # log_id -> comments
@@ -459,58 +462,179 @@ class DataStore:
         self.next_custom_template_id = 1
         self.custom_templates: dict[int, CustomSessionTemplate] = {}  # id -> template
 
+    def _row_to_training_log(self, row) -> Optional[TrainingLog]:
+        if not row:
+            return None
+        return TrainingLog(
+            id=row["id"],
+            athlete_id=row["athlete_id"],
+            date=date.fromisoformat(row["date"]),
+            session_type=row["session_type"],
+            duration_minutes=row["duration_minutes"],
+            rpe=row["rpe"],
+            comment=row["comment"] or "",
+            planned_session_id=row["planned_session_id"],
+            actual_pace_seconds_per_km=row["actual_pace_seconds_per_km"],
+        )
+
+    def _row_to_planned_session(self, row) -> Optional[PlannedSession]:
+        if not row:
+            return None
+        return PlannedSession(
+            id=row["id"],
+            athlete_id=row["athlete_id"],
+            date=date.fromisoformat(row["date"]),
+            template_id=row["template_id"],
+            session_name=row["session_name"],
+            session_type=row["session_type"],
+            planned_duration=row["planned_duration"],
+            planned_intensity=row["planned_intensity"],
+            exercises=json.loads(row["exercises_json"] or "[]"),
+            coach_notes=row["coach_notes"] or "",
+            completed=bool(row["completed"]),
+            log_id=row["log_id"],
+            source=row["source"] or "coach",
+            is_key_session=bool(row["is_key_session"]),
+            week_theme=row["week_theme"] or "",
+            training_phase=row["training_phase"] or "",
+            estimated_low_minutes=row["estimated_low_minutes"] or 0,
+            estimated_medium_minutes=row["estimated_medium_minutes"] or 0,
+            estimated_high_minutes=row["estimated_high_minutes"] or 0,
+            intensity_distribution_source=row["intensity_distribution_source"] or "",
+            tempo_source=row["tempo_source"] or "",
+            tempo_assumptions=row["tempo_assumptions"] or "",
+            tempo_surface_options=json.loads(row["tempo_surface_options_json"] or "[]"),
+        )
+
+    def _hydrate_athlete(self, row) -> Optional[Athlete]:
+        if not row:
+            return None
+
+        cached = self.athletes.get(row["id"])
+        athlete = Athlete(
+            id=row["id"],
+            user_id=row["user_id"],
+            name=row["name"],
+            birth_year=row["birth_year"],
+            discipline=row["discipline"],
+            club=row["club"] or "",
+            training_mode=row["training_mode"] or "coach",
+            training_days_per_week=row["training_days_per_week"] or 4,
+            training_phase=row["training_phase"] or "grundträning",
+            rag_documents=json.loads(row["rag_documents"] or "[]") or ["loptranare", "friidrottslara", "uppbyggnad"],
+            running_focus=row["running_focus"] or "",
+            training_experience_level=row["training_experience_level"] or "",
+            weekly_training_amount=row["weekly_training_amount"] or "",
+            primary_goal=row["primary_goal"] or "",
+            injury_constraints=row["injury_constraints"] or "",
+            best_5k_time=row["best_5k_time"] or "",
+            best_alt_distance=row["best_alt_distance"] or "",
+            best_alt_time=row["best_alt_time"] or "",
+            easy_pace=row["easy_pace"] or "",
+            threshold_pace=row["threshold_pace"] or "",
+            training_surface=row["training_surface"] or "",
+            tempo_model_runner_key=row["tempo_model_runner_key"] or "",
+            tempo_model_personal_offset_seconds=row["tempo_model_personal_offset_seconds"] or 0.0,
+            tempo_model_offset_samples=row["tempo_model_offset_samples"] or 0,
+            response_notes=row["response_notes"] or "",
+            has_external_training_data=bool(row["has_external_training_data"]),
+            best_60m_time=row["best_60m_time"] or "",
+            best_100m_time=row["best_100m_time"] or "",
+            best_200m_time=row["best_200m_time"] or "",
+            primary_sprint_event=row["primary_sprint_event"] or "",
+            logs=[],
+            planned_sessions=[],
+            week_programs=cached.week_programs[:] if cached else [],
+            test_results=cached.test_results[:] if cached else [],
+            injuries=cached.injuries[:] if cached else [],
+        )
+
+        conn = get_connection()
+        log_rows = conn.execute(
+            "SELECT * FROM training_logs WHERE athlete_id = ? ORDER BY date ASC, id ASC",
+            (athlete.id,),
+        ).fetchall()
+        athlete.logs = [self._row_to_training_log(log_row) for log_row in log_rows]
+
+        session_rows = conn.execute(
+            "SELECT * FROM planned_sessions WHERE athlete_id = ? ORDER BY date ASC, id ASC",
+            (athlete.id,),
+        ).fetchall()
+        athlete.planned_sessions = [self._row_to_planned_session(session_row) for session_row in session_rows]
+        conn.close()
+
+        self.athletes[athlete.id] = athlete
+        self.athletes_by_user[athlete.user_id] = athlete
+        return athlete
+
     def create_athlete_for_user(self, user_id: int, name: str, birth_year: int, discipline: str,
                                 club: str = "", training_mode: str = "coach",
                                 training_days_per_week: int = 4, training_phase: str = "grundträning",
                                 **ai_profile) -> Athlete:
         """Skapa en idrottarprofil kopplad till en användare."""
-        athlete = Athlete(
-            id=self.next_athlete_id,
-            user_id=user_id,
-            name=name,
-            birth_year=birth_year,
-            discipline=discipline,
-            club=club,
-            training_mode=training_mode,
-            training_days_per_week=training_days_per_week,
-            training_phase=training_phase,
-            running_focus=ai_profile.get("running_focus", ""),
-            training_experience_level=ai_profile.get("training_experience_level", ""),
-            weekly_training_amount=ai_profile.get("weekly_training_amount", ""),
-            primary_goal=ai_profile.get("primary_goal", ""),
-            injury_constraints=ai_profile.get("injury_constraints", ""),
-            best_5k_time=ai_profile.get("best_5k_time", ""),
-            best_alt_distance=ai_profile.get("best_alt_distance", ""),
-            best_alt_time=ai_profile.get("best_alt_time", ""),
-            easy_pace=ai_profile.get("easy_pace", ""),
-            threshold_pace=ai_profile.get("threshold_pace", ""),
-            training_surface=ai_profile.get("training_surface", ""),
-            tempo_model_runner_key=ai_profile.get("tempo_model_runner_key", ""),
-            tempo_model_personal_offset_seconds=float(ai_profile.get("tempo_model_personal_offset_seconds", 0.0) or 0.0),
-            tempo_model_offset_samples=int(ai_profile.get("tempo_model_offset_samples", 0) or 0),
-            response_notes=ai_profile.get("response_notes", ""),
-            has_external_training_data=ai_profile.get("has_external_training_data", False),
-            best_60m_time=ai_profile.get("best_60m_time", ""),
-            best_100m_time=ai_profile.get("best_100m_time", ""),
-            best_200m_time=ai_profile.get("best_200m_time", ""),
-            primary_sprint_event=ai_profile.get("primary_sprint_event", "")
+        existing = self.get_athlete_by_user(user_id)
+        if existing:
+            return existing
+
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO athletes (
+                user_id, name, birth_year, discipline, club, training_mode,
+                training_days_per_week, training_phase, running_focus,
+                training_experience_level, weekly_training_amount, primary_goal,
+                injury_constraints, best_5k_time, best_alt_distance, best_alt_time,
+                easy_pace, threshold_pace, training_surface, tempo_model_runner_key,
+                tempo_model_personal_offset_seconds, tempo_model_offset_samples,
+                response_notes, has_external_training_data, best_60m_time,
+                best_100m_time, best_200m_time, primary_sprint_event, rag_documents
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                user_id, name, birth_year, discipline, club, training_mode,
+                training_days_per_week, training_phase, ai_profile.get("running_focus", ""),
+                ai_profile.get("training_experience_level", ""), ai_profile.get("weekly_training_amount", ""),
+                ai_profile.get("primary_goal", ""), ai_profile.get("injury_constraints", ""),
+                ai_profile.get("best_5k_time", ""), ai_profile.get("best_alt_distance", ""),
+                ai_profile.get("best_alt_time", ""), ai_profile.get("easy_pace", ""),
+                ai_profile.get("threshold_pace", ""), ai_profile.get("training_surface", ""),
+                ai_profile.get("tempo_model_runner_key", ""),
+                float(ai_profile.get("tempo_model_personal_offset_seconds", 0.0) or 0.0),
+                int(ai_profile.get("tempo_model_offset_samples", 0) or 0),
+                ai_profile.get("response_notes", ""),
+                1 if ai_profile.get("has_external_training_data", False) else 0,
+                ai_profile.get("best_60m_time", ""), ai_profile.get("best_100m_time", ""),
+                ai_profile.get("best_200m_time", ""), ai_profile.get("primary_sprint_event", ""),
+                json.dumps(ai_profile.get("rag_documents", ["loptranare", "friidrottslara", "uppbyggnad"])),
+            ),
         )
-        self.athletes[athlete.id] = athlete
-        self.athletes_by_user[user_id] = athlete
-        self.next_athlete_id += 1
-        return athlete
+        athlete_id = cur.lastrowid
+        conn.commit()
+        row = conn.execute("SELECT * FROM athletes WHERE id = ?", (athlete_id,)).fetchone()
+        conn.close()
+        return self._hydrate_athlete(row)
 
     def get_athlete(self, athlete_id: int) -> Optional[Athlete]:
         """Hämta en idrottare via ID."""
-        return self.athletes.get(athlete_id)
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM athletes WHERE id = ?", (athlete_id,)).fetchone()
+        conn.close()
+        return self._hydrate_athlete(row)
 
     def get_athlete_by_user(self, user_id: int) -> Optional[Athlete]:
         """Hämta idrottarprofil för en användare."""
-        return self.athletes_by_user.get(user_id)
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM athletes WHERE user_id = ?", (user_id,)).fetchone()
+        conn.close()
+        return self._hydrate_athlete(row)
 
     def get_all_athletes(self) -> list[Athlete]:
         """Hämta alla idrottare."""
-        return list(self.athletes.values())
+        conn = get_connection()
+        rows = conn.execute("SELECT * FROM athletes ORDER BY name").fetchall()
+        conn.close()
+        return [self._hydrate_athlete(row) for row in rows]
 
     def get_athletes_for_coach(self, coach_user_id: int, auth_db) -> list[Athlete]:
         """Hämta alla idrottare kopplade till en coach."""
@@ -520,10 +644,67 @@ class DataStore:
         # Returnera deras athlete-profiler
         athletes = []
         for user in athlete_users:
-            athlete = self.athletes_by_user.get(user.id)
+            athlete = self.get_athlete_by_user(user.id)
             if athlete:
                 athletes.append(athlete)
         return athletes
+
+    def save_athlete(self, athlete: Athlete) -> Optional[Athlete]:
+        """Spara uppdateringar på en idrottarprofil."""
+        if not athlete:
+            return None
+
+        conn = get_connection()
+        conn.execute(
+            """
+            UPDATE athletes
+            SET name = ?, birth_year = ?, discipline = ?, club = ?, training_mode = ?,
+                training_days_per_week = ?, training_phase = ?, running_focus = ?,
+                training_experience_level = ?, weekly_training_amount = ?, primary_goal = ?,
+                injury_constraints = ?, best_5k_time = ?, best_alt_distance = ?, best_alt_time = ?,
+                easy_pace = ?, threshold_pace = ?, training_surface = ?, tempo_model_runner_key = ?,
+                tempo_model_personal_offset_seconds = ?, tempo_model_offset_samples = ?, response_notes = ?,
+                has_external_training_data = ?, best_60m_time = ?, best_100m_time = ?,
+                best_200m_time = ?, primary_sprint_event = ?, rag_documents = ?
+            WHERE id = ?
+            """,
+            (
+                athlete.name,
+                athlete.birth_year,
+                athlete.discipline,
+                athlete.club,
+                athlete.training_mode,
+                athlete.training_days_per_week,
+                athlete.training_phase,
+                athlete.running_focus,
+                athlete.training_experience_level,
+                athlete.weekly_training_amount,
+                athlete.primary_goal,
+                athlete.injury_constraints,
+                athlete.best_5k_time,
+                athlete.best_alt_distance,
+                athlete.best_alt_time,
+                athlete.easy_pace,
+                athlete.threshold_pace,
+                athlete.training_surface,
+                athlete.tempo_model_runner_key,
+                athlete.tempo_model_personal_offset_seconds,
+                athlete.tempo_model_offset_samples,
+                athlete.response_notes,
+                1 if athlete.has_external_training_data else 0,
+                athlete.best_60m_time,
+                athlete.best_100m_time,
+                athlete.best_200m_time,
+                athlete.primary_sprint_event,
+                json.dumps(athlete.rag_documents or []),
+                athlete.id,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        self.athletes[athlete.id] = athlete
+        self.athletes_by_user[athlete.user_id] = athlete
+        return athlete
 
     def add_log(self, athlete_id: int, log_date: date, session_type: str,
                 duration: int, rpe: int, comment: str = "",
@@ -534,28 +715,39 @@ class DataStore:
         if not athlete:
             return None
 
-        log = TrainingLog(
-            id=self.next_log_id,
-            athlete_id=athlete_id,
-            date=log_date,
-            session_type=session_type,
-            duration_minutes=duration,
-            rpe=rpe,
-            comment=comment,
-            planned_session_id=planned_session_id,
-            actual_pace_seconds_per_km=actual_pace_seconds_per_km,
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO training_logs (
+                athlete_id, date, session_type, duration_minutes, rpe, comment,
+                planned_session_id, actual_pace_seconds_per_km
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                athlete_id,
+                log_date.isoformat(),
+                session_type,
+                duration,
+                rpe,
+                comment,
+                planned_session_id,
+                actual_pace_seconds_per_km,
+            ),
         )
-        athlete.add_log(log)
-        self.next_log_id += 1
+        log_id = cur.lastrowid
 
         # Markera planerat pass som genomfört
         if planned_session_id:
-            for ps in athlete.planned_sessions:
-                if ps.id == planned_session_id:
-                    ps.completed = True
-                    ps.log_id = log.id
-                    break
-
+            cur.execute(
+                "UPDATE planned_sessions SET completed = 1, log_id = ? WHERE id = ?",
+                (log_id, planned_session_id),
+            )
+        conn.commit()
+        row = conn.execute("SELECT * FROM training_logs WHERE id = ?", (log_id,)).fetchone()
+        conn.close()
+        log = self._row_to_training_log(row)
+        athlete.add_log(log)
         return log
 
     def add_planned_session(self, athlete_id: int, session_date: date,
@@ -579,49 +771,115 @@ class DataStore:
         if not athlete:
             return None
 
-        planned = PlannedSession(
-            id=self.next_planned_session_id,
-            athlete_id=athlete_id,
-            date=session_date,
-            template_id=template_id,
-            session_name=session_name,
-            session_type=session_type,
-            planned_duration=planned_duration,
-            planned_intensity=planned_intensity,
-            exercises=exercises or [],
-            coach_notes=coach_notes,
-            source=source,
-            is_key_session=is_key_session,
-            week_theme=week_theme,
-            training_phase=training_phase,
-            estimated_low_minutes=estimated_low_minutes,
-            estimated_medium_minutes=estimated_medium_minutes,
-            estimated_high_minutes=estimated_high_minutes,
-            intensity_distribution_source=intensity_distribution_source,
-            tempo_source=tempo_source,
-            tempo_assumptions=tempo_assumptions,
-            tempo_surface_options=tempo_surface_options or [],
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO planned_sessions (
+                athlete_id, date, template_id, session_name, session_type,
+                planned_duration, planned_intensity, exercises_json, coach_notes,
+                completed, log_id, source, is_key_session, week_theme,
+                training_phase, estimated_low_minutes, estimated_medium_minutes,
+                estimated_high_minutes, intensity_distribution_source,
+                tempo_source, tempo_assumptions, tempo_surface_options_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                athlete_id,
+                session_date.isoformat(),
+                template_id,
+                session_name,
+                session_type,
+                planned_duration,
+                planned_intensity,
+                json.dumps(exercises or []),
+                coach_notes,
+                source,
+                1 if is_key_session else 0,
+                week_theme,
+                training_phase,
+                estimated_low_minutes,
+                estimated_medium_minutes,
+                estimated_high_minutes,
+                intensity_distribution_source,
+                tempo_source,
+                tempo_assumptions,
+                json.dumps(tempo_surface_options or []),
+            ),
         )
+        session_id = cur.lastrowid
+        conn.commit()
+        row = conn.execute("SELECT * FROM planned_sessions WHERE id = ?", (session_id,)).fetchone()
+        conn.close()
+        planned = self._row_to_planned_session(row)
         athlete.planned_sessions.append(planned)
-        self.next_planned_session_id += 1
         return planned
 
     def get_planned_session(self, session_id: int) -> Optional[PlannedSession]:
         """Hämta ett planerat pass via ID."""
-        for athlete in self.athletes.values():
-            for ps in athlete.planned_sessions:
-                if ps.id == session_id:
-                    return ps
-        return None
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM planned_sessions WHERE id = ?", (session_id,)).fetchone()
+        conn.close()
+        return self._row_to_planned_session(row)
+
+    def save_planned_session(self, planned_session: PlannedSession) -> Optional[PlannedSession]:
+        """Spara uppdateringar på ett planerat pass."""
+        if not planned_session:
+            return None
+        conn = get_connection()
+        conn.execute(
+            """
+            UPDATE planned_sessions
+            SET date = ?, template_id = ?, session_name = ?, session_type = ?,
+                planned_duration = ?, planned_intensity = ?, exercises_json = ?,
+                coach_notes = ?, completed = ?, log_id = ?, source = ?, is_key_session = ?,
+                week_theme = ?, training_phase = ?, estimated_low_minutes = ?,
+                estimated_medium_minutes = ?, estimated_high_minutes = ?,
+                intensity_distribution_source = ?, tempo_source = ?, tempo_assumptions = ?,
+                tempo_surface_options_json = ?
+            WHERE id = ?
+            """,
+            (
+                planned_session.date.isoformat(),
+                planned_session.template_id,
+                planned_session.session_name,
+                planned_session.session_type,
+                planned_session.planned_duration,
+                planned_session.planned_intensity,
+                json.dumps(planned_session.exercises or []),
+                planned_session.coach_notes,
+                1 if planned_session.completed else 0,
+                planned_session.log_id,
+                planned_session.source,
+                1 if planned_session.is_key_session else 0,
+                planned_session.week_theme,
+                planned_session.training_phase,
+                planned_session.estimated_low_minutes,
+                planned_session.estimated_medium_minutes,
+                planned_session.estimated_high_minutes,
+                planned_session.intensity_distribution_source,
+                planned_session.tempo_source,
+                planned_session.tempo_assumptions,
+                json.dumps(planned_session.tempo_surface_options or []),
+                planned_session.id,
+            ),
+        )
+        conn.commit()
+        conn.close()
+        return planned_session
 
     def delete_planned_session(self, session_id: int) -> bool:
         """Ta bort ett planerat pass."""
-        for athlete in self.athletes.values():
-            for i, ps in enumerate(athlete.planned_sessions):
-                if ps.id == session_id:
-                    del athlete.planned_sessions[i]
-                    return True
-        return False
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM planned_sessions WHERE id = ?", (session_id,))
+        deleted = cur.rowcount > 0
+        conn.commit()
+        conn.close()
+        if deleted:
+            for athlete in self.athletes.values():
+                athlete.planned_sessions = [ps for ps in athlete.planned_sessions if ps.id != session_id]
+        return deleted
 
     def clear_future_ai_sessions(self, athlete_id: int, from_date: date = None) -> int:
         """
@@ -638,16 +896,25 @@ class DataStore:
         if from_date is None:
             from_date = date.today()
 
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            DELETE FROM planned_sessions
+            WHERE athlete_id = ? AND date >= ? AND source = 'ai'
+            """,
+            (athlete_id, from_date.isoformat()),
+        )
+        removed = cur.rowcount
+        conn.commit()
+        conn.close()
         athlete = self.athletes.get(athlete_id)
-        if not athlete:
-            return 0
-
-        before = len(athlete.planned_sessions)
-        athlete.planned_sessions = [
-            ps for ps in athlete.planned_sessions
-            if not (ps.date >= from_date and getattr(ps, 'source', 'coach') == 'ai')
-        ]
-        return before - len(athlete.planned_sessions)
+        if athlete:
+            athlete.planned_sessions = [
+                ps for ps in athlete.planned_sessions
+                if not (ps.date >= from_date and getattr(ps, 'source', 'coach') == 'ai')
+            ]
+        return removed
 
     # ============================================================
     # KOMMENTARER
@@ -676,11 +943,10 @@ class DataStore:
 
     def get_log_by_id(self, log_id: int) -> Optional[TrainingLog]:
         """Hämta en logg via ID."""
-        for athlete in self.athletes.values():
-            for log in athlete.logs:
-                if log.id == log_id:
-                    return log
-        return None
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM training_logs WHERE id = ?", (log_id,)).fetchone()
+        conn.close()
+        return self._row_to_training_log(row)
 
     # ============================================================
     # TESTRESULTAT

@@ -9,6 +9,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, s
 from datetime import date, datetime, timedelta
 from functools import wraps
 
+from database import init_db
 from models import db
 from auth import auth_db
 from readiness import calculate_readiness, get_week_trend
@@ -32,6 +33,8 @@ from tempo_model import TEMPO_MODEL_RUNNERS, parse_pace_to_seconds_per_km, calib
 app = Flask(__name__,
             template_folder='templates',
             static_folder='static')
+
+init_db()
 
 # Secret key för sessions (byt i produktion!)
 app.secret_key = 'dev-secret-key-change-in-production'
@@ -95,6 +98,7 @@ def _refresh_athlete_tempo_calibration(athlete) -> dict:
     calibration = calibrate_runner_offset_from_logs(athlete)
     athlete.tempo_model_personal_offset_seconds = calibration["offset_seconds"] if calibration["is_calibrated"] else 0.0
     athlete.tempo_model_offset_samples = calibration["sample_count"]
+    db.save_athlete(athlete)
     return calibration
 
 
@@ -446,7 +450,7 @@ def init_demo_data():
     # - Hugo Kündig visar automatisk matchning mot tävlingsresultat
     athletes_info = [
         (
-            2,
+            "ebba@demo.se",
             "Ebba 3",
             2003,
             "distans",
@@ -462,7 +466,7 @@ def init_demo_data():
             },
         ),
         (
-            3,
+            "hugo@demo.se",
             "Hugo Kündig",
             2006,
             "sprint",
@@ -476,7 +480,7 @@ def init_demo_data():
             },
         ),
         (
-            4,
+            "daniel@demo.se",
             "Daniel",
             2001,
             "medel",
@@ -493,13 +497,19 @@ def init_demo_data():
         ),
     ]
 
-    for user_id, name, birth_year, discipline, club, training_mode, ai_profile in athletes_info:
+    for user_email, name, birth_year, discipline, club, training_mode, ai_profile in athletes_info:
+        user = auth_db.get_user_by_email(user_email)
+        if not user:
+            continue
         athlete = db.create_athlete_for_user(
-            user_id, name, birth_year, discipline, club,
+            user.id, name, birth_year, discipline, club,
             training_mode=training_mode,
             **ai_profile,
         )
-        db.generate_demo_logs(athlete)
+        athlete = db.get_athlete(athlete.id)
+        if not athlete.logs:
+            db.generate_demo_logs(athlete)
+            athlete = db.get_athlete(athlete.id)
         if training_mode == 'ai':
             # Rensa eventuella gamla AI-pass (skyddar mot dubbletter vid omstart)
             db.clear_future_ai_sessions(athlete.id)
@@ -619,8 +629,7 @@ def register():
                     ai_profile = _parse_ai_profile_from_form(request.form)
 
                     if training_mode == 'ai' and not ai_profile.get('training_experience_level'):
-                        auth_db.users.pop(user.id, None)
-                        auth_db.users_by_email.pop(user.email, None)
+                        auth_db.delete_user(user.id)
                         error = 'Välj din träningsvana för att få AI-genererad planering.'
                         return render_template('register.html', error=error)
 
@@ -936,6 +945,7 @@ def update_ai_profile(athlete_id: int):
         return redirect(url_for('dashboard'))
     club = _clean_form_value(request.form.get('club', athlete.club))
     athlete.club = club
+    db.save_athlete(athlete)
 
     if not profile.get('training_experience_level'):
         flash('Träningsvana är obligatorisk för AI-planering.', 'error')
@@ -1372,6 +1382,7 @@ def update_planned_session(session_id: int):
         planned_session.tempo_source = ""
         planned_session.tempo_assumptions = ""
         planned_session.tempo_surface_options = []
+        db.save_planned_session(planned_session)
         flash('Passet uppdaterades.', 'success')
     except ValueError:
         flash('Kontrollera datum och duration innan du sparar.', 'error')
@@ -2202,6 +2213,8 @@ def generate_ai_schedule(athlete_id: int):
                 "mangkamp": "medel",
             }.get(getattr(athlete, 'discipline', ''), "medel")
             athlete.rag_documents = resolve_allowed_doc_keys(selected_docs or getattr(athlete, 'rag_documents', None), running_type)
+
+        db.save_athlete(athlete)
 
         # Rensa gamla AI-pass innan nytt schema genereras (undviker dubbletter)
         removed = db.clear_future_ai_sessions(athlete.id)
