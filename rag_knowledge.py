@@ -650,8 +650,8 @@ def _humanize_api_failure(reason: str) -> str:
         return "AI-generering kunde inte användas eftersom API-anropet tog för lång tid."
     if "connection" in lower or "network" in lower or "dns" in lower:
         return "AI-generering kunde inte användas på grund av nätverksfel."
-    if "kunde inte parsa" in lower:
-        return "AI-generering misslyckades eftersom svaret från modellen inte kunde tolkas."
+    if "ai-svaret kunde inte tolkas" in lower or "kunde inte parsa" in lower:
+        return text or "AI-generering misslyckades eftersom svaret från modellen inte kunde tolkas."
     if "kvalitetssäkras" in lower and "vecka" in text.lower():
         return text
     if "blocking_errors" in lower:
@@ -664,6 +664,40 @@ def _humanize_api_failure(reason: str) -> str:
         return "AI-generering kunde inte användas eftersom API-nyckeln saknas."
 
     return text or "AI-generering kunde inte användas."
+
+
+def _compact_ai_response_snippet(text: str, pos: int, radius: int = 220) -> str:
+    """Returnera ett kort utdrag runt JSON-felet utan att dumpa hela AI-svaret."""
+    raw = text or ""
+    if not raw:
+        return "tomt AI-svar"
+
+    safe_pos = max(0, min(pos or 0, len(raw)))
+    start = max(0, safe_pos - radius)
+    end = min(len(raw), safe_pos + radius)
+    snippet = raw[start:end].replace("\n", "\\n")
+    snippet = re.sub(r"\s{2,}", " ", snippet).strip()
+    if start > 0:
+        snippet = "..." + snippet
+    if end < len(raw):
+        snippet += "..."
+    return snippet
+
+
+def _format_json_decode_failure(error: json.JSONDecodeError, text: str, plan_label: str) -> str:
+    """
+    Bygg ett felsvar som är användbart vid felsökning av Claude/RAG-output.
+    Hålls på en rad eftersom meddelandet också visas i flash och coach_notes.
+    """
+    snippet = _compact_ai_response_snippet(text, error.pos)
+    first_chars = (text or "").lstrip()[:30].replace("\n", "\\n")
+    first_chars = first_chars or "tomt svar"
+    return (
+        f"AI-svaret kunde inte tolkas som JSON för {plan_label}. "
+        f"JSON-fel: {error.msg} vid rad {error.lineno}, kolumn {error.colno}, tecken {error.pos}. "
+        f"Svaret börjar med: '{first_chars}'. "
+        f"Utdrag nära felet: '{snippet}'"
+    )
 
 
 def _summarize_guardrail_errors(errors: list[str], max_items: int = 2) -> str:
@@ -1308,8 +1342,9 @@ KRITISKA regler för description-fältet:
         }
 
     except json.JSONDecodeError as e:
-        print(f"⚠️ Kunde inte parsa Claude-svar: {e}")
-        return _build_failed_plan_result(f"Kunde inte parsa Claude-svar: {e}", used_chunks=used_chunks)
+        failure_reason = _format_json_decode_failure(e, text, "veckoplan")
+        print(f"⚠️ {failure_reason}")
+        return _build_failed_plan_result(failure_reason, used_chunks=used_chunks)
     except anthropic.APIError as e:
         print(f"⚠️ Claude API-fel: {e}")
         return _build_failed_plan_result(f"Claude API-fel: {e}", used_chunks=used_chunks)
@@ -1541,8 +1576,9 @@ KRITISKA regler för description-fältet:
         }
 
     except json.JSONDecodeError as e:
-        print(f"⚠️ Kunde inte parsa månadsplan: {e}")
-        return _build_failed_plan_result(f"Kunde inte parsa månadsplan: {e}", used_chunks=used_chunks)
+        failure_reason = _format_json_decode_failure(e, text, "månadsplan")
+        print(f"⚠️ {failure_reason}")
+        return _build_failed_plan_result(failure_reason, used_chunks=used_chunks)
     except anthropic.APIError as e:
         print(f"⚠️ Claude API-fel: {e}")
         return _build_failed_plan_result(f"Claude API-fel: {e}", used_chunks=used_chunks)
