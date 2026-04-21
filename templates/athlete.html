@@ -65,7 +65,7 @@
         <div class="ai-modal-panel">
             <h3>⚙️ Uppdatera AI-underlag</h3>
             <p class="ai-modal-intro">Dessa uppgifter används både för bättre träningsplanering och för att uppskatta tempo i passen. Endast födelseår och träningsvana är obligatoriska.</p>
-            <form action="{{ url_for('update_ai_profile', athlete_id=athlete.id) }}" method="POST" class="ai-profile-form">
+            <form action="{{ url_for('update_ai_profile', athlete_id=athlete.id) }}" method="POST" class="ai-profile-form" enctype="multipart/form-data">
                 <input type="hidden" name="return_to" value="athlete_detail">
                 <div class="ai-profile-section">
                     <div class="ai-profile-section-title">Grunduppgifter</div>
@@ -124,31 +124,25 @@
                     <div class="ai-profile-grid">
                 <div id="coachAiDistanceFields" class="full-width" style="display:none;">
                     <div class="ai-profile-grid">
+                    {% set current_best_distance = '5 km' if athlete.best_5k_time else (athlete.best_alt_distance or '') %}
+                    {% set current_best_time = athlete.best_5k_time if athlete.best_5k_time else (athlete.best_alt_time or '') %}
+                    {% set selected_best_distance = current_best_distance if current_best_distance in best_result_distance_values else ('annan' if current_best_distance else '') %}
                     <div class="form-group">
-                        <label for="coach_ai_best_5k_time">Bästa 5 km-tid (frivilligt)</label>
-                        <input type="text" id="coach_ai_best_5k_time" name="best_5k_time" value="{{ athlete.best_5k_time or '' }}" placeholder="T.ex. 22:30">
-                    </div>
-                    <div class="form-group">
-                        <label for="coach_ai_best_alt_distance">Alternativ distans (frivilligt)</label>
-                        <select id="coach_ai_best_alt_distance" name="best_alt_distance">
+                        <label for="coach_ai_best_result_distance">Bästa tid - distans (frivilligt)</label>
+                        <select id="coach_ai_best_result_distance" name="best_result_distance" class="best-result-distance-select">
                             <option value="">Välj distans</option>
-                            <option value="1500 m" {% if athlete.best_alt_distance == '1500 m' %}selected{% endif %}>1500 m</option>
-                            <option value="3 km" {% if athlete.best_alt_distance == '3 km' %}selected{% endif %}>3 km</option>
-                            <option value="10 km" {% if athlete.best_alt_distance == '10 km' %}selected{% endif %}>10 km</option>
-                            <option value="annan" {% if athlete.best_alt_distance == 'annan' %}selected{% endif %}>Annan</option>
+                            {% for value, label in best_result_distance_options %}
+                                <option value="{{ value }}" {% if selected_best_distance == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="coach_ai_best_alt_time">Tid på alternativ distans (frivilligt)</label>
-                        <input type="text" id="coach_ai_best_alt_time" name="best_alt_time" value="{{ athlete.best_alt_time or '' }}">
+                    <div class="form-group best-result-custom-distance" {% if selected_best_distance != 'annan' %}style="display:none;"{% endif %}>
+                        <label for="coach_ai_best_result_custom_distance">Om annan distans, skriv distansen här</label>
+                        <input type="text" id="coach_ai_best_result_custom_distance" name="best_result_custom_distance" value="{{ current_best_distance if selected_best_distance == 'annan' else '' }}" placeholder="T.ex. 2000 m eller 7 km">
                     </div>
                     <div class="form-group">
-                        <label for="coach_ai_easy_pace">Lugnt tempo (frivilligt)</label>
-                        <input type="text" id="coach_ai_easy_pace" name="easy_pace" value="{{ athlete.easy_pace or '' }}" placeholder="T.ex. 5:45 min/km">
-                    </div>
-                    <div class="form-group">
-                        <label for="coach_ai_threshold_pace">Tröskeltempo (frivilligt)</label>
-                        <input type="text" id="coach_ai_threshold_pace" name="threshold_pace" value="{{ athlete.threshold_pace or '' }}">
+                        <label for="coach_ai_best_result_time">Bästa tid (frivilligt)</label>
+                        <input type="text" id="coach_ai_best_result_time" name="best_result_time" value="{{ current_best_time }}" placeholder="T.ex. 2:05, 17:45, 1:32:10">
                     </div>
                     </div>
                 </div>
@@ -187,24 +181,33 @@
                         <option value="valdigt_kuperat" {% if athlete.training_surface == 'valdigt_kuperat' %}selected{% endif %}>Väldigt kuperat (30,0 m/km)</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label for="coach_ai_tempo_model_runner_key">Tempo-profil från Garmin-modellen (frivilligt)</label>
-                    <select id="coach_ai_tempo_model_runner_key" name="tempo_model_runner_key">
-                        <option value="">Ingen vald profil</option>
-                        {% for runner_name in tempo_model_runners %}
-                        <option value="{{ runner_name }}" {% if athlete.tempo_model_runner_key == runner_name %}selected{% endif %}>{{ runner_name }}</option>
-                        {% endfor %}
-                    </select>
-                    <small class="form-hint">Använd bara en profil om den matchar samma löpare i den delade Garmin-modellen. Annars kan personlig offset byggas upp från flera loggade pass med verkligt medeltempo.</small>
-                </div>
                 <div class="form-group full-width">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="has_external_training_data" {% if athlete.has_external_training_data %}checked{% endif %}>
+                        <input type="checkbox" name="has_external_training_data" class="external-data-checkbox" {% if athlete.has_external_training_data %}checked{% endif %}>
                         <span class="checkbox-text">
                             Extern träningsdata finns tillgänglig
-                            <small>Annan träningsdata kan ge bättre individanpassning senare.</small>
+                            <small>Visa tempo-profiler och CSV-uppladdning för personlig tempokalibrering.</small>
                         </span>
                     </label>
+                </div>
+                <div class="external-data-fields full-width" {% if not athlete.has_external_training_data %}style="display:none;"{% endif %}>
+                    <div class="ai-profile-grid">
+                        <div class="form-group">
+                            <label for="coach_ai_tempo_model_runner_key">Välj befintlig tempo-profil (frivilligt)</label>
+                            <select id="coach_ai_tempo_model_runner_key" name="tempo_model_runner_key">
+                                <option value="">Ingen vald profil</option>
+                                {% for runner_name in tempo_model_runners %}
+                                <option value="{{ runner_name }}" {% if athlete.tempo_model_runner_key == runner_name %}selected{% endif %}>{{ runner_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-hint">Använd bara om profilen matchar samma löpare i Garmin-modellen.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="coach_ai_training_data_csv">Eller ladda upp träningsdata som CSV (frivilligt)</label>
+                            <input type="file" id="coach_ai_training_data_csv" name="training_data_csv" accept=".csv,text/csv">
+                            <small class="form-hint">CSV:n bör innehålla datum, medeltempo och gärna duration/RPE. Minst 3 pass med medeltempo behövs för personlig tempooffset.</small>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group full-width">
                     <label for="coach_ai_response_notes">Övrigt AI:n bör veta (frivilligt)</label>
@@ -547,6 +550,8 @@
             const runningFocus = document.getElementById('coach_ai_running_focus');
             const distanceFields = document.getElementById('coachAiDistanceFields');
             const sprintFields = document.getElementById('coachAiSprintFields');
+            const bestResultSelect = document.getElementById('coach_ai_best_result_distance');
+            const externalDataCheckbox = document.querySelector('#coachAiProfileModal .external-data-checkbox');
             if (!runningFocus || !distanceFields || !sprintFields) return;
 
             function updateCoachAiProfileFields() {
@@ -555,8 +560,29 @@
                 sprintFields.style.display = value === 'sprint' ? 'block' : 'none';
             }
 
+            function updateBestResultCustomField() {
+                const customField = document.querySelector('#coachAiDistanceFields .best-result-custom-distance');
+                if (bestResultSelect && customField) {
+                    customField.style.display = bestResultSelect.value === 'annan' ? 'block' : 'none';
+                }
+            }
+
+            function updateExternalDataFields() {
+                document.querySelectorAll('#coachAiProfileModal .external-data-fields').forEach(function(field) {
+                    field.style.display = externalDataCheckbox && externalDataCheckbox.checked ? 'block' : 'none';
+                });
+            }
+
             runningFocus.addEventListener('change', updateCoachAiProfileFields);
+            if (bestResultSelect) {
+                bestResultSelect.addEventListener('change', updateBestResultCustomField);
+            }
+            if (externalDataCheckbox) {
+                externalDataCheckbox.addEventListener('change', updateExternalDataFields);
+            }
             updateCoachAiProfileFields();
+            updateBestResultCustomField();
+            updateExternalDataFields();
         })();
 
         document.addEventListener('DOMContentLoaded', function () {

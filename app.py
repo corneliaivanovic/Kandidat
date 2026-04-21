@@ -5,6 +5,8 @@ Med autentisering, roller (coach/idrottare), planering och uppföljning.
 
 import os
 import calendar
+import csv
+import io
 from flask import Flask, render_template, request, redirect, url_for, jsonify, session, flash
 from datetime import date, datetime, timedelta
 from functools import wraps
@@ -59,6 +61,19 @@ AI_PROFILE_FIELDS = [
     "primary_sprint_event",
 ]
 
+BEST_RESULT_DISTANCE_OPTIONS = [
+    ("800 m", "800 m"),
+    ("1500 m", "1500 m"),
+    ("3000 m", "3000 m"),
+    ("5 km", "5 km"),
+    ("10 km", "10 km"),
+    ("halvmaraton", "Halvmaraton"),
+    ("maraton", "Maraton"),
+    ("annan", "Annan distans"),
+]
+
+BEST_RESULT_DISTANCE_VALUES = {value for value, _label in BEST_RESULT_DISTANCE_OPTIONS if value != "annan"}
+
 
 def _clean_form_value(value: str) -> str:
     return (value or "").strip()
@@ -77,12 +92,168 @@ def _parse_birth_year_value(value: str) -> int | None:
 def _parse_ai_profile_from_form(form) -> dict:
     """Normalisera AI-onboardingfält från formulär."""
     profile = {field: _clean_form_value(form.get(field, "")) for field in AI_PROFILE_FIELDS}
+    _apply_unified_best_result_fields(profile, form)
     profile["has_external_training_data"] = form.get("has_external_training_data") in {"on", "true", "1", "yes"}
+    if not profile["has_external_training_data"]:
+        profile["tempo_model_runner_key"] = ""
     return profile
+
+
+def _apply_unified_best_result_fields(profile: dict, form) -> None:
+    """Mappa det samlade bästa-tid-fältet till befintliga interna fält."""
+    if "best_result_distance" not in form and "best_result_time" not in form:
+        return
+
+    selected_distance = _clean_form_value(form.get("best_result_distance", ""))
+    custom_distance = _clean_form_value(form.get("best_result_custom_distance", ""))
+    result_time = _clean_form_value(form.get("best_result_time", ""))
+    distance = custom_distance if selected_distance == "annan" else selected_distance
+
+    profile["best_5k_time"] = ""
+    profile["best_alt_distance"] = ""
+    profile["best_alt_time"] = ""
+
+    if not distance and not result_time:
+        return
+
+    if distance == "5 km":
+        profile["best_5k_time"] = result_time
+    else:
+        profile["best_alt_distance"] = distance
+        profile["best_alt_time"] = result_time
 
 
 def _parse_actual_pace_from_form(form) -> float | None:
     return parse_pace_to_seconds_per_km(form.get("actual_pace", ""))
+
+
+def _normalize_csv_key(value: str) -> str:
+    return (
+        (value or "")
+        .strip()
+        .lower()
+        .replace("å", "a")
+        .replace("ä", "a")
+        .replace("ö", "o")
+        .replace(" ", "_")
+        .replace("-", "_")
+    )
+
+
+def _csv_value(row: dict, *candidates: str) -> str:
+    normalized = {_normalize_csv_key(key): value for key, value in row.items()}
+    for candidate in candidates:
+        value = normalized.get(_normalize_csv_key(candidate))
+        if value not in (None, ""):
+            return str(value).strip()
+    return ""
+
+
+def _parse_csv_date(value: str) -> date | None:
+    value = _clean_form_value(value)
+    if not value:
+        return None
+    for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%d/%m/%Y", "%d-%m-%Y", "%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S"):
+        try:
+            return datetime.strptime(value[:19], fmt).date()
+        except ValueError:
+            continue
+    return None
+
+
+def _parse_duration_minutes(value: str) -> int | None:
+    value = _clean_form_value(value).lower()
+    if not value:
+        return None
+    if ":" in value:
+        try:
+            parts = [float(part) for part in value.split(":")]
+        except ValueError:
+            return None
+        seconds = 0.0
+        for part in parts:
+            seconds = seconds * 60 + part
+        return max(1, int(round(seconds / 60)))
+    try:
+        numeric = float(value.replace(",", ".").replace("min", "").strip())
+    except ValueError:
+        return None
+    return max(1, int(round(numeric)))
+
+
+def _import_training_csv_for_athlete(athlete, uploaded_file) -> dict:
+    """Importera enkel tränings-CSV som loggar för personlig tempokalibrering."""
+    if not uploaded_file or not uploaded_file.filename:
+        return {"imported": 0, "skipped": 0, "error": ""}
+    if not uploaded_file.filename.lower().endswith(".csv"):
+        return {"imported": 0, "skipped": 0, "error": "Filen måste vara en CSV-fil."}
+
+    try:
+        raw_text = uploaded_file.stream.read().decode("utf-8-sig")
+    except UnicodeDecodeError:
+        uploaded_file.stream.seek(0)
+        raw_text = uploaded_file.stream.read().decode("latin-1")
+
+    if not raw_text.strip():
+        return {"imported": 0, "skipped": 0, "error": "CSV-filen är tom."}
+
+    sample = raw_text[:2048]
+    try:
+        dialect = csv.Sniffer().sniff(sample, delimiters=",;")
+    except csv.Error:
+        dialect = csv.excel
+    reader = csv.DictReader(io.StringIO(raw_text), dialect=dialect)
+
+    imported = 0
+    skipped = 0
+    for row in reader:
+        actual_pace = parse_pace_to_seconds_per_km(_csv_value(
+            row,
+            "actual_pace",
+            "pace",
+            "medeltempo",
+            "average_pace",
+            "avg_pace",
+            "tempo",
+            "faktiskt_medeltempo",
+        ))
+        if not actual_pace:
+            skipped += 1
+            continue
+
+        log_date = _parse_csv_date(_csv_value(row, "date", "datum", "start_time", "starttid", "start"))
+        duration = _parse_duration_minutes(_csv_value(row, "duration_minutes", "duration", "tid", "time", "elapsed_time"))
+        rpe_raw = _csv_value(row, "rpe", "anstrangning", "kansla")
+        try:
+            rpe = int(float(rpe_raw.replace(",", "."))) if rpe_raw else 5
+        except ValueError:
+            rpe = 5
+        rpe = min(10, max(1, rpe))
+
+        session_type = _csv_value(row, "session_type", "type", "passtyp", "activity_type", "aktivitet") or "uthållighet"
+        comment = _csv_value(row, "comment", "kommentar", "name", "namn", "title")
+
+        db.add_log(
+            athlete.id,
+            log_date or date.today(),
+            session_type,
+            duration or 45,
+            rpe,
+            comment=f"CSV-import: {comment}".strip(),
+            actual_pace_seconds_per_km=actual_pace,
+        )
+        imported += 1
+
+    athlete.has_external_training_data = True
+    db.save_athlete(athlete)
+    refreshed_athlete = db.get_athlete(athlete.id)
+    calibration = _refresh_athlete_tempo_calibration(refreshed_athlete)
+    return {
+        "imported": imported,
+        "skipped": skipped,
+        "error": "",
+        "calibration": calibration,
+    }
 
 
 def _format_pace_seconds_per_km(value: float | None) -> str:
@@ -119,6 +290,8 @@ def inject_shared_template_context():
     return {
         "tempo_model_runners": TEMPO_MODEL_RUNNERS,
         "format_pace_seconds_per_km": _format_pace_seconds_per_km,
+        "best_result_distance_options": BEST_RESULT_DISTANCE_OPTIONS,
+        "best_result_distance_values": BEST_RESULT_DISTANCE_VALUES,
     }
 
 
@@ -640,9 +813,15 @@ def register():
                         training_phase=training_phase,
                         **ai_profile
                     )
+                    csv_import = _import_training_csv_for_athlete(athlete, request.files.get("training_data_csv"))
+                    if csv_import.get("error"):
+                        flash(csv_import["error"], "warning")
+                    elif csv_import.get("imported"):
+                        flash(f'{csv_import["imported"]} pass importerades från CSV och används för tempokalibrering.', 'success')
 
                     # Om AI-schema valdes, generera en månadsplan direkt
                     if training_mode == 'ai':
+                        athlete = db.get_athlete(athlete.id)
                         sessions = generate_month_schedule(athlete, db, use_rag=True)
                         flash(f'🤖 Ditt AI-schema är klart! {len(sessions)} pass planerade för 4 veckor.', 'success')
                         if club:
@@ -744,7 +923,7 @@ def dashboard():
 
         athletes_data.sort(key=sort_key)
 
-        # Generera AI-sammanfattning för coachen
+        # Snabb regelbaserad coachöversikt. Inga API-anrop vid sidladdning.
         action_items = generate_coach_action_items(athletes_data)
 
         return render_template('coach_dashboard.html',
@@ -761,7 +940,8 @@ def dashboard():
             return redirect(url_for('logout'))
 
         readiness = calculate_readiness(athlete)
-        summary = generate_week_summary(athlete, use_ai=True)
+        # Snabb regelbaserad sammanfattning. RAG/Claude används bara vid schema eller AI-chatt.
+        summary = generate_week_summary(athlete, use_ai=False)
         recent_logs = sorted(
             athlete.get_logs_last_n_days(14),
             key=lambda x: x.date,
@@ -850,8 +1030,8 @@ def athlete_detail(athlete_id: int):
             flash('Denna idrottare är inte kopplad till dig.', 'error')
             return redirect(url_for('dashboard'))
 
-    # Generera data (med AI för personlig veckosammanfattning)
-    summary = generate_week_summary(athlete, use_ai=True)
+    # Snabb regelbaserad sammanfattning. RAG/Claude används bara vid schema eller AI-chatt.
+    summary = generate_week_summary(athlete, use_ai=False)
     readiness = calculate_readiness(athlete)
     suggested_sessions = get_suggested_sessions(
         readiness.recommendation,
@@ -946,6 +1126,15 @@ def update_ai_profile(athlete_id: int):
     club = _clean_form_value(request.form.get('club', athlete.club))
     athlete.club = club
     db.save_athlete(athlete)
+    csv_import = _import_training_csv_for_athlete(athlete, request.files.get("training_data_csv"))
+    if csv_import.get("error"):
+        flash(csv_import["error"], "warning")
+    elif csv_import.get("imported"):
+        calibration = csv_import.get("calibration", {})
+        if calibration.get("is_calibrated"):
+            flash(f'{csv_import["imported"]} pass importerades från CSV och personlig tempooffset uppdaterades.', 'success')
+        else:
+            flash(f'{csv_import["imported"]} pass importerades från CSV. Minst 3 pass med medeltempo krävs för personlig tempooffset.', 'info')
 
     if not profile.get('training_experience_level'):
         flash('Träningsvana är obligatorisk för AI-planering.', 'error')

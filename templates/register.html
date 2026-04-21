@@ -20,7 +20,7 @@
             </div>
             {% endif %}
 
-            <form method="POST" class="auth-form" id="registerForm">
+            <form method="POST" class="auth-form" id="registerForm" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Namn</label>
                     <input type="text" id="name" name="name" required
@@ -185,39 +185,27 @@
                         </div>
 
                         <div id="distanceFields" style="display:none;">
+                            {% set selected_best_distance = request.form.get('best_result_distance', '') %}
                             <div class="form-group">
-                                <label for="best_5k_time">Vad är din bästa tid på 5 km? (frivilligt)</label>
-                                <input type="text" id="best_5k_time" name="best_5k_time"
-                                       placeholder="T.ex. 22:30"
-                                       value="{{ request.form.get('best_5k_time', '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="best_alt_distance">Alternativ distans om du inte har 5 km-tid (frivilligt)</label>
-                                <select id="best_alt_distance" name="best_alt_distance">
+                                <label for="best_result_distance">Bästa tid - distans (frivilligt)</label>
+                                <select id="best_result_distance" name="best_result_distance" class="best-result-distance-select">
                                     <option value="">Välj distans</option>
-                                    <option value="1500 m" {% if request.form.get('best_alt_distance') == '1500 m' %}selected{% endif %}>1500 m</option>
-                                    <option value="3 km" {% if request.form.get('best_alt_distance') == '3 km' %}selected{% endif %}>3 km</option>
-                                    <option value="10 km" {% if request.form.get('best_alt_distance') == '10 km' %}selected{% endif %}>10 km</option>
-                                    <option value="annan" {% if request.form.get('best_alt_distance') == 'annan' %}selected{% endif %}>Annan</option>
+                                    {% for value, label in best_result_distance_options %}
+                                        <option value="{{ value }}" {% if selected_best_distance == value %}selected{% endif %}>{{ label }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="best_alt_time">Tid på alternativ distans (frivilligt)</label>
-                                <input type="text" id="best_alt_time" name="best_alt_time"
-                                       placeholder="T.ex. 5:10 eller 41:30"
-                                       value="{{ request.form.get('best_alt_time', '') }}">
+                            <div class="form-group best-result-custom-distance" {% if selected_best_distance != 'annan' %}style="display:none;"{% endif %}>
+                                <label for="best_result_custom_distance">Om annan distans, skriv distansen här</label>
+                                <input type="text" id="best_result_custom_distance" name="best_result_custom_distance"
+                                       placeholder="T.ex. 2000 m eller 7 km"
+                                       value="{{ request.form.get('best_result_custom_distance', '') }}">
                             </div>
                             <div class="form-group">
-                                <label for="easy_pace">I vilket ungefärligt tempo springer du dina lugna pass? (frivilligt)</label>
-                                <input type="text" id="easy_pace" name="easy_pace"
-                                       placeholder="T.ex. 5:45 min/km"
-                                       value="{{ request.form.get('easy_pace', '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="threshold_pace">Ungefärligt tröskeltempo (frivilligt)</label>
-                                <input type="text" id="threshold_pace" name="threshold_pace"
-                                       placeholder="T.ex. 4:45 min/km"
-                                       value="{{ request.form.get('threshold_pace', '') }}">
+                                <label for="best_result_time">Bästa tid (frivilligt)</label>
+                                <input type="text" id="best_result_time" name="best_result_time"
+                                       placeholder="T.ex. 2:05, 17:45, 1:32:10"
+                                       value="{{ request.form.get('best_result_time', '') }}">
                             </div>
                         </div>
 
@@ -263,21 +251,28 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="tempo_model_runner_key">Tempo-profil från Garmin-modellen (frivilligt)</label>
-                            <select id="tempo_model_runner_key" name="tempo_model_runner_key">
-                                <option value="">Ingen vald profil</option>
-                                {% for runner_name in tempo_model_runners %}
-                                <option value="{{ runner_name }}" {% if request.form.get('tempo_model_runner_key') == runner_name %}selected{% endif %}>{{ runner_name }}</option>
-                                {% endfor %}
-                            </select>
-                            <small class="form-hint">Välj bara en profil om du vet att den matchar samma löpare i den delade Garmin-modellen. Annars kan en personlig offset byggas upp från flera loggade pass med verkligt medeltempo.</small>
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="checkbox" name="has_external_training_data" class="external-data-checkbox" {% if request.form.get('has_external_training_data') %}checked{% endif %}>
+                                Jag har extern träningsdata
+                            </label>
                         </div>
 
-                        <div class="form-group">
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                                <input type="checkbox" name="has_external_training_data" {% if request.form.get('has_external_training_data') %}checked{% endif %}>
-                                Jag har annan träningsdata som kan användas senare
-                            </label>
+                        <div class="external-data-fields" {% if not request.form.get('has_external_training_data') %}style="display:none;"{% endif %}>
+                            <div class="form-group">
+                                <label for="tempo_model_runner_key">Välj befintlig tempo-profil (frivilligt)</label>
+                                <select id="tempo_model_runner_key" name="tempo_model_runner_key">
+                                    <option value="">Ingen vald profil</option>
+                                    {% for runner_name in tempo_model_runners %}
+                                    <option value="{{ runner_name }}" {% if request.form.get('tempo_model_runner_key') == runner_name %}selected{% endif %}>{{ runner_name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="form-hint">Välj bara en profil om den matchar samma löpare i den delade Garmin-modellen.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="training_data_csv">Eller ladda upp träningsdata som CSV (frivilligt)</label>
+                                <input type="file" id="training_data_csv" name="training_data_csv" accept=".csv,text/csv">
+                                <small class="form-hint">CSV:n bör innehålla datum, medeltempo och gärna duration/RPE. Minst 3 pass med medeltempo behövs för personlig tempooffset.</small>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -316,6 +311,8 @@
         const sprintFields = document.getElementById('sprintFields');
         const birthYearInput = document.getElementById('birth_year');
         const experienceInput = document.getElementById('training_experience_level');
+        const bestResultDistanceSelects = document.querySelectorAll('.best-result-distance-select');
+        const externalDataCheckboxes = document.querySelectorAll('.external-data-checkbox');
 
         function updateRoleFields() {
             const selectedRole = document.querySelector('input[name="role"]:checked').value;
@@ -337,12 +334,36 @@
             sprintFields.style.display = focus === 'sprint' ? 'block' : 'none';
         }
 
+        function updateBestResultCustomFields() {
+            bestResultDistanceSelects.forEach(function(select) {
+                const wrapper = select.closest('.ai-profile-grid, #distanceFields, form') || document;
+                const customField = wrapper.querySelector('.best-result-custom-distance');
+                if (customField) {
+                    customField.style.display = select.value === 'annan' ? 'block' : 'none';
+                }
+            });
+        }
+
+        function updateExternalDataFields() {
+            externalDataCheckboxes.forEach(function(checkbox) {
+                const form = checkbox.closest('form') || document;
+                const fields = form.querySelectorAll('.external-data-fields');
+                fields.forEach(function(field) {
+                    field.style.display = checkbox.checked ? 'block' : 'none';
+                });
+            });
+        }
+
         roleInputs.forEach(input => input.addEventListener('change', updateRoleFields));
         modeInputs.forEach(input => input.addEventListener('change', updateAiFields));
         runningFocus.addEventListener('change', updateRunningFocusFields);
+        bestResultDistanceSelects.forEach(input => input.addEventListener('change', updateBestResultCustomFields));
+        externalDataCheckboxes.forEach(input => input.addEventListener('change', updateExternalDataFields));
 
         updateRoleFields();
         updateAiFields();
+        updateBestResultCustomFields();
+        updateExternalDataFields();
     </script>
 </body>
 </html>

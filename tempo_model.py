@@ -279,26 +279,36 @@ def calibrate_runner_offset_from_logs(
 
     for log in getattr(athlete, "logs", []):
         actual_pace = getattr(log, "actual_pace_seconds_per_km", None)
-        if not actual_pace or not getattr(log, "planned_session_id", None):
+        if not actual_pace:
             continue
 
-        planned_session = next(
-            (session for session in getattr(athlete, "planned_sessions", []) if session.id == log.planned_session_id),
-            None,
-        )
-        if not planned_session:
-            continue
+        planned_session = None
+        if getattr(log, "planned_session_id", None):
+            planned_session = next(
+                (session for session in getattr(athlete, "planned_sessions", []) if session.id == log.planned_session_id),
+                None,
+            )
 
-        description = ""
-        for exercise in getattr(planned_session, "exercises", []) or []:
-            description = (exercise.get("description") or exercise.get("details") or "").strip()
-            if description:
-                break
+        if planned_session:
+            description = ""
+            for exercise in getattr(planned_session, "exercises", []) or []:
+                description = (exercise.get("description") or exercise.get("details") or "").strip()
+                if description:
+                    break
+            session_name = planned_session.session_name
+            session_type = planned_session.session_type
+            intensity = planned_session.planned_intensity
+        else:
+            description = getattr(log, "comment", "") or ""
+            session_name = "Importerat träningspass"
+            session_type = getattr(log, "session_type", "") or "uthållighet"
+            rpe = getattr(log, "rpe", 5) or 5
+            intensity = "hög" if rpe >= 8 else ("medel" if rpe >= 6 else "låg")
 
         if_val = infer_if(
-            planned_session.session_name,
-            planned_session.session_type,
-            planned_session.planned_intensity,
+            session_name,
+            session_type,
+            intensity,
             description,
         )
         stigning_per_km, nedfor_per_km = get_surface_profile(getattr(athlete, "training_surface", ""))

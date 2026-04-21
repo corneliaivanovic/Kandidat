@@ -432,6 +432,16 @@ def _parse_distance_to_meters(value: str) -> Optional[int]:
     if not value:
         return None
     text = str(value).strip().lower().replace(",", ".")
+    aliases = {
+        "halvmaraton": 21098,
+        "halvmara": 21098,
+        "half marathon": 21098,
+        "maraton": 42195,
+        "mara": 42195,
+        "marathon": 42195,
+    }
+    if text in aliases:
+        return aliases[text]
     match = re.search(r"(\d+(?:\.\d+)?)\s*(km|m)?", text)
     if not match:
         return None
