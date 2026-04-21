@@ -1090,7 +1090,7 @@ def _append_pace_hint_to_description(
         source_text = " (från passdetaljen)"
     pace_hint_with_source = f"{pace_hint.rstrip('.')}{source_text}."
     basis_sentence = (
-        f"Rekommenderat underlag: {pace_surface_label}. Tempot i huvudpasset och tempovarianterna utgår från detta underlag."
+        f"Rekommenderat underlag för passet: {pace_surface_label}. Tempovarianterna visar hur samma pass kan justeras om det genomförs på andra underlag."
         if pace_surface_label else ""
     )
     sentence_to_add = "" if has_existing_pace and basis_sentence else pace_hint_with_source
@@ -1124,7 +1124,7 @@ def _append_term_explanations(description: str) -> str:
         )
     if "stegr" in lower or "uppbyggnad" in lower or "progressiv" in lower:
         explanations.append(
-            "Stegring/uppbyggnad/progressivt = börja kontrollerat och öka gradvis, ungefär från 60 % till 85-90 % av max utan att sprinta fullt."
+            "Stegring/uppbyggnad/progressivt = börja kontrollerat och öka gradvis till snabbt men avslappnat, utan att sprinta fullt."
         )
     if "dynamisk rörlighet" in lower or "dynamisk stretch" in lower:
         explanations.append(
