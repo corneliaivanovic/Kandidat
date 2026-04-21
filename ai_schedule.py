@@ -540,6 +540,51 @@ def _parse_pace_range_text(text: str) -> tuple[Optional[float], Optional[float]]
     return float(low), float(high)
 
 
+def _extract_main_work_pace_range(description: str) -> tuple[Optional[float], Optional[float]]:
+    """Plocka ut tempo från Huvudpass-raden, inte från uppvärmning/nedvarvning."""
+    main_work_text = _extract_main_work_text(description)
+    if not main_work_text:
+        return None, None
+
+    pace_range_match = re.search(
+        r"(\d+):(\d{2})\s*(?:min/km)?\s*[–-]\s*(\d+):(\d{2})\s*(?:min/km)?",
+        main_work_text,
+        flags=re.IGNORECASE,
+    )
+    if pace_range_match:
+        low = int(pace_range_match.group(1)) * 60 + int(pace_range_match.group(2))
+        high = int(pace_range_match.group(3)) * 60 + int(pace_range_match.group(4))
+        return tuple(sorted((float(low), float(high))))
+
+    pace_match = re.search(r"(\d+):(\d{2})\s*(?:min/km)?", main_work_text, flags=re.IGNORECASE)
+    if pace_match:
+        value = int(pace_match.group(1)) * 60 + int(pace_match.group(2))
+        return float(value), float(value)
+    return None, None
+
+
+def _replace_main_work_pace_range(description: str, low_seconds: float, high_seconds: float) -> str:
+    """Ersätt första tempoangivelsen i Huvudpass-raden med ett breddat spann."""
+    lines = (description or "").split("\n")
+    replacement = _format_pace_range(low_seconds, high_seconds)
+    range_pattern = re.compile(
+        r"\d+:\d{2}\s*(?:min/km)?\s*[–-]\s*\d+:\d{2}\s*(?:min/km)?",
+        flags=re.IGNORECASE,
+    )
+    single_pattern = re.compile(r"\d+:\d{2}\s*(?:min/km)?", flags=re.IGNORECASE)
+
+    for index, line in enumerate(lines):
+        if not line.strip().lower().startswith("huvudpass:"):
+            continue
+        if range_pattern.search(line):
+            lines[index] = range_pattern.sub(replacement, line, count=1)
+            return "\n".join(lines)
+        if single_pattern.search(line):
+            lines[index] = single_pattern.sub(replacement, line, count=1)
+            return "\n".join(lines)
+    return description
+
+
 def _choose_performance_anchor(athlete_info: dict, running_type: str) -> tuple[Optional[int], Optional[float], str]:
     best_5k = _parse_time_to_seconds(athlete_info.get("best_5k_time", ""))
     if best_5k:
@@ -763,6 +808,32 @@ def _surface_adjusted_pace_range(low_seconds: float, high_seconds: float, surfac
     return low_seconds + delta, high_seconds + delta
 
 
+def _build_surface_options_from_recommended_range(
+    low_seconds: float,
+    high_seconds: float,
+    recommended_surface_key: str,
+    min_range_width: int,
+) -> list[dict]:
+    options = []
+    for surface_key, label, gradient in TEMPO_SURFACE_CHOICES:
+        if surface_key == recommended_surface_key:
+            continue
+        delta = _surface_delta_seconds(surface_key, baseline_surface_key=recommended_surface_key)
+        low, high = _ensure_minimum_pace_range(
+            low_seconds + delta,
+            high_seconds + delta,
+            min_range_width,
+        )
+        options.append({
+            "surface_key": surface_key,
+            "label": label,
+            "gradient": gradient,
+            "is_recommended": False,
+            "pace_text": _format_pace_range(low, high),
+        })
+    return options
+
+
 def _build_surface_tempo_options(
     session_name: str,
     session_type: str,
@@ -874,6 +945,24 @@ def _pace_hint_for_session(
         f"rekommenderat underlag {recommended_surface_detail}, "
         f"underlagsval: {surface_reason}"
     )
+    min_range_width = _minimum_pace_range_width(profile, intensity)
+
+    existing_low, existing_high = _extract_main_work_pace_range(description)
+    if existing_low is not None and existing_high is not None:
+        existing_low, existing_high = _ensure_minimum_pace_range(existing_low, existing_high, min_range_width)
+        options = _build_surface_options_from_recommended_range(
+            existing_low,
+            existing_high,
+            recommended_surface_key,
+            min_range_width,
+        )
+        return (
+            f"Tempo ungefär {_format_pace_range(existing_low, existing_high)} på {recommended_surface_label}.",
+            "ai_description_pace",
+            surface_assumptions,
+            options,
+            recommended_surface_label,
+        )
 
     def race_hint_from_range(low: float, high: float, prefix: str = "Tempo ungefär") -> tuple[str, str, str, list[dict], str]:
         source = "race_based_heuristic"
@@ -881,7 +970,7 @@ def _pace_hint_for_session(
         adjusted_low, adjusted_high = _ensure_minimum_pace_range(
             adjusted_low,
             adjusted_high,
-            _minimum_pace_range_width(profile, intensity),
+            min_range_width,
         )
         options = _build_surface_tempo_options(
             session_name,
@@ -975,6 +1064,11 @@ def _append_pace_hint_to_description(
     if not description or not pace_hint:
         return description
 
+    if pace_source == "ai_description_pace":
+        hint_low, hint_high = _parse_pace_range_text(pace_hint)
+        if hint_low is not None and hint_high is not None:
+            description = _replace_main_work_pace_range(description, hint_low, hint_high)
+
     lower = description.lower()
     pace_patterns = [
         r"\d+:\d{2}\s*(?:min/)?km",
@@ -992,14 +1086,20 @@ def _append_pace_hint_to_description(
         source_text = " (Garmin-modell)"
     elif pace_source == "race_based_heuristic":
         source_text = " (tävlings-/profilbaserad uppskattning)"
+    elif pace_source == "ai_description_pace":
+        source_text = " (från passdetaljen)"
     pace_hint_with_source = f"{pace_hint.rstrip('.')}{source_text}."
     basis_sentence = (
-        f"Tempot i passdetaljen är baserat på rekommenderat underlag: {pace_surface_label}."
+        f"Rekommenderat underlag: {pace_surface_label}. Tempot i huvudpasset och tempovarianterna utgår från detta underlag."
         if pace_surface_label else ""
     )
-    sentence_to_add = basis_sentence if has_existing_pace and basis_sentence else pace_hint_with_source
+    sentence_to_add = "" if has_existing_pace and basis_sentence else pace_hint_with_source
 
     lines = description.split("\n")
+    if basis_sentence and basis_sentence not in description:
+        insert_index = 1 if lines and lines[0].startswith("Syfte:") else 0
+        lines.insert(insert_index, basis_sentence)
+
     for index, line in enumerate(lines):
         if line.startswith("Huvudpass:"):
             if sentence_to_add and sentence_to_add not in line:
@@ -1566,6 +1666,7 @@ def _format_evaluation_date(session_date: date) -> str:
 
 def _extract_recommended_surface_option(description: str) -> Optional[dict]:
     text = description or ""
+    main_work_text = _extract_main_work_text(text)
     surface_match = re.search(
         r"(?:på|rekommenderat underlag:)\s*(Bana|Plan väg|Kuperat|Väldigt kuperat)",
         text,
@@ -1573,7 +1674,7 @@ def _extract_recommended_surface_option(description: str) -> Optional[dict]:
     )
     pace_match = re.search(
         r"(\d+:\d{2})\s*(?:min/km)?\s*[–-]\s*(\d+:\d{2})\s*min/km",
-        text,
+        main_work_text,
         flags=re.IGNORECASE,
     )
     if not surface_match or not pace_match:

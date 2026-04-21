@@ -367,6 +367,7 @@ def _build_session_view(session, today: date) -> dict:
         "garmin_model_calibrated": "Garmin-modell med personlig kalibrering",
         "garmin_model_population": "Garmin-modell",
         "race_based_heuristic": "Profil-/tävlingsbaserad uppskattning",
+        "ai_description_pace": "Tempo från passdetaljen",
     }.get(tempo_source, tempo_source)
 
     return {
