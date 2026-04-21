@@ -250,10 +250,13 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <div class="form-group full-width">
+                            <label class="checkbox-label">
                                 <input type="checkbox" name="has_external_training_data" class="external-data-checkbox" {% if request.form.get('has_external_training_data') %}checked{% endif %}>
-                                Jag har extern träningsdata
+                                <span class="checkbox-text">
+                                    Jag har extern träningsdata
+                                    <small>Visa tempo-profiler och CSV-uppladdning för personlig tempokalibrering.</small>
+                                </span>
                             </label>
                         </div>
 

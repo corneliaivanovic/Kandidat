@@ -995,6 +995,11 @@ body::before {
     transition: all var(--transition-fast);
 }
 
+.form-group input[type="checkbox"],
+.form-group input[type="radio"] {
+    width: auto;
+}
+
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {

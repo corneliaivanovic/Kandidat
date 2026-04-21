@@ -1425,12 +1425,27 @@ def _session_description_text(session) -> str:
     return ""
 
 
+def _is_rag_generated_plan(sessions: list) -> bool:
+    """Returnera True bara om hela upplägget faktiskt kommer från RAG."""
+    if not sessions:
+        return False
+
+    rag_statuses = ("Planstatus: RAG-genererad", "Planstatus: RAG-reparerad")
+    for session in sessions:
+        coach_notes = getattr(session, "coach_notes", "") or ""
+        if "Planstatus: Regelbaserad fallback" in coach_notes:
+            return False
+        if not any(status in coach_notes for status in rag_statuses):
+            return False
+    return True
+
+
 def _export_evaluation_plan_txt(athlete, sessions: list, start_date: date) -> Optional[Path]:
     """
     Skapa en lättläst txt-export för utvärdering av plan och tempo.
-    En ny fil skapas för varje genererat upplägg.
+    En ny fil skapas bara för RAG-genererade upplägg.
     """
-    if not sessions or not _should_export_evaluation_plan(athlete):
+    if not sessions or not _should_export_evaluation_plan(athlete) or not _is_rag_generated_plan(sessions):
         return None
 
     export_dir = Path(__file__).parent / "planutvarderingar"
@@ -1641,10 +1656,6 @@ def generate_month_schedule(
             use_rag=False,
             fallback_reason_override=rag_failure_reason,
         ) or []
-        if export_for_evaluation:
-            exported_path = _export_evaluation_plan_txt(athlete, fallback_sessions, start_date)
-            if exported_path:
-                print(f"📝 Utvarderingsfil skapad: {exported_path}")
         return fallback_sessions
     except Exception as e:
         print(f"⚠️ Veckovis fallback misslyckades för månadsplan: {e}")
