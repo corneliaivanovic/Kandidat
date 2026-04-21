@@ -108,6 +108,7 @@ class AuthStore:
 
     def register(self, email: str, password: str, name: str, role: str) -> Optional[User]:
         """Registrera en ny användare."""
+        email = (email or "").strip().lower()
         if self.get_user_by_email(email):
             return None
 
@@ -126,7 +127,7 @@ class AuthStore:
             INSERT INTO users (email, password_hash, name, role, coach_code, connected_coach_id)
             VALUES (?, ?, ?, ?, ?, NULL)
             """,
-            (email.lower(), User._hash_password(password), name, role, coach_code),
+            (email, User._hash_password(password), name, role, coach_code),
         )
         user_id = cur.lastrowid
         conn.commit()
@@ -148,8 +149,12 @@ class AuthStore:
         return self._row_to_user(row)
 
     def get_user_by_email(self, email: str) -> Optional[User]:
+        email = (email or "").strip().lower()
         conn = get_connection()
-        row = conn.execute("SELECT * FROM users WHERE email = ?", (email.lower(),)).fetchone()
+        row = conn.execute(
+            "SELECT * FROM users WHERE LOWER(TRIM(email)) = ?",
+            (email,),
+        ).fetchone()
         conn.close()
         return self._row_to_user(row)
 

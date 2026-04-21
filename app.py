@@ -775,7 +775,7 @@ def register():
     error = None
     if request.method == 'POST':
         name = request.form.get('name', '')
-        email = request.form.get('email', '')
+        email = request.form.get('email', '').strip().lower()
         password = request.form.get('password', '')
         role = request.form.get('role', 'athlete')
 
@@ -787,53 +787,65 @@ def register():
         else:
             # Försök registrera
             user = auth_db.register(email, password, name, role)
+            if not user and role == 'athlete':
+                existing_user = auth_db.get_user_by_email(email)
+                existing_athlete = db.get_athlete_by_user(existing_user.id) if existing_user else None
+                if existing_user and existing_user.is_athlete() and not existing_athlete:
+                    auth_db.delete_user(existing_user.id)
+                    user = auth_db.register(email, password, name, role)
+
             if not user:
                 error = 'E-postadressen är redan registrerad'
             else:
-                # Om idrottare, skapa athlete-profil
-                if role == 'athlete':
-                    birth_year = _parse_birth_year_value(request.form.get('birth_year', '')) or 2000
-                    discipline = request.form.get('discipline', 'sprint')
-                    club = request.form.get('club', '').strip()
-                    training_mode = request.form.get('training_mode', 'coach')
-                    training_days_str = request.form.get('training_days', '').strip()
-                    training_days = int(training_days_str) if training_days_str else 4
-                    training_phase = request.form.get('training_phase', 'grundträning')
-                    ai_profile = _parse_ai_profile_from_form(request.form)
+                try:
+                    # Om idrottare, skapa athlete-profil
+                    if role == 'athlete':
+                        birth_year = _parse_birth_year_value(request.form.get('birth_year', '')) or 2000
+                        discipline = request.form.get('discipline', 'sprint')
+                        club = request.form.get('club', '').strip()
+                        training_mode = request.form.get('training_mode', 'coach')
+                        training_days_str = request.form.get('training_days', '').strip()
+                        training_days = int(training_days_str) if training_days_str else 4
+                        training_phase = request.form.get('training_phase', 'grundträning')
+                        ai_profile = _parse_ai_profile_from_form(request.form)
 
-                    if training_mode == 'ai' and not ai_profile.get('training_experience_level'):
-                        auth_db.delete_user(user.id)
-                        error = 'Välj din träningsvana för att få AI-genererad planering.'
-                        return render_template('register.html', error=error)
+                        if training_mode == 'ai' and not ai_profile.get('training_experience_level'):
+                            auth_db.delete_user(user.id)
+                            error = 'Välj din träningsvana för att få AI-genererad planering.'
+                            return render_template('register.html', error=error)
 
-                    athlete = db.create_athlete_for_user(
-                        user.id, name, birth_year, discipline, club,
-                        training_mode=training_mode,
-                        training_days_per_week=training_days,
-                        training_phase=training_phase,
-                        **ai_profile
-                    )
-                    csv_import = _import_training_csv_for_athlete(athlete, request.files.get("training_data_csv"))
-                    if csv_import.get("error"):
-                        flash(csv_import["error"], "warning")
-                    elif csv_import.get("imported"):
-                        flash(f'{csv_import["imported"]} pass importerades från CSV och används för tempokalibrering.', 'success')
+                        athlete = db.create_athlete_for_user(
+                            user.id, name, birth_year, discipline, club,
+                            training_mode=training_mode,
+                            training_days_per_week=training_days,
+                            training_phase=training_phase,
+                            **ai_profile
+                        )
+                        csv_import = _import_training_csv_for_athlete(athlete, request.files.get("training_data_csv"))
+                        if csv_import.get("error"):
+                            flash(csv_import["error"], "warning")
+                        elif csv_import.get("imported"):
+                            flash(f'{csv_import["imported"]} pass importerades från CSV och används för tempokalibrering.', 'success')
 
-                    # Om AI-schema valdes, generera en månadsplan direkt
-                    if training_mode == 'ai':
-                        athlete = db.get_athlete(athlete.id)
-                        sessions = generate_month_schedule(athlete, db, use_rag=True)
-                        flash(f'🤖 Ditt AI-schema är klart! {len(sessions)} pass planerade för 4 veckor.', 'success')
-                        if club:
-                            flash('Tävlingsresultat matchas automatiskt mot namn, ålder och klubb om sådana finns.', 'info')
-                        else:
-                            flash('Du kan lämna frivilliga AI-frågor tomma, men fler svar ger bättre individanpassning och tempouppskattning.', 'info')
+                        # Om AI-schema valdes, generera en månadsplan direkt
+                        if training_mode == 'ai':
+                            athlete = db.get_athlete(athlete.id)
+                            sessions = generate_month_schedule(athlete, db, use_rag=True)
+                            flash(f'🤖 Ditt AI-schema är klart! {len(sessions)} pass planerade för 4 veckor.', 'success')
+                            if club:
+                                flash('Tävlingsresultat matchas automatiskt mot namn, ålder och klubb om sådana finns.', 'info')
+                            else:
+                                flash('Du kan lämna frivilliga AI-frågor tomma, men fler svar ger bättre individanpassning och tempouppskattning.', 'info')
 
-                    # Koppla till coach om kod angavs
-                    coach_code = request.form.get('coach_code', '').strip()
-                    if coach_code:
-                        if not auth_db.connect_athlete_to_coach(user.id, coach_code):
-                            flash('Coach-koden hittades inte, men ditt konto skapades.', 'warning')
+                        # Koppla till coach om kod angavs
+                        coach_code = request.form.get('coach_code', '').strip()
+                        if coach_code:
+                            if not auth_db.connect_athlete_to_coach(user.id, coach_code):
+                                flash('Coach-koden hittades inte, men ditt konto skapades.', 'warning')
+                except Exception as exc:
+                    auth_db.delete_user(user.id)
+                    error = f'Kunde inte skapa profilen: {exc}'
+                    return render_template('register.html', error=error)
 
                 # Logga in direkt
                 session['user_id'] = user.id
@@ -939,9 +951,6 @@ def dashboard():
             flash('Din idrottsprofil hittades inte.', 'error')
             return redirect(url_for('logout'))
 
-        readiness = calculate_readiness(athlete)
-        # Snabb regelbaserad sammanfattning. RAG/Claude används bara vid schema eller AI-chatt.
-        summary = generate_week_summary(athlete, use_ai=False)
         recent_logs = sorted(
             athlete.get_logs_last_n_days(14),
             key=lambda x: x.date,
@@ -963,9 +972,6 @@ def dashboard():
             month_param=request.args.get('month', '')
         )
 
-        # Hämta trenddata
-        trend_data = get_week_trend(athlete)
-
         # Räkna ut om schemat snart tar slut (för AI-idrottare)
         schedule_expiring_soon = False
         days_until_schedule_end = None
@@ -981,8 +987,6 @@ def dashboard():
         return render_template('athlete_dashboard.html',
                                user=user,
                                athlete=athlete,
-                               readiness=readiness,
-                               summary=summary,
                                recent_logs=recent_logs,
                                coach=coach,
                                todays_session=todays_session,
@@ -995,7 +999,6 @@ def dashboard():
                                month_label=calendar_context["month_label"],
                                month_grid=calendar_context["month_grid"],
                                calendar_session_views=calendar_context["session_views"],
-                               trend_data=trend_data,
                                today=date.today(),
                                schedule_expiring_soon=schedule_expiring_soon,
                                days_until_schedule_end=days_until_schedule_end,
@@ -1030,14 +1033,6 @@ def athlete_detail(athlete_id: int):
             flash('Denna idrottare är inte kopplad till dig.', 'error')
             return redirect(url_for('dashboard'))
 
-    # Snabb regelbaserad sammanfattning. RAG/Claude används bara vid schema eller AI-chatt.
-    summary = generate_week_summary(athlete, use_ai=False)
-    readiness = calculate_readiness(athlete)
-    suggested_sessions = get_suggested_sessions(
-        readiness.recommendation,
-        summary["next_focus"]["type"]
-    )
-
     recent_logs = sorted(
         athlete.get_logs_last_n_days(14),
         key=lambda x: x.date,
@@ -1054,9 +1049,6 @@ def athlete_detail(athlete_id: int):
         month_param=request.args.get('month', '')
     )
 
-    # Hämta trenddata
-    trend_data = get_week_trend(athlete)
-
     schedule_expiring_soon = False
     days_until_schedule_end = None
     last_planned_date = None
@@ -1072,10 +1064,7 @@ def athlete_detail(athlete_id: int):
         'athlete.html',
         user=user,
         athlete=athlete,
-        summary=summary,
-        suggested_sessions=suggested_sessions,
         recent_logs=recent_logs,
-        readiness=readiness,
         upcoming_sessions=upcoming_sessions,
         all_upcoming_sessions=all_upcoming_sessions,
         has_more_upcoming=len(all_upcoming_sessions) > len(upcoming_sessions),
@@ -1086,7 +1075,6 @@ def athlete_detail(athlete_id: int):
         month_grid=calendar_context["month_grid"],
         calendar_session_views=calendar_context["session_views"],
         todays_session=todays_session,
-        trend_data=trend_data,
         today=date.today(),
         schedule_expiring_soon=schedule_expiring_soon,
         days_until_schedule_end=days_until_schedule_end,

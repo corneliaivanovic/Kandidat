@@ -117,84 +117,13 @@
         </section>
         {% endif %}
 
-        <div class="dashboard-grid">
-            <!-- Readiness Card -->
-            <section class="card readiness-card">
-                <h2>Din dagsform</h2>
-                <div class="readiness-hero readiness-{{ readiness.level }}">
-                    <span class="readiness-score-large">{{ readiness.score }}</span>
-                    <span class="readiness-level">{{ readiness.level }}</span>
-                </div>
-                <p class="readiness-message">{{ readiness.message }}</p>
-
-                <div class="readiness-details">
-                    <div class="detail-row">
-                        <span>ACWR</span>
-                        <span class="detail-value">{{ readiness.acwr }}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Veckobelastning</span>
-                        <span class="detail-value">{{ readiness.acute_load }}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span>Genomsnitt (4v)</span>
-                        <span class="detail-value">{{ readiness.chronic_load }}</span>
-                    </div>
-                </div>
-
-                {% if not todays_session %}
-                <a href="{{ url_for('add_log', athlete_id=athlete.id) }}" class="btn btn-primary btn-block">
-                    + Logga träningspass
-                </a>
-                {% endif %}
-            </section>
-
-            <!-- Veckosammanfattning -->
-            <section class="card summary-card">
-                <h2>Veckosammanfattning</h2>
-
-                <div class="summary-stats">
-                    <div class="stat-box">
-                        <span class="stat-value">{{ summary.total_sessions }}</span>
-                        <span class="stat-label">pass</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-value">{{ summary.total_duration }}</span>
-                        <span class="stat-label">minuter</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-value">{{ summary.total_load }}</span>
-                        <span class="stat-label">total load</span>
-                    </div>
-                </div>
-
-                {% if summary.session_types %}
-                <div class="session-breakdown">
-                    <h3>Fördelning</h3>
-                    {% for type, count in summary.session_types.items() %}
-                        <div class="breakdown-row">
-                            <span class="type-name">{{ type }}</span>
-                            <span class="type-count">{{ count }} pass</span>
-                        </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <div class="ai-summary">
-                    <h3>Status</h3>
-                    <p>{{ summary.ai_text }}</p>
-                </div>
-
-                <div class="next-focus">
-                    <h3>Rekommenderat fokus</h3>
-                    <div class="focus-card">
-                        <span class="focus-type">{{ summary.next_focus.label }}</span>
-                        <span class="focus-intensity intensity-{{ summary.next_focus.intensity }}">{{ summary.next_focus.intensity }}</span>
-                    </div>
-                    <p>{{ summary.next_focus.description }}</p>
-                </div>
-            </section>
-        </div>
+        {% if not todays_session %}
+        <section class="card quick-log-card">
+            <a href="{{ url_for('add_log', athlete_id=athlete.id) }}" class="btn btn-primary">
+                + Logga träningspass
+            </a>
+        </section>
+        {% endif %}
 
         <!-- AI Schema-hantering -->
         {% if athlete.training_mode == 'ai' %}

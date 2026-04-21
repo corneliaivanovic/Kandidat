@@ -328,85 +328,6 @@
         {% endif %}
     </div>
 
-    <!-- Readiness och Veckosammanfattning -->
-    <div class="summary-grid">
-        <div class="summary-card readiness-card readiness-{{ readiness.level }}">
-            <h2>Dagsform</h2>
-            <div class="big-score">{{ readiness.score }}</div>
-            <p class="readiness-level-text">{{ readiness.level | upper }}</p>
-            <p>{{ readiness.message }}</p>
-            <div class="acwr-display">
-                <span>ACWR: {{ readiness.acwr }}</span>
-                <span>•</span>
-                <span>7d: {{ readiness.acute_load }}</span>
-                <span>•</span>
-                <span>Snitt: {{ readiness.chronic_load }}/v</span>
-            </div>
-        </div>
-
-        <div class="summary-card">
-            <h2>Veckosammanfattning</h2>
-            <p class="summary-text">{{ summary.summary }}</p>
-
-            <h3>Rekommenderat fokus</h3>
-            <div class="focus-recommendation">
-                <div class="focus-main">
-                    <span class="focus-label">{{ summary.next_focus.label }}</span>
-                    <span class="intensity-badge intensity-{{ summary.next_focus.intensity }}">
-                        {{ summary.next_focus.intensity }}
-                    </span>
-                </div>
-                <p>{{ summary.next_focus.description }}</p>
-            </div>
-
-            <h4>Alternativ</h4>
-            <div class="alternatives">
-                {% for alt in summary.alternatives %}
-                <div class="alternative-chip">
-                    {{ alt.label }}
-                    <span class="alt-intensity">({{ alt.intensity }})</span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Passförslag -->
-    <section class="session-suggestions">
-        <h2>Föreslagna pass</h2>
-        <p class="section-subtitle">Baserat på din dagsform och rekommenderat fokus</p>
-
-        <div class="session-grid">
-            {% for session in suggested_sessions %}
-            <div class="session-card">
-                <div class="session-header">
-                    <h3>{{ session.name }}</h3>
-                    <span class="intensity-badge intensity-{{ session.intensity }}">
-                        {{ session.intensity }}
-                    </span>
-                </div>
-                <p class="session-category">{{ session.category | capitalize }}</p>
-                <p>{{ session.description }}</p>
-                <p class="session-duration">⏱️ {{ session.duration }} min</p>
-
-                <div class="exercise-list">
-                    <h4>Övningar:</h4>
-                    <ul>
-                        {% for ex in session.exercises %}
-                        <li>
-                            <strong>{{ ex.name }}</strong> ({{ ex.duration }} min)
-                            <br><small>{{ ex.description }}</small>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <button class="btn btn-primary btn-full">Välj detta pass</button>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
     {% if athlete.training_mode == 'ai' %}
     <section class="card upcoming-section" style="margin-bottom:24px;">
         <div class="month-grid-header">
@@ -654,20 +575,5 @@
         </div>
     </section>
 
-    <!-- Trend (enkel visualisering) -->
-    <section class="trend-section">
-        <h2>Veckotrend</h2>
-        <div class="trend-chart">
-            {% for week in summary.trend.weeks %}
-            <div class="trend-bar-container">
-                <div class="trend-bar" style="height: {{ (week.total_load / 30) | int }}px;">
-                    <span class="trend-value">{{ week.total_load }}</span>
-                </div>
-                <span class="trend-label">{{ week.week_label }}</span>
-            </div>
-            {% endfor %}
-        </div>
-        <p class="trend-legend">Total belastning (session-RPE load) per vecka</p>
-    </section>
 </div>
 {% endblock %}
