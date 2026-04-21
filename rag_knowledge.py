@@ -1289,6 +1289,9 @@ KRITISKA regler för description-fältet:
 - Använd \\n för radbrytning mellan sektionerna
 - Hårda pass: Uppvärmning (≥15 min) + Huvudpass + Nedvarvning (≥10 min)
 - Lätta pass: Uppvärmning och Huvudpass måste ingå
+- Uppvärmning ska vara konkret: ange jogg/promenad, dynamisk rörlighet, löpskola/stegringar, antal repetitioner och ungefärlig intensitet i känsla/procent, t.ex. "stegringslopp från ca 60 % till 85–90 %, inte max"
+- Nedvarvning ska vara konkret: ange lugn jogg/promenad, stretch/rörlighet och intensitet, t.ex. "mycket lätt, ska kännas återhämtande"
+- Om du använder ord som löpskola, stegringslopp, uppbyggnad, progressivt eller dynamisk rörlighet ska du kort förklara vad idrottaren ska göra
 - Specifika distanser, tider, viloperioder MÅSTE anges
 - Skriv på svenska"""
 
@@ -1492,6 +1495,9 @@ KRITISKA regler för description-fältet:
 - ALLTID använd denna struktur exakt: Syfte: ... \\nUppvärmning: ... \\nHuvudpass: ... \\nNedvarvning: ...
 - ALDRIG asterisker (**) eller andra markdown-symboler
 - Använd \\n för radbrytning mellan sektionerna
+- Uppvärmning ska vara konkret: ange jogg/promenad, dynamisk rörlighet, löpskola/stegringar, antal repetitioner och ungefärlig intensitet i känsla/procent, t.ex. "stegringslopp från ca 60 % till 85–90 %, inte max"
+- Nedvarvning ska vara konkret: ange lugn jogg/promenad, stretch/rörlighet och intensitet, t.ex. "mycket lätt, ska kännas återhämtande"
+- Om du använder ord som löpskola, stegringslopp, uppbyggnad, progressivt eller dynamisk rörlighet ska du kort förklara vad idrottaren ska göra
 - Specifika distanser, tider, viloperioder i varje pass
 - Tydlig progression vecka 1 → 3, tydlig nedtrappning vecka 4
 - Skriv på svenska"""

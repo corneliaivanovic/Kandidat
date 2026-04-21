@@ -482,6 +482,33 @@ def _format_pace_range(low_seconds: float, high_seconds: float) -> str:
     return f"{_format_pace_seconds(low)}–{_format_pace_seconds(high)}"
 
 
+def _minimum_pace_range_width(profile: dict, intensity: str) -> int:
+    """Hårdkodad säkerhetsregel mot falsk precision i tempointervall."""
+    rep_distance = profile.get("rep_distance")
+    is_threshold_like = profile.get("is_threshold_like")
+    is_easy_like = profile.get("is_easy_like")
+    is_long_like = profile.get("is_long_like")
+
+    if intensity == "låg" or is_easy_like or is_long_like:
+        return 20
+    if is_threshold_like:
+        return 12
+    if rep_distance or intensity == "hög":
+        return 10
+    return 15
+
+
+def _ensure_minimum_pace_range(low_seconds: float, high_seconds: float, min_width_seconds: int) -> tuple[float, float]:
+    """Bredda ett tempo runt mitten om spannet är för smalt."""
+    low, high = sorted((float(low_seconds), float(high_seconds)))
+    if high - low >= min_width_seconds:
+        return low, high
+
+    center = (low + high) / 2
+    half_width = min_width_seconds / 2
+    return center - half_width, center + half_width
+
+
 def _surface_choice(surface_key: str) -> dict:
     for key, label, gradient in TEMPO_SURFACE_CHOICES:
         if key == surface_key:
@@ -712,8 +739,14 @@ def _garmin_pace_hint_for_session(
         assumptions.append(f"kalibrering pågår ({personal_offset_samples}/3 loggade pass)")
     assumptions_text = ", ".join(assumptions)
     pace_text = _format_pace_range(
-        prediction["low_seconds_per_km"],
-        prediction["high_seconds_per_km"],
+        *_ensure_minimum_pace_range(
+            prediction["low_seconds_per_km"],
+            prediction["high_seconds_per_km"],
+            _minimum_pace_range_width(
+                _session_pace_profile(session_name, session_type, intensity, description),
+                intensity,
+            ),
+        )
     )
     surface_label = _surface_choice(recommended_surface_key or pace_model.get("training_surface", "plan_vag"))["label"]
     return f"Tempo ungefär {pace_text} på {surface_label}.", prediction["source"], assumptions_text
@@ -758,15 +791,20 @@ def _build_surface_tempo_options(
                 runner_key=runner_key,
                 personal_offset_seconds=personal_offset_seconds,
             )
+            low, high = _ensure_minimum_pace_range(
+                prediction["low_seconds_per_km"],
+                prediction["high_seconds_per_km"],
+                _minimum_pace_range_width(
+                    _session_pace_profile(session_name, session_type, intensity, description),
+                    intensity,
+                ),
+            )
             options.append({
                 "surface_key": surface_key,
                 "label": label,
                 "gradient": gradient,
                 "is_recommended": False,
-                "pace_text": _format_pace_range(
-                    prediction["low_seconds_per_km"],
-                    prediction["high_seconds_per_km"],
-                ),
+                "pace_text": _format_pace_range(low, high),
             })
         return options
 
@@ -774,6 +812,7 @@ def _build_surface_tempo_options(
     main_work_text = profile["main_work_text"]
     rep_distance = profile["rep_distance"]
     is_threshold_like = profile["is_threshold_like"]
+    min_range_width = _minimum_pace_range_width(profile, intensity)
 
     base_low = None
     base_high = None
@@ -802,6 +841,7 @@ def _build_surface_tempo_options(
         if surface_key == recommended_surface_key:
             continue
         low, high = _surface_adjusted_pace_range(base_low, base_high, surface_key)
+        low, high = _ensure_minimum_pace_range(low, high, min_range_width)
         options.append({
             "surface_key": surface_key,
             "label": label,
@@ -838,6 +878,11 @@ def _pace_hint_for_session(
     def race_hint_from_range(low: float, high: float, prefix: str = "Tempo ungefär") -> tuple[str, str, str, list[dict], str]:
         source = "race_based_heuristic"
         adjusted_low, adjusted_high = _surface_adjusted_pace_range(low, high, recommended_surface_key)
+        adjusted_low, adjusted_high = _ensure_minimum_pace_range(
+            adjusted_low,
+            adjusted_high,
+            _minimum_pace_range_width(profile, intensity),
+        )
         options = _build_surface_tempo_options(
             session_name,
             session_type,
@@ -961,6 +1006,34 @@ def _append_pace_hint_to_description(
                 lines[index] = f"{line} {sentence_to_add}".strip()
             return "\n".join(lines)
     return description + f"\nTempoindikation: {sentence_to_add or pace_hint_with_source}"
+
+
+def _append_term_explanations(description: str) -> str:
+    """Lägg till korta termförklaringar så passet inte blir tvetydigt."""
+    if not description:
+        return description
+
+    lower = description.lower()
+    if "förklaring:" in lower:
+        return description
+
+    explanations: list[str] = []
+    if "löpskola" in lower:
+        explanations.append(
+            "Löpskola = teknikövningar som höga knän, hälkick, A-skip/B-skip eller snabba fötter med fokus på rytm, hållning och aktiv fotisättning."
+        )
+    if "stegr" in lower or "uppbyggnad" in lower or "progressiv" in lower:
+        explanations.append(
+            "Stegring/uppbyggnad/progressivt = börja kontrollerat och öka gradvis, ungefär från 60 % till 85-90 % av max utan att sprinta fullt."
+        )
+    if "dynamisk rörlighet" in lower or "dynamisk stretch" in lower:
+        explanations.append(
+            "Dynamisk rörlighet = rörliga övningar före passet, till exempel benpendlingar, höftöppnare, utfallssteg och lätta skips."
+        )
+
+    if not explanations:
+        return description
+    return f"{description.rstrip()}\nFörklaring: {' '.join(explanations)}"
 
 
 def _normalize_pace_text_to_min_per_km(description: str) -> str:
@@ -1283,6 +1356,7 @@ def generate_week_schedule(
                 "name": "Passbeskrivning",
                 "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
             }]
+            exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
             final_description = exercises[0]["description"]
             distribution = estimate_intensity_distribution(
                 session_name=session_data.get("name", "AI-pass"),
@@ -1367,6 +1441,7 @@ def generate_week_schedule(
                 "name": "Passbeskrivning",
                 "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
             }]
+            exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
             final_description = exercises[0]["description"]
             distribution = estimate_intensity_distribution(
                 session_name=name,
@@ -1474,14 +1549,73 @@ def _slugify_filename(value: str) -> str:
     return normalized.strip("_") or "athlete"
 
 
-def _surface_options_text(surface_options: list[dict]) -> str:
-    if not surface_options:
-        return ""
-    lines = ["Tempoalternativ för andra underlag:"]
-    for option in surface_options:
+_SWEDISH_WEEKDAYS = [
+    "Måndag",
+    "Tisdag",
+    "Onsdag",
+    "Torsdag",
+    "Fredag",
+    "Lördag",
+    "Söndag",
+]
+
+
+def _format_evaluation_date(session_date: date) -> str:
+    return f"{_SWEDISH_WEEKDAYS[session_date.weekday()]} {session_date.strftime('%Y-%m-%d')}"
+
+
+def _extract_recommended_surface_option(description: str) -> Optional[dict]:
+    text = description or ""
+    surface_match = re.search(
+        r"(?:på|rekommenderat underlag:)\s*(Bana|Plan väg|Kuperat|Väldigt kuperat)",
+        text,
+        flags=re.IGNORECASE,
+    )
+    pace_match = re.search(
+        r"(\d+:\d{2})\s*(?:min/km)?\s*[–-]\s*(\d+:\d{2})\s*min/km",
+        text,
+        flags=re.IGNORECASE,
+    )
+    if not surface_match or not pace_match:
+        return None
+
+    label_lookup = {
+        "bana": "Bana",
+        "plan väg": "Plan väg",
+        "kuperat": "Kuperat",
+        "väldigt kuperat": "Väldigt kuperat",
+    }
+    label = label_lookup.get(surface_match.group(1).lower(), surface_match.group(1))
+    return {
+        "label": label,
+        "pace_text": f"{pace_match.group(1)} min/km–{pace_match.group(2)} min/km",
+        "is_recommended": True,
+    }
+
+
+def _surface_options_text(surface_options: list[dict], description: str = "") -> str:
+    combined_options: dict[str, str] = {}
+    recommended = _extract_recommended_surface_option(description)
+    if recommended:
+        combined_options[recommended["label"]] = recommended["pace_text"]
+
+    for option in surface_options or []:
         label = option.get("label") or option.get("surface") or "Underlag"
         pace = option.get("pace_text") or option.get("text") or ""
         if pace:
+            combined_options[label] = pace
+
+    if not combined_options:
+        return ""
+
+    lines = ["Tempovarianter per underlag:"]
+    ordered_labels = [label for _key, label, _gradient in TEMPO_SURFACE_CHOICES]
+    for label in ordered_labels:
+        pace = combined_options.get(label)
+        if pace:
+            lines.append(f"- {label}: {pace}")
+    for label, pace in combined_options.items():
+        if label not in ordered_labels and pace:
             lines.append(f"- {label}: {pace}")
     return "\n".join(lines)
 
@@ -1493,6 +1627,11 @@ def _session_description_text(session) -> str:
         if description:
             return description.strip()
     return ""
+
+
+def _format_evaluation_description(description: str) -> str:
+    lines = [line.strip() for line in (description or "").splitlines() if line.strip()]
+    return "\n\n".join(lines)
 
 
 def _is_rag_generated_plan(sessions: list) -> bool:
@@ -1531,47 +1670,39 @@ def _export_evaluation_plan_txt(athlete, sessions: list, start_date: date) -> Op
     sessions_sorted = sorted(sessions, key=lambda item: (item.date, item.session_name))
     phase = getattr(athlete, "training_phase", "") or "-"
     running_focus = getattr(athlete, "running_focus", "") or getattr(athlete, "discipline", "") or "-"
-    runner_key = (getattr(athlete, "tempo_model_runner_key", "") or "").strip() or "-"
-    external_data = "Ja" if getattr(athlete, "has_external_training_data", False) else "Nej"
 
     lines = [
         "UTVARDERING AV AI-GENERERAD TRANINGSPLAN",
         "=" * 48,
-        f"Namn: {getattr(athlete, 'name', '-')}",
         f"Genererad: {generated_at.strftime('%Y-%m-%d %H:%M:%S')}",
         f"Startdatum for planen: {start_date.strftime('%Y-%m-%d')}",
         f"Fas: {phase}",
-        f"Lopinriktning: {running_focus}",
-        f"Extern data tillganglig: {external_data}",
-        f"Tempo-profil: {runner_key}",
+        f"Löpinriktning: {running_focus}",
         "",
     ]
 
-    current_week_label = None
+    current_week_key = None
     for session in sessions_sorted:
-        week_start = session.date - timedelta(days=session.date.weekday())
-        week_end = week_start + timedelta(days=6)
-        week_label = f"VECKA {week_start.strftime('%Y-%m-%d')} - {week_end.strftime('%Y-%m-%d')}"
-        if week_label != current_week_label:
-            if current_week_label is not None:
+        iso_year, iso_week, _ = session.date.isocalendar()
+        week_key = (iso_year, iso_week)
+        if week_key != current_week_key:
+            if current_week_key is not None:
                 lines.append("")
-            lines.extend([week_label, "-" * len(week_label)])
-            current_week_label = week_label
+            lines.extend([f"VECKA {iso_week}", "-" * 29])
+            current_week_key = week_key
 
-        lines.append(f"{session.date.strftime('%A %Y-%m-%d')}".upper())
+        lines.append(_format_evaluation_date(session.date))
         lines.append(f"Pass: {session.session_name}")
         lines.append(
-            f"Typ: {session.session_type} | Intensitet: {session.planned_intensity} | "
+            f"Fokus: {session.session_type} | Intensitet: {session.planned_intensity} | "
             f"Duration: {session.planned_duration} min"
         )
-        if getattr(session, "tempo_assumptions", ""):
-            lines.append(f"Tempoantaganden: {session.tempo_assumptions}")
-        surface_text = _surface_options_text(getattr(session, "tempo_surface_options", []) or [])
-        if surface_text:
-            lines.append(surface_text)
         description = _session_description_text(session)
         if description:
-            lines.extend(["", "Passdetaljer:", description])
+            lines.extend(["", "Passdetaljer:", _format_evaluation_description(description)])
+        surface_text = _surface_options_text(getattr(session, "tempo_surface_options", []) or [], description)
+        if surface_text:
+            lines.extend(["", surface_text])
         lines.append("")
 
     export_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
@@ -1670,6 +1801,7 @@ def generate_month_schedule(
                                 "name": "Passbeskrivning",
                                 "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
                             }]
+                            exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
                             final_description = exercises[0]["description"]
                             distribution = estimate_intensity_distribution(
                                 session_name=session_data.get("name", "AI-pass"),
