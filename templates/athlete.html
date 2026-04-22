@@ -46,10 +46,10 @@
                 <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="btn" style="font-size:0.9em; background:#ecfeff; color:#0f766e;">
                     📆 Veckoplan
                 </a>
-                <button onclick="document.getElementById('coachAiProfileModal').style.display='flex'" class="btn" style="font-size:0.9em; background:#e0f2fe; color:#0c4a6e;">
+                <button onclick="openOverlayModal('coachAiProfileModal')" class="btn" style="font-size:0.9em; background:#e0f2fe; color:#0c4a6e;">
                     ⚙️ AI-underlag
                 </button>
-                <button onclick="document.getElementById('coachScheduleModal').style.display='flex'" class="btn btn-primary">
+                <button onclick="openOverlayModal('coachScheduleModal')" class="btn btn-primary">
                     🔄 Förnya månadsschema
                 </button>
             </div>
@@ -217,7 +217,7 @@
                 </div>
                 <div class="ai-profile-actions">
                     <button type="submit" class="btn btn-primary" style="flex:1;">Spara AI-underlag</button>
-                    <button type="button" onclick="document.getElementById('coachAiProfileModal').style.display='none'" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
+                    <button type="button" onclick="closeOverlayModal('coachAiProfileModal')" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
                 </div>
             </form>
         </div>
@@ -230,6 +230,19 @@
                 Genererar 4 veckor med coachlika löppass för {{ athlete.name }}.
             </p>
             <form action="{{ url_for('generate_ai_schedule', athlete_id=athlete.id) }}" method="POST">
+                <div class="form-group">
+                    <label for="coach_modal_start_date">Startdatum för planen</label>
+                    <input
+                        id="coach_modal_start_date"
+                        type="date"
+                        name="start_date"
+                        value="{{ today.isoformat() }}"
+                        required
+                    >
+                    <p style="font-size:0.78em; color:#6b7280; margin-top:6px;">
+                        Planen startar från valt datum i stället för att alltid börja kommande måndag.
+                    </p>
+                </div>
                 <div class="form-group">
                     <label for="coach_modal_phase">Träningsfas</label>
                     <select id="coach_modal_phase" name="training_phase">
@@ -292,7 +305,7 @@
                 </script>
                 <div style="display:flex; gap:10px; margin-top:16px;">
                     <button type="submit" class="btn btn-primary" style="flex:1;">Generera månadsschema</button>
-                    <button type="button" onclick="document.getElementById('coachScheduleModal').style.display='none'" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
+                    <button type="button" onclick="closeOverlayModal('coachScheduleModal')" class="btn" style="flex:1; background:#f3f4f6;">Avbryt</button>
                 </div>
             </form>
         </div>
@@ -506,6 +519,27 @@
             updateExternalDataFields();
         })();
 
+        function openOverlayModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            modal.style.display = 'flex';
+            document.body.classList.add('modal-open');
+            requestAnimationFrame(function () {
+                modal.scrollTop = 0;
+                const panel = modal.querySelector('.ai-modal-panel, div[style*="background:white"]');
+                if (panel) {
+                    panel.scrollTop = 0;
+                }
+            });
+        }
+
+        function closeOverlayModal(id) {
+            const modal = document.getElementById(id);
+            if (!modal) return;
+            modal.style.display = 'none';
+            document.body.classList.remove('modal-open');
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const modalTriggers = document.querySelectorAll('[data-open-modal]');
             const closeTriggers = document.querySelectorAll('[data-close-modal]');
@@ -540,6 +574,12 @@
 
             document.addEventListener('keydown', function (event) {
                 if (event.key !== 'Escape') return;
+                ['coachAiProfileModal', 'coachScheduleModal'].forEach(function (id) {
+                    const overlayModal = document.getElementById(id);
+                    if (overlayModal && overlayModal.style.display === 'flex') {
+                        closeOverlayModal(id);
+                    }
+                });
                 document.querySelectorAll('.session-modal.is-visible').forEach(function (modal) {
                     closeModal(modal.id);
                 });

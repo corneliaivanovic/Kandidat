@@ -2375,6 +2375,17 @@ def generate_ai_schedule(athlete_id: int):
         if new_days:
             athlete.training_days_per_week = int(new_days)
 
+        start_date = None
+        start_date_raw = (request.form.get('start_date') or '').strip()
+        if start_date_raw:
+            try:
+                start_date = datetime.strptime(start_date_raw, '%Y-%m-%d').date()
+            except ValueError:
+                flash('Startdatumet är inte giltigt. Välj ett datum i formatet ÅÅÅÅ-MM-DD.', 'error')
+                target = 'athlete_detail' if user.is_coach() else 'dashboard'
+                target_kwargs = {'athlete_id': athlete.id} if user.is_coach() else {}
+                return redirect(url_for(target, **target_kwargs))
+
         # Kontrollera om RAG ska användas
         use_rag = 'use_rag' in request.form
 
@@ -2403,6 +2414,7 @@ def generate_ai_schedule(athlete_id: int):
         sessions = generate_month_schedule(
             athlete,
             db,
+            start_date=start_date,
             use_rag=use_rag,
             export_for_evaluation=True,
         ) or []

@@ -14,11 +14,12 @@
                 {% if current_user.is_coach() %}
                     <a href="{{ url_for('dashboard') }}">Dashboard</a>
                     <a href="{{ url_for('session_library') }}">📚 Träningsbanken</a>
-                    <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
                     <a href="{{ url_for('coach_settings') }}">Inställningar</a>
                 {% else %}
                     <a href="{{ url_for('dashboard') }}">Min träning</a>
-                    <a href="{{ url_for('exercise_list') }}">Övningsbank</a>
+                    {% if athlete %}
+                    <a href="{{ url_for('athlete_competition_results', athlete_id=athlete.id) }}">🏆 Tävlingsresultat</a>
+                    {% endif %}
                     <a href="{{ url_for('connect_coach') }}">Min coach</a>
                 {% endif %}
             {% endif %}
