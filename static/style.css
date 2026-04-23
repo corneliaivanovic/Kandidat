@@ -4679,6 +4679,23 @@ body.modal-open {
     margin-bottom: 8px;
 }
 
+.light-modal-panel {
+    background: #ffffff;
+    color: #111827;
+    border: none;
+}
+
+.light-modal-panel p,
+.light-modal-panel label,
+.light-modal-panel strong,
+.light-modal-panel span {
+    color: inherit;
+}
+
+.schedule-modal-panel {
+    width: min(440px, 100%);
+}
+
 .ai-modal-intro {
     color: var(--text-secondary);
     font-size: 0.88rem;
@@ -4766,6 +4783,10 @@ body.modal-open {
     .ai-modal-panel {
         max-height: calc(100vh - 24px);
         padding: 18px;
+    }
+
+    .schedule-modal-panel {
+        width: 100%;
     }
 
     .ai-profile-form,

@@ -331,8 +331,8 @@
         </div>
 
         <!-- Modal för att generera nytt schema -->
-        <div id="scheduleModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
-            <div style="background:white; border-radius:12px; padding:24px; max-width:400px; width:90%; margin:20px;">
+        <div id="scheduleModal" class="ai-modal-overlay">
+            <div class="ai-modal-panel light-modal-panel schedule-modal-panel">
                 <h3 style="margin-top:0;">🤖 Generera nytt månadsschema</h3>
                 <p style="color:#6b7280; font-size:0.88em; margin-top:-8px;">Skapar 4 veckor med anpassade träningspass baserade på friidrottsutbildningsmaterial.</p>
                 <form action="{{ url_for('generate_ai_schedule', athlete_id=athlete.id) }}" method="POST">
