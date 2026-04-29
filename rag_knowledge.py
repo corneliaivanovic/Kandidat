@@ -805,7 +805,7 @@ def review_month_plan(month_plan: list[dict], phase: str = "uppbyggnad",
     weekly_totals = summary["weekly_totals"]
     for index, week in enumerate(weekly_totals):
         theme = (week.get("week_theme") or "").lower()
-        if "återhämt" not in theme:
+        if theme not in RECOVERY_WEEK_THEMES and "återhämt" not in theme:
             continue
         prev_total = weekly_totals[index - 1]["total"] if index > 0 else 0
         current_total = week["total"]
@@ -826,25 +826,98 @@ def review_month_plan(month_plan: list[dict], phase: str = "uppbyggnad",
     }
 
 
+def _recovery_target_total(prev_total: float, current_total: float) -> float:
+    if prev_total <= 0:
+        return current_total
+    # Håll återhämtningsveckan tydligt under 75 % av föregående vecka med liten säkerhetsmarginal.
+    return prev_total * 0.68
+
+
+def _lighten_recovery_session(session: dict) -> dict:
+    updated = dict(session)
+    current_duration = int(updated.get("duration_min", 0) or 30)
+    current_intensity = updated.get("intensity", "låg")
+    current_role = updated.get("role", "")
+
+    if current_intensity == "hög":
+        current_duration = max(20, int(round(current_duration * 0.5)))
+    elif current_intensity == "medel":
+        current_duration = max(20, int(round(current_duration * 0.6)))
+    else:
+        current_duration = max(20, int(round(current_duration * 0.75)))
+
+    updated["duration_min"] = current_duration
+    updated["intensity"] = "låg"
+    updated["difficulty"] = "easy"
+    updated["role"] = "återhämtning" if current_role != "aktivering" else "aktivering"
+    updated["is_key_session"] = False
+    updated["estimated_distribution"] = _estimate_session_distribution(updated)
+    return updated
+
+
+def _shrink_recovery_week_sessions(sessions: list[dict], target_total: float) -> list[dict]:
+    adjusted = [_lighten_recovery_session(session) for session in sessions]
+
+    def week_total(items: list[dict]) -> float:
+        return sum(
+            (
+                (item.get("estimated_distribution") or _estimate_session_distribution(item)).get("low", 0)
+                + (item.get("estimated_distribution") or _estimate_session_distribution(item)).get("medium", 0)
+                + (item.get("estimated_distribution") or _estimate_session_distribution(item)).get("high", 0)
+            )
+            for item in items
+        )
+
+    if not adjusted:
+        return adjusted
+
+    # Ta bort de minst viktiga passen först om veckan fortfarande är för tung.
+    while len(adjusted) > 2 and week_total(adjusted) > target_total:
+        removal_index = None
+        for index in range(len(adjusted) - 1, -1, -1):
+            role = adjusted[index].get("role", "")
+            if role != "kvalitet":
+                removal_index = index
+                break
+        if removal_index is None:
+            removal_index = len(adjusted) - 1
+        adjusted.pop(removal_index)
+
+    current_total = week_total(adjusted)
+    if current_total > target_total and current_total > 0:
+        scale = max(0.45, min(0.9, target_total / current_total))
+        for session in adjusted:
+            scaled_duration = max(18, int(round((session.get("duration_min", 0) or 25) * scale)))
+            session["duration_min"] = scaled_duration
+            session["estimated_distribution"] = _estimate_session_distribution(session)
+
+    return adjusted
+
+
 def _rebalance_month_plan_intensity(month_plan: list[dict], phase: str = "uppbyggnad") -> list[dict]:
     rebalanced = []
+    previous_week_total = 0.0
     for week in month_plan or []:
         theme = (week.get("week_theme") or "").lower()
         sessions = [dict(session) for session in (week.get("sessions") or [])]
 
-        if "återhämt" in theme:
-            for session in sessions:
-                distribution = _estimate_session_distribution(session)
-                if session.get("intensity") in {"hög", "medel"}:
-                    session["intensity"] = "låg"
-                    session["difficulty"] = "easy"
-                    session["role"] = "återhämtning"
-                    session["duration_min"] = max(20, int(round((session.get("duration_min", 0) or 30) * 0.8)))
-                session["estimated_distribution"] = _estimate_session_distribution(session)
-            rebalanced.append({
+        if theme in RECOVERY_WEEK_THEMES or "återhämt" in theme:
+            current_total = sum(
+                (
+                    _estimate_session_distribution(session).get("low", 0)
+                    + _estimate_session_distribution(session).get("medium", 0)
+                    + _estimate_session_distribution(session).get("high", 0)
+                )
+                for session in sessions
+            )
+            target_total = _recovery_target_total(previous_week_total, current_total)
+            sessions = _shrink_recovery_week_sessions(sessions, target_total)
+            week_entry = {
                 **week,
                 "sessions": sessions,
-            })
+            }
+            rebalanced.append(week_entry)
+            previous_week_total = _summarize_month_intensity_balance([week_entry])["weekly_totals"][0]["total"]
             continue
 
         # Dämpa extra hög belastning först, sedan mellanzon om den blir för dominant.
@@ -873,10 +946,12 @@ def _rebalance_month_plan_intensity(month_plan: list[dict], phase: str = "uppbyg
                 for session in sessions:
                     session["estimated_distribution"] = _estimate_session_distribution(session)
 
-        rebalanced.append({
+        week_entry = {
             **week,
             "sessions": sessions,
-        })
+        }
+        rebalanced.append(week_entry)
+        previous_week_total = _summarize_month_intensity_balance([week_entry])["weekly_totals"][0]["total"]
 
     return rebalanced
 
