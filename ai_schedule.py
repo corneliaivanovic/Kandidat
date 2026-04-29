@@ -1136,6 +1136,21 @@ def _append_term_explanations(description: str) -> str:
     return f"{description.rstrip()}\nFörklaring: {' '.join(explanations)}"
 
 
+def _clarify_integrated_warmup(description: str) -> str:
+    if not description:
+        return description
+
+    return re.sub(
+        r"Uppvärmning:\s*Integrerad i huvudpasset\.",
+        (
+            "Uppvärmning: Ingen separat uppvärmning behövs. "
+            "Börja de första 5–10 minuterna mycket lugnt och låt tempot gradvis stabiliseras."
+        ),
+        description,
+        flags=re.IGNORECASE,
+    )
+
+
 def _normalize_pace_text_to_min_per_km(description: str) -> str:
     if not description:
         return description
@@ -1444,6 +1459,7 @@ def generate_week_schedule(
 
             description = session_data.get("description", "")
             description = _normalize_pace_text_to_min_per_km(description)
+            description = _clarify_integrated_warmup(description)
             pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
                 session_name=session_data.get("name", ""),
                 session_type=session_data.get("type", ""),
@@ -1528,6 +1544,7 @@ def generate_week_schedule(
 
             name, session_type, duration, intensity, description = workout
             description = _normalize_pace_text_to_min_per_km(description)
+            description = _clarify_integrated_warmup(description)
 
             pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
                 session_name=name,
@@ -1890,6 +1907,7 @@ def generate_month_schedule(
 
                             description = session_data.get("description", "")
                             description = _normalize_pace_text_to_min_per_km(description)
+                            description = _clarify_integrated_warmup(description)
                             pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
                                 session_name=session_data.get("name", ""),
                                 session_type=session_data.get("type", ""),
