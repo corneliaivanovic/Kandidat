@@ -1654,11 +1654,8 @@ def _next_monday(from_date: Optional[date] = None) -> date:
 
 
 def _should_export_evaluation_plan(athlete) -> bool:
-    """Exportera bara planer för profiler med extern data/tempo-profil."""
-    return bool(
-        getattr(athlete, "has_external_training_data", False)
-        or (getattr(athlete, "tempo_model_runner_key", "") or "").strip()
-    )
+    """Alla RAG-genererade planer ska kunna exporteras för utvärdering."""
+    return True
 
 
 def _slugify_filename(value: str) -> str:
