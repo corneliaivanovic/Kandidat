@@ -27,7 +27,7 @@ CHUNK_SIZE    = 800   # Samma som plattformen
 CHUNK_OVERLAP = 150
 TOP_K         = 8     # Antal chunks per metod
 
-# ── Sökfrågor (exakt samma som generate_week_plan_rag i plattformen) ───────
+# ── Sökfrågor (samma format som plattformens RAG-sökning) ───────
 # Discipline och phase är hårdkodade här för testet — ändra om du vill testa
 # en annan atlet.
 DISCIPLINE = "sprint"

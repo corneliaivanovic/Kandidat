@@ -178,92 +178,6 @@ class CheckInactiveAthletesSkill(Skill):
         )
 
 
-class GenerateWeekPlanSkill(Skill):
-    """Skill: Generera veckoplan för en idrottare med AI."""
-
-    name = "generate_week_plan"
-    description = "Skapar ett AI-genererat veckoplaneringsförslag för en idrottare"
-
-    def execute(self, context: dict) -> SkillResult:
-        athlete_id = context.get("athlete_id")
-        if not athlete_id:
-            return SkillResult(success=False, message="Ingen athlete_id angiven")
-
-        from models import db
-        from readiness import calculate_readiness
-
-        athlete = db.get_athlete(athlete_id)
-        if not athlete:
-            return SkillResult(success=False, message="Idrottare hittades inte")
-
-        readiness = calculate_readiness(athlete)
-        logs = athlete.get_logs_last_n_days(14)
-        injuries = athlete.get_active_injuries()
-
-        # Bygg prompt för AI
-        prompt = f"""Du är en friidrottsexpert. Skapa ett veckoplaneringsförslag för:
-
-Idrottare: {athlete.name}
-Gren: {athlete.discipline}
-Ålder: {date.today().year - athlete.birth_year} år
-ACWR: {readiness.acwr:.2f if readiness.acwr else 'Ej beräknat'}
-Status: {readiness.level}
-Aktiva skador: {', '.join([f"{i.body_part} ({i.status})" for i in injuries]) if injuries else 'Inga'}
-
-Senaste 14 dagars träning:
-{chr(10).join([f"- {log.date}: {log.session_type}, {log.duration}min, RPE {log.rpe}" for log in logs[-7:]])}
-
-Ge ett konkret veckoschema (mån-sön) med:
-- Typ av pass
-- Ungefärlig duration
-- Intensitet (låg/medel/hög)
-- Kort motivering
-
-Svara på svenska i JSON-format:
-{{"monday": {{"type": "...", "duration": X, "intensity": "...", "note": "..."}}, ...}}
-"""
-
-        if not API_AVAILABLE:
-            return SkillResult(
-                success=False,
-                message="API ej tillgänglig",
-                data={"error": "no_api"}
-            )
-
-        try:
-            response = client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=1500,
-                messages=[{"role": "user", "content": prompt}]
-            )
-
-            plan_text = response.content[0].text
-
-            # Försök parsa JSON från svaret
-            import re
-            json_match = re.search(r'\{[\s\S]*\}', plan_text)
-            if json_match:
-                plan_data = json.loads(json_match.group())
-            else:
-                plan_data = {"raw_response": plan_text}
-
-            # Spara till minnet
-            save_memory(f"week_plan_{athlete_id}", {
-                "athlete_id": athlete_id,
-                "plan": plan_data,
-                "generated_at": datetime.now().isoformat()
-            })
-
-            return SkillResult(
-                success=True,
-                message=f"Veckoplan genererad för {athlete.name}",
-                data={"plan": plan_data, "athlete_name": athlete.name}
-            )
-
-        except Exception as e:
-            return SkillResult(success=False, message=f"Fel vid AI-anrop: {str(e)}")
-
-
 class AnalyzeProgressSkill(Skill):
     """Skill: Analysera en idrottares progression över tid."""
 
@@ -335,7 +249,6 @@ class AnalyzeProgressSkill(Skill):
 SKILLS = {
     "check_acwr": CheckACWRSkill(),
     "check_inactive": CheckInactiveAthletesSkill(),
-    "generate_week_plan": GenerateWeekPlanSkill(),
     "analyze_progress": AnalyzeProgressSkill(),
 }
 
@@ -403,14 +316,6 @@ class AgentLoop:
                 id=f"task_{len(self.tasks) + len(tasks)}",
                 description="Hitta inaktiva idrottare",
                 skill_name="check_inactive",
-                context=context
-            ))
-
-        if "veckoplan" in goal_lower or "planera" in goal_lower:
-            tasks.append(AgentTask(
-                id=f"task_{len(self.tasks) + len(tasks)}",
-                description="Generera veckoplan",
-                skill_name="generate_week_plan",
                 context=context
             ))
 

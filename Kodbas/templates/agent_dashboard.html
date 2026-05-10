@@ -79,9 +79,6 @@
         {% if athlete_id %}
         <div class="athlete-actions">
             <h4>Åtgärder för {{ athlete_name }}</h4>
-            <button class="action-btn" onclick="runAgent('Generera veckoplan för idrottare', {{ athlete_id }})">
-                📅 Generera Veckoplan
-            </button>
             <button class="action-btn" onclick="runAgent('Analysera progression och utveckling', {{ athlete_id }})">
                 📈 Analysera Progress
             </button>

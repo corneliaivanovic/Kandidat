@@ -43,9 +43,6 @@
                 {% endif %}
             </div>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="btn" style="font-size:0.9em; background:#ecfeff; color:#0f766e;">
-                    📆 Veckoplan
-                </a>
                 <button onclick="openOverlayModal('coachAiProfileModal')" class="btn" style="font-size:0.9em; background:#e0f2fe; color:#0c4a6e;">
                     ⚙️ AI-underlag
                 </button>
@@ -314,10 +311,6 @@
 
     <!-- Quick navigation -->
     <div class="athlete-quick-nav">
-        <a href="{{ url_for('week_plan', athlete_id=athlete.id) }}" class="quick-nav-link">
-            <span class="nav-icon">📅</span>
-            <span>Veckoplan</span>
-        </a>
         <a href="{{ url_for('athlete_tests', athlete_id=athlete.id) }}" class="quick-nav-link">
             <span class="nav-icon">📊</span>
             <span>Testresultat</span>
@@ -469,7 +462,6 @@
                 <section class="modal-edit-block">
                     <h3>Åtgärder</h3>
                     <div class="modal-action-row">
-                        <a href="{{ url_for('week_plan', athlete_id=athlete.id, week=session.date.isoformat(), month=selected_month.strftime('%Y-%m')) }}" class="btn btn-outline">Öppna i veckoplan</a>
                         {% if session.log_id %}
                         <a href="{{ url_for('view_log', log_id=session.log_id) }}" class="btn btn-outline">Visa loggat pass</a>
                         {% endif %}

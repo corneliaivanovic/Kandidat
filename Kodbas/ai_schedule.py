@@ -1369,20 +1369,22 @@ def generate_week_schedule(
     athlete,
     db,
     week_start: Optional[date] = None,
-    use_rag: bool = True,
+    use_rag: bool = False,
     fallback_reason_override: str = "",
 ) -> list:
     """
-    Generera ett veckoschema för en atlet och spara det i databasen.
-    Använder RAG + Claude API om tillgängligt, annars regelbaserade mallar.
+    Generera ett veckoschema för en atlet och spara det i databasen
+    med regelbaserade mallar. Används som fallback när månadsplaneringens
+    RAG-genererade plan inte kan användas.
 
     Args:
         athlete: Athlete-objekt
         db: DataStore-instans
         week_start: Startdatum (måndag). Om None, nästa måndag.
-        use_rag: Försök använda RAG (True) eller enbart regler (False)
-        fallback_reason_override: Exakt orsak som ska användas om ett tidigare
-            högre nivå-fel redan har triggat fallback
+        use_rag: Behålls för bakåtkompatibilitet men har ingen effekt;
+            funktionen använder alltid regelbaserade mallar.
+        fallback_reason_override: Exakt orsak som ska sparas i passens
+            coach_notes som förklaring till varför fallbacken triggades.
 
     Returns:
         Lista med skapade PlannedSession-objekt
@@ -1401,205 +1403,109 @@ def generate_week_schedule(
     phase = getattr(athlete, 'training_phase', 'grundträning')
     days_per_week = getattr(athlete, 'training_days_per_week', 4)
 
-    # Hämta passmallar för denna gren och fas (fallback)
+    # Hämta passmallar för denna gren och fas
     category_workouts = RUNNING_WORKOUTS.get(running_type, RUNNING_WORKOUTS["medel"])
     phase_workouts = category_workouts.get(phase, category_workouts["grundträning"])
 
     # Hämta veckotemplet
     week_template = get_week_template(days_per_week)
 
-    # Atletens info för RAG (inkl. tävlingsresultat om de finns)
     athlete_info = _build_athlete_info(athlete)
-
-    # ===== FÖRSÖK RAG: HELA VECKAN I ETT CLAUDE-ANROP =====
-    rag_week = None
-    rag_failure_reason = ""
-    if use_rag:
-        try:
-            from rag_knowledge import get_retriever, generate_week_plan_rag, resolve_allowed_doc_keys
-            rag_retriever = get_retriever()
-            if rag_retriever.chunks:
-                doc_keys = resolve_allowed_doc_keys(getattr(athlete, 'rag_documents', None), running_type)
-                rag_week = generate_week_plan_rag(
-                    discipline=running_type,
-                    phase=phase,
-                    days_per_week=days_per_week,
-                    retriever=rag_retriever,
-                    athlete_info=athlete_info,
-                    allowed_doc_keys=doc_keys,
-                )
-                if rag_week and not rag_week.get("plan"):
-                    rag_failure_reason = rag_week.get("error", "")
-                elif not rag_week:
-                    rag_failure_reason = "RAG returnerade inget användbart veckoschema"
-            else:
-                print("⚠️ RAG: Ingen kunskapsbas laddad, använder regelbaserade mallar")
-                rag_failure_reason = "Ingen kunskapsbas kunde laddas"
-        except Exception as e:
-            print(f"⚠️ RAG ej tillgängligt: {e}")
-            rag_failure_reason = f"RAG ej tillgängligt: {e}"
 
     created_sessions = []
 
-    # ===== OM RAG LYCKADES: Spara RAG-genererade pass =====
-    if rag_week and rag_week.get("plan"):
-        rag_sessions = rag_week.get("plan", [])
-        rag_metadata = rag_week.get("metadata", {})
-        coach_notes = rag_metadata.get("coach_notes", f"Planstatus: {rag_metadata.get('status', 'RAG-genererad')}")
-        pace_model = athlete_info.get("pace_model", {})
-        # Mappning från dagnamn till nummer i veckan (måndag = 0)
-        day_map = {
-            "Måndag": 0, "Tisdag": 1, "Onsdag": 2,
-            "Torsdag": 3, "Fredag": 4, "Lördag": 5, "Söndag": 6
-        }
-        for session_data in rag_sessions:
-            day_name = session_data.get("day_name", "Måndag")
-            day_offset = day_map.get(day_name, 0)
-            session_date = week_start + timedelta(days=day_offset)
+    # ===== REGELBASERADE MALLAR PASS FÖR PASS =====
+    effective_failure_reason = fallback_reason_override
+    used_hard = 0
+    used_medium = 0
+    used_easy = 0
+    pace_model = athlete_info.get("pace_model", {})
 
-            description = session_data.get("description", "")
-            description = _normalize_pace_text_to_min_per_km(description)
-            description = _clarify_integrated_warmup(description)
-            pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
-                session_name=session_data.get("name", ""),
-                session_type=session_data.get("type", ""),
-                intensity=session_data.get("intensity", ""),
-                description=description,
-                pace_model=pace_model,
-            )
-            exercises = [{
-                "id": "ai_generated",
-                "name": "Passbeskrivning",
-                "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
-            }]
-            exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
-            final_description = exercises[0]["description"]
-            distribution = estimate_intensity_distribution(
-                session_name=session_data.get("name", "AI-pass"),
-                session_type=session_data.get("type", "uthållighet"),
-                planned_duration=session_data.get("duration_min", 60),
-                planned_intensity=session_data.get("intensity", "medel"),
-                description=final_description,
-            )
+    key_session_assigned = False
+    for day_info in week_template:
+        difficulty = day_info["difficulty"]
+        session_date = week_start + timedelta(days=day_info["day"])
 
-            session = db.add_planned_session(
-                athlete_id=athlete.id,
-                session_date=session_date,
-                template_id="ai_schedule",
-                session_name=session_data.get("name", "AI-pass"),
-                session_type=session_data.get("type", "uthållighet"),
-                planned_duration=session_data.get("duration_min", 60),
-                planned_intensity=session_data.get("intensity", "medel"),
-                exercises=exercises,
-                coach_notes=coach_notes,
-                source="ai",
-                is_key_session=bool(session_data.get("is_key_session")),
-                week_theme=rag_metadata.get("week_theme", ""),
-                training_phase=phase,
-                estimated_low_minutes=distribution["low"],
-                estimated_medium_minutes=distribution["medium"],
-                estimated_high_minutes=distribution["high"],
-                intensity_distribution_source=distribution["source"],
-                tempo_source=pace_source,
-                tempo_assumptions=pace_assumptions,
-                tempo_surface_options=pace_surface_options,
-            )
-            if session:
-                created_sessions.append(session)
+        if difficulty == "rest":
+            continue
 
-    # ===== FALLBACK: REGELBASERADE MALLAR PASS FÖR PASS =====
-    else:
-        effective_failure_reason = rag_failure_reason or fallback_reason_override
-        used_hard = 0
-        used_medium = 0
-        used_easy = 0
-        pace_model = athlete_info.get("pace_model", {})
-
-        key_session_assigned = False
-        for day_info in week_template:
-            difficulty = day_info["difficulty"]
-            session_date = week_start + timedelta(days=day_info["day"])
-
-            if difficulty == "rest":
-                continue
-
-            available = phase_workouts.get(difficulty, [])
-            if not available:
-                if difficulty == "hard":
-                    available = phase_workouts.get("medium", phase_workouts.get("easy", []))
-                elif difficulty == "medium":
-                    available = phase_workouts.get("easy", [])
-            if not available:
-                continue
-
+        available = phase_workouts.get(difficulty, [])
+        if not available:
             if difficulty == "hard":
-                workout = available[used_hard % len(available)]
-                used_hard += 1
+                available = phase_workouts.get("medium", phase_workouts.get("easy", []))
             elif difficulty == "medium":
-                workout = available[used_medium % len(available)]
-                used_medium += 1
-            else:
-                workout = available[used_easy % len(available)]
-                used_easy += 1
+                available = phase_workouts.get("easy", [])
+        if not available:
+            continue
 
-            name, session_type, duration, intensity, description = workout
-            description = _normalize_pace_text_to_min_per_km(description)
-            description = _clarify_integrated_warmup(description)
+        if difficulty == "hard":
+            workout = available[used_hard % len(available)]
+            used_hard += 1
+        elif difficulty == "medium":
+            workout = available[used_medium % len(available)]
+            used_medium += 1
+        else:
+            workout = available[used_easy % len(available)]
+            used_easy += 1
 
-            pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
-                session_name=name,
-                session_type=session_type,
-                intensity=intensity,
-                description=description,
-                pace_model=pace_model,
-            )
-            exercises = [{
-                "id": "ai_generated",
-                "name": "Passbeskrivning",
-                "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
-            }]
-            exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
-            final_description = exercises[0]["description"]
-            distribution = estimate_intensity_distribution(
-                session_name=name,
-                session_type=session_type,
-                planned_duration=duration,
-                planned_intensity=intensity,
-                description=final_description,
-            )
+        name, session_type, duration, intensity, description = workout
+        description = _normalize_pace_text_to_min_per_km(description)
+        description = _clarify_integrated_warmup(description)
 
-            session = db.add_planned_session(
-                athlete_id=athlete.id,
-                session_date=session_date,
-                template_id="ai_schedule",
-                session_name=name,
-                session_type=session_type,
-                planned_duration=duration,
-                planned_intensity=intensity,
-                exercises=exercises,
-                coach_notes=(
-                    "Planstatus: Regelbaserad fallback\n"
-                    f"Veckofokus: {phase}\n"
-                    "Nyckelpass: regelbaserat upplägg\n"
-                    "Källor: Inga externa källor\n"
-                    f"Coachförklaring: Ett säkert reservupplägg användes eftersom RAG inte kunde användas fullt ut. Orsak: {effective_failure_reason or 'okänd orsak'}."
-                ),
-                source="ai",
-                is_key_session=(difficulty == "hard" and not key_session_assigned),
-                week_theme=phase,
-                training_phase=phase,
-                estimated_low_minutes=distribution["low"],
-                estimated_medium_minutes=distribution["medium"],
-                estimated_high_minutes=distribution["high"],
-                intensity_distribution_source=distribution["source"],
-                tempo_source=pace_source,
-                tempo_assumptions=pace_assumptions,
-                tempo_surface_options=pace_surface_options,
-            )
-            if session:
-                created_sessions.append(session)
-                if difficulty == "hard" and not key_session_assigned:
-                    key_session_assigned = True
+        pace_hint, pace_source, pace_assumptions, pace_surface_options, pace_surface_label = _pace_hint_for_session(
+            session_name=name,
+            session_type=session_type,
+            intensity=intensity,
+            description=description,
+            pace_model=pace_model,
+        )
+        exercises = [{
+            "id": "ai_generated",
+            "name": "Passbeskrivning",
+            "description": _append_pace_hint_to_description(description, pace_hint, pace_source, pace_surface_label)
+        }]
+        exercises[0]["description"] = _append_term_explanations(exercises[0]["description"])
+        final_description = exercises[0]["description"]
+        distribution = estimate_intensity_distribution(
+            session_name=name,
+            session_type=session_type,
+            planned_duration=duration,
+            planned_intensity=intensity,
+            description=final_description,
+        )
+
+        session = db.add_planned_session(
+            athlete_id=athlete.id,
+            session_date=session_date,
+            template_id="ai_schedule",
+            session_name=name,
+            session_type=session_type,
+            planned_duration=duration,
+            planned_intensity=intensity,
+            exercises=exercises,
+            coach_notes=(
+                "Planstatus: Regelbaserad fallback\n"
+                f"Veckofokus: {phase}\n"
+                "Nyckelpass: regelbaserat upplägg\n"
+                "Källor: Inga externa källor\n"
+                f"Coachförklaring: Ett säkert reservupplägg användes eftersom RAG inte kunde användas fullt ut. Orsak: {effective_failure_reason or 'okänd orsak'}."
+            ),
+            source="ai",
+            is_key_session=(difficulty == "hard" and not key_session_assigned),
+            week_theme=phase,
+            training_phase=phase,
+            estimated_low_minutes=distribution["low"],
+            estimated_medium_minutes=distribution["medium"],
+            estimated_high_minutes=distribution["high"],
+            intensity_distribution_source=distribution["source"],
+            tempo_source=pace_source,
+            tempo_assumptions=pace_assumptions,
+            tempo_surface_options=pace_surface_options,
+        )
+        if session:
+            created_sessions.append(session)
+            if difficulty == "hard" and not key_session_assigned:
+                key_session_assigned = True
 
     return created_sessions or []
 

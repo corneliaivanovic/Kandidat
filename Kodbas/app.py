@@ -410,65 +410,6 @@ def _build_session_view(session, today: date) -> dict:
     }
 
 
-def _build_plan_weeks(athlete, today: date) -> list[dict]:
-    sorted_sessions = sorted(athlete.planned_sessions, key=lambda session: (session.date, session.id))
-    if not sorted_sessions:
-        current_start = _week_start_for(today)
-        return [{
-            "start": current_start,
-            "end": current_start + timedelta(days=6),
-            "days": [{"date": current_start + timedelta(days=index), "sessions": []} for index in range(7)],
-            "sessions": [],
-            "week_theme": getattr(athlete, "training_phase", "grundträning"),
-            "training_phase": getattr(athlete, "training_phase", "grundträning"),
-            "is_recovery_week": False,
-            "is_competition_week": False,
-            "planned_count": 0,
-            "completed_count": 0,
-            "missed_count": 0,
-            "total_duration": 0,
-            "upcoming_count": 0,
-        }]
-
-    earliest = _week_start_for(min(session.date for session in sorted_sessions))
-    latest = _week_start_for(max(session.date for session in sorted_sessions))
-    sessions_by_week = {}
-    for session in sorted_sessions:
-        sessions_by_week.setdefault(_week_start_for(session.date), []).append(session)
-
-    plan_weeks = []
-    cursor = earliest
-    while cursor <= latest:
-        week_sessions = sorted(sessions_by_week.get(cursor, []), key=lambda session: (session.date, session.id))
-        session_views = [_build_session_view(session, today) for session in week_sessions]
-        week_theme = next((item["week_theme"] for item in session_views if item["week_theme"]), "") or getattr(athlete, "training_phase", "grundträning")
-        training_phase = next((item["training_phase"] for item in session_views if item["training_phase"]), "") or getattr(athlete, "training_phase", "grundträning")
-        plan_weeks.append({
-            "start": cursor,
-            "end": cursor + timedelta(days=6),
-            "days": [
-                {
-                    "date": cursor + timedelta(days=index),
-                    "sessions": [item for item in session_views if item["date"] == cursor + timedelta(days=index)],
-                }
-                for index in range(7)
-            ],
-            "sessions": session_views,
-            "week_theme": week_theme,
-            "training_phase": training_phase,
-            "is_recovery_week": _is_recovery_week(week_theme, training_phase),
-            "is_competition_week": _is_competition_week(week_theme, training_phase),
-            "planned_count": len(session_views),
-            "completed_count": sum(1 for item in session_views if item["status"] == "completed"),
-            "missed_count": sum(1 for item in session_views if item["status"] == "missed"),
-            "upcoming_count": sum(1 for item in session_views if item["status"] in {"today", "upcoming"}),
-            "total_duration": sum(item["planned_duration"] for item in session_views),
-        })
-        cursor += timedelta(days=7)
-
-    return plan_weeks
-
-
 def _first_of_month(target_date: date) -> date:
     return target_date.replace(day=1)
 
@@ -477,19 +418,6 @@ def _next_month(target_date: date) -> date:
     year = target_date.year + (1 if target_date.month == 12 else 0)
     month = 1 if target_date.month == 12 else target_date.month + 1
     return date(year, month, 1)
-
-
-def _build_plan_months(plan_weeks: list[dict], today: date) -> list[date]:
-    if not plan_weeks:
-        return [_first_of_month(today)]
-    first_month = _first_of_month(plan_weeks[0]["start"])
-    last_month = _first_of_month(plan_weeks[-1]["end"])
-    months = []
-    cursor = first_month
-    while cursor <= last_month:
-        months.append(cursor)
-        cursor = _next_month(cursor)
-    return months
 
 
 def _month_label(target_month: date) -> str:
@@ -595,25 +523,6 @@ def _build_calendar_context_for_sessions(sessions: list, today: date, month_para
         "month_label": _month_label(selected_month),
         "month_grid": month_grid,
         "session_views": session_views,
-    }
-
-
-def _build_coach_week_overview(athlete, today: date) -> dict:
-    recent_window_start = today - timedelta(days=14)
-    recent_sessions = [session for session in athlete.planned_sessions if recent_window_start <= session.date <= today]
-    missed_recent = sum(1 for session in recent_sessions if session.date < today and not session.completed)
-    next_key_session = next(
-        (
-            session for session in sorted(athlete.planned_sessions, key=lambda item: (item.date, item.id))
-            if session.date >= today and getattr(session, "is_key_session", False)
-        ),
-        None,
-    )
-    return {
-        "completion_rate": round(athlete.get_completion_rate_last_n_days(14) * 100),
-        "missed_recent": missed_recent,
-        "logs_last_7_days": len(athlete.get_logs_last_n_days(7)),
-        "next_key_session": _build_session_view(next_key_session, today) if next_key_session else None,
     }
 
 
@@ -1399,107 +1308,6 @@ def plan_session(athlete_id: int):
                            timedelta=timedelta)
 
 
-@app.route('/athlete/<int:athlete_id>/week-plan')
-@login_required
-def week_plan(athlete_id: int):
-    """Visa och hantera veckoplan för en idrottare."""
-    user = get_current_user()
-    athlete = db.get_athlete(athlete_id)
-
-    if not athlete:
-        flash('Idrottaren hittades inte.', 'error')
-        return redirect(url_for('dashboard'))
-
-    if not _can_manage_athlete(user, athlete):
-        flash('Du har inte behörighet att se denna planering.', 'error')
-        return redirect(url_for('dashboard'))
-
-    today = date.today()
-    plan_weeks = _build_plan_weeks(athlete, today)
-    available_starts = {week["start"]: week for week in plan_weeks}
-
-    week_param = request.args.get('week')
-    if week_param:
-        try:
-            week_start = _week_start_for(datetime.strptime(week_param, '%Y-%m-%d').date())
-        except ValueError:
-            week_start = None
-    else:
-        week_start = None
-
-    if week_start not in available_starts:
-        current_week_start = _week_start_for(today)
-        if current_week_start in available_starts:
-            week_start = current_week_start
-        else:
-            first_relevant = next((week["start"] for week in plan_weeks if week["end"] >= today), None)
-            week_start = first_relevant or plan_weeks[0]["start"]
-
-    selected_index = next((index for index, week in enumerate(plan_weeks) if week["start"] == week_start), 0)
-    selected_week = plan_weeks[selected_index]
-    week_end = selected_week["end"]
-    prev_week = plan_weeks[selected_index - 1]["start"] if selected_index > 0 else None
-    next_week = plan_weeks[selected_index + 1]["start"] if selected_index < len(plan_weeks) - 1 else None
-
-    available_months = _build_plan_months(plan_weeks, today)
-    month_param = request.args.get('month', '').strip()
-    selected_month = None
-    if month_param:
-        try:
-            selected_month = datetime.strptime(month_param, '%Y-%m').date().replace(day=1)
-        except ValueError:
-            selected_month = None
-    if selected_month not in available_months:
-        selected_month = _first_of_month(selected_week["start"])
-        if selected_month not in available_months:
-            selected_month = available_months[0]
-    selected_month_index = available_months.index(selected_month)
-    prev_month = available_months[selected_month_index - 1] if selected_month_index > 0 else None
-    next_month = available_months[selected_month_index + 1] if selected_month_index < len(available_months) - 1 else None
-    month_grid = _build_month_grid(selected_month, athlete, today)
-
-    logs_this_week = [log for log in athlete.logs if week_start <= log.date <= week_end]
-    logs_by_date = {}
-    for log in logs_this_week:
-        logs_by_date.setdefault(log.date, []).append(log)
-
-    for day in selected_week["days"]:
-        day["logs"] = logs_by_date.get(day["date"], [])
-        day["is_today"] = day["date"] == today
-        day["is_past"] = day["date"] < today
-        day["has_missed"] = any(session["status"] == "missed" for session in day["sessions"])
-        day["has_completed"] = any(session["status"] == "completed" for session in day["sessions"])
-
-    total_planned_duration = selected_week["total_duration"]
-    completed_sessions = selected_week["completed_count"]
-    is_coach = user.is_coach()
-
-    return render_template(
-        'week_plan.html',
-        user=user,
-        athlete=athlete,
-        selected_week=selected_week,
-        plan_weeks=plan_weeks,
-        selected_month=selected_month,
-        month_grid=month_grid,
-        month_label=_month_label(selected_month),
-        available_months=available_months,
-        prev_month=prev_month,
-        next_month=next_month,
-        logs_this_week=logs_this_week,
-        week_start=week_start,
-        week_end=week_end,
-        prev_week=prev_week,
-        next_week=next_week,
-        total_planned_duration=total_planned_duration,
-        completed_sessions=completed_sessions,
-        today=today,
-        is_coach=is_coach,
-        coach_overview=_build_coach_week_overview(athlete, today) if is_coach else None,
-        timedelta=timedelta
-    )
-
-
 @app.route('/planned-session/<int:session_id>/update', methods=['POST'])
 @coach_required
 def update_planned_session(session_id: int):
@@ -1566,7 +1374,7 @@ def update_planned_session(session_id: int):
         flash('Kontrollera datum och duration innan du sparar.', 'error')
 
     redirect_url = request.form.get('redirect_url', '').strip()
-    return redirect(redirect_url or url_for('week_plan', athlete_id=athlete.id))
+    return redirect(redirect_url or url_for('athlete_detail', athlete_id=athlete.id))
 
 
 @app.route('/planned-session/<int:session_id>/delete', methods=['POST'])

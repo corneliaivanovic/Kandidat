@@ -7,7 +7,7 @@ os.chdir('/sessions/affectionate-sweet-cerf/mnt/Idrottsapp - Prototyp')
 # 1) Test imports
 print("=== TEST 1: Imports ===")
 from ai_schedule import generate_week_schedule, generate_schedule_for_weeks
-from rag_knowledge import get_retriever, generate_week_plan_rag
+from rag_knowledge import get_retriever
 print("✅ Alla imports OK")
 
 # 2) Test RAG-retriever
@@ -17,26 +17,8 @@ results = retriever.search("intervallträning sprint acceleration")
 print(f"✅ Hittade {len(results)} chunks för 'intervallträning sprint'")
 print(f"   Bästa match: score={results[0]['score']:.3f}, källa={results[0]['source']}")
 
-# 3) Test RAG week generation
-print("\n=== TEST 3: RAG Veckoplan ===")
-week_plan = generate_week_plan_rag(
-    discipline='sprint',
-    phase='uppbyggnad',
-    days_per_week=4,
-    retriever=retriever,
-    athlete_info={"birth_year": 2006, "experience_level": "van", "performance_level": "utvecklande"},
-)
-if week_plan and week_plan.get("plan"):
-    workout = week_plan["plan"][0]
-    print(f"✅ Genererat: '{workout['name']}' ({workout['duration_min']} min, {workout['intensity']})")
-    print(f"   Typ: {workout['type']}")
-    print(f"   Beskrivning (150 tecken): {workout['description'][:150]}...")
-    print(f"   Status: {week_plan['metadata']['status']}")
-else:
-    print("⚠️ RAG-generering misslyckades (kontrollera API-nyckel)")
-
-# 4) Test generate_schedule_for_weeks with RAG=False (regel-baserat, snabbt)
-print("\n=== TEST 4: Regelbaserat schema (use_rag=False) ===")
+# 3) Test generate_schedule_for_weeks (regelbaserat schema)
+print("\n=== TEST 3: Regelbaserat schema ===")
 from dataclasses import dataclass
 from datetime import date
 
@@ -73,8 +55,8 @@ print(f"✅ Genererade {len(sessions)} pass (regelbaserat)")
 for s in sessions:
     print(f"   - {s.date}: {s.name} ({s.session_type})")
 
-# 5) App startup check
-print("\n=== TEST 5: Flask-app import ===")
+# 4) App startup check
+print("\n=== TEST 4: Flask-app import ===")
 import importlib.util
 spec = importlib.util.spec_from_file_location("app", "/sessions/affectionate-sweet-cerf/mnt/Idrottsapp - Prototyp/app.py")
 print("✅ app.py hittad och läsbar")
