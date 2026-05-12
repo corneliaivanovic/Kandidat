@@ -1,0 +1,190 @@
+% =============================================================
+% BILAGA: Fördefinierade träningsmallar
+% Översikt av de mallar som används vid regelbaserad fallback
+% och som komplement till den AI-baserade träningsplaneringen.
+% =============================================================
+
+\section{Fördefinierade träningsmallar}
+\label{app:mallar}
+
+Denna bilaga ger en överblick av de fördefinierade träningsmallar som används
+i prototypen. Mallarna utgör grunden för den regelbaserade fallbacken som
+aktiveras när RAG-lösningen inte kan användas eller när den AI-genererade
+planen inte kan repareras till regelkompatibilitet. Den fullständiga
+implementationen finns i projektets kodrepository~\cite{Boissier_AI-baserat_traningsstod_for}.
+
+Mallstrukturen bygger på tre nivåer: en \emph{veckomall} som anger
+svårighetsgrad per dag, ett \emph{passbibliotek} med konkreta passförslag
+indexerade på disciplin, träningsfas och svårighet, samt en \emph{disciplinmappning}
+som styr vilken kategori av mallar som används för olika grenar.
+
+% ----------------------------------------------------------------
+\subsection{Veckomallar}
+\label{app:mallar:vecka}
+
+Beroende på hur många träningsdagar idrottaren har per vecka väljs en
+fördefinierad veckostruktur. Varje dag tilldelas en svårighetsgrad:
+\textit{hard} (kvalitetspass), \textit{medium} (teknik eller medelintensiv
+löpning), \textit{easy} (lugn distans eller återhämtning) eller \textit{rest}
+(vila). Tabell~\ref{tab:veckomallar} visar de fyra veckomallarna.
+
+\begin{table}[h]
+\centering
+\caption{Veckomallar per antal träningsdagar.}
+\label{tab:veckomallar}
+\small
+\begin{tabular}{l c c c c c c c}
+\hline
+\textbf{Dagar/v} & \textbf{Mån} & \textbf{Tis} & \textbf{Ons} & \textbf{Tor} & \textbf{Fre} & \textbf{Lör} & \textbf{Sön} \\
+\hline
+3 & hard   & rest   & medium & rest & hard & rest   & rest \\
+4 & hard   & easy   & medium & rest & hard & easy   & rest \\
+5 & hard   & easy   & medium & easy & hard & medium & rest \\
+6 & hard   & easy   & medium & easy & hard & medium & rest \\
+\hline
+\end{tabular}
+\end{table}
+
+Strukturen följer principen om hård-lätt-växling, där högintensiva pass
+varvas med återhämtning eller lugnare pass.
+
+% ----------------------------------------------------------------
+\subsection{Passbibliotek}
+\label{app:mallar:pass}
+
+Varje passmall innehåller fem fält: \textit{namn}, \textit{typ} (snabbhet,
+uthållighet, teknik eller återhämtning), \textit{längd} i minuter,
+\textit{intensitet} (hög, medel eller låg) samt en detaljerad
+\textit{beskrivning} med uppvärmning, huvudpass och nedjogg. Mallarna är
+organiserade i en tredimensionell struktur: disciplin $\times$ träningsfas
+$\times$ svårighet.
+
+\begin{itemize}
+    \item \textbf{Discipliner:} sprint (100--200~m), medel (400--1500~m) och
+    distans (3000~m och längre).
+    \item \textbf{Träningsfaser:} grundträning, uppbyggnad, tävling och
+    återhämtning.
+    \item \textbf{Svårigheter:} hard, medium och easy.
+\end{itemize}
+
+Totalt ger detta $3 \times 4 \times 3 = 36$ kategorier av mallar, där varje
+kategori innehåller mellan ett och två passförslag.
+Tabell~\ref{tab:passbibliotek_sprint}, \ref{tab:passbibliotek_medel} och
+\ref{tab:passbibliotek_distans} visar exempel på pass per disciplin och fas
+(svårighet \textit{hard} och \textit{easy}).
+
+\begin{table}[h]
+\centering
+\caption{Exempel på passmallar för sprint (100--200~m).}
+\label{tab:passbibliotek_sprint}
+\small
+\begin{tabular}{l l p{0.45\textwidth}}
+\hline
+\textbf{Fas} & \textbf{Svårighet} & \textbf{Pass} \\
+\hline
+Grundträning & hard & Accelerationsträning (60 min), Fartträning 150~m \\
+Grundträning & easy & Lugn löpning (35 min), Återhämtning \& rörlighet \\
+Uppbyggnad   & hard & Maxfart 60~m, Fartuthållighet sprint \\
+Uppbyggnad   & easy & Lätt jogg (30 min), Aktiv vila \\
+Tävling      & hard & Tävlingsförberedelse (3$\times$30~m + 2$\times$60~m) \\
+Tävling      & easy & Lätt löpning (25 min), Vila + stretch \\
+Återhämtning & easy & Lätt jogg (25 min), Stretch \& rörlighet \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Exempel på passmallar för medeldistans (400--1500~m).}
+\label{tab:passbibliotek_medel}
+\small
+\begin{tabular}{l l p{0.45\textwidth}}
+\hline
+\textbf{Fas} & \textbf{Svårighet} & \textbf{Pass} \\
+\hline
+Grundträning & hard & Tröskelpass (60 min), Intervaller 8$\times$400~m \\
+Grundträning & easy & Lugn distanslöpning (45 min), Återhämtningsjogg \\
+Uppbyggnad   & hard & VO2max 5$\times$1000~m, Tempointervaller 6$\times$600~m \\
+Uppbyggnad   & easy & Lugn löpning (40 min), Aktiv vila \\
+Tävling      & hard & Tävlingsspecifikt (3$\times$300~m + 2$\times$200~m) \\
+Tävling      & easy & Lätt löpning (30 min), Vila + förberedelse \\
+Återhämtning & easy & Lugn jogg (30 min), Stretch \& rörlighet \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Exempel på passmallar för distans (3000~m och längre).}
+\label{tab:passbibliotek_distans}
+\small
+\begin{tabular}{l l p{0.45\textwidth}}
+\hline
+\textbf{Fas} & \textbf{Svårighet} & \textbf{Pass} \\
+\hline
+Grundträning & hard & Tröskelpass långt (2$\times$15 min), Intervaller 6$\times$1000~m \\
+Grundträning & easy & Lång löpning (60 min), Återhämtningsjogg \\
+Uppbyggnad   & hard & VO2max 5$\times$1200~m, Tempolöpning (25 min tröskel) \\
+Uppbyggnad   & easy & Lugn distanslöpning (50 min), Aktiv vila \\
+Tävling      & hard & Tävlingsspecifikt 3$\times$1000~m \\
+Tävling      & easy & Lätt löpning (30 min), Vila + stretch \\
+Återhämtning & easy & Mycket lugn jogg (30 min), Stretch \& rörlighet \\
+\hline
+\end{tabular}
+\end{table}
+
+Vid val av pass kombineras dagens svårighet i veckomallen med idrottarens
+disciplin och aktuella träningsfas, varefter ett pass slumpas ur den
+matchande listan.
+
+% ----------------------------------------------------------------
+\subsection{Disciplinmappning}
+\label{app:mallar:mappning}
+
+Eftersom mallbiblioteket är uppbyggt kring de tre löpkategorierna sprint,
+medel och distans används en mappning för grenar utanför dessa, vilket
+visas i tabell~\ref{tab:disciplinmappning}.
+
+\begin{table}[h]
+\centering
+\caption{Mappning från friidrottsgren till löpkategori i mallbiblioteket.}
+\label{tab:disciplinmappning}
+\small
+\begin{tabular}{l l}
+\hline
+\textbf{Gren} & \textbf{Använder mallar för} \\
+\hline
+Sprint    & sprint \\
+Medel     & medel \\
+Distans   & distans \\
+Hopp      & sprint \\
+Kast      & sprint \\
+Mångkamp  & medel \\
+\hline
+\end{tabular}
+\end{table}
+
+Mappningen utgår från att hoppare och kastare ofta tränar med
+sprintliknande inslag, medan mångkampare har en blandad träningsprofil
+som närmast motsvarar medeldistans.
+
+% ----------------------------------------------------------------
+\subsection{Exempel på passmall}
+\label{app:mallar:exempel}
+
+Som illustration visas innehållet i en enskild passmall, här
+\textit{Tröskelpass} för medeldistans i grundträningsfas:
+
+\begin{quote}
+\textbf{Namn:} Tröskelpass \\
+\textbf{Typ:} Uthållighet \\
+\textbf{Längd:} 60 min \\
+\textbf{Intensitet:} Hög \\
+\textbf{Beskrivning:} \\
+Uppvärmning: 15 min jogg + dynamisk stretch \\
+Huvudpass: 20 min löpning i tröskeltempo (puls $\sim$85\,\% av max) \\
+Nedjogg: 15 min + stretch
+\end{quote}
+
+Övriga mallar följer samma struktur och kan inspekteras i sin helhet
+i projektets kodrepository~\cite{Boissier_AI-baserat_traningsstod_for}.

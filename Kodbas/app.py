@@ -875,7 +875,14 @@ def dashboard():
 
         # Förhandsvisa närmaste del av schemat, men skicka med hela planen för expandera-vy
         upcoming_sessions = athlete.get_upcoming_sessions(14)
-        all_upcoming_sessions = athlete.get_upcoming_sessions(35)
+        future_planned_dates = [
+            ps.date for ps in athlete.planned_sessions
+            if ps.date >= date.today() and not ps.completed
+        ]
+        horizon_days = 35
+        if future_planned_dates:
+            horizon_days = max(horizon_days, (max(future_planned_dates) - date.today()).days + 1)
+        all_upcoming_sessions = athlete.get_upcoming_sessions(horizon_days)
         calendar_context = _build_calendar_context_for_sessions(
             all_upcoming_sessions,
             today=date.today(),
@@ -951,7 +958,14 @@ def athlete_detail(athlete_id: int):
 
     # Hämta kommande och dagens pass
     upcoming_sessions = athlete.get_upcoming_sessions(14)
-    all_upcoming_sessions = athlete.get_upcoming_sessions(35)
+    future_planned_dates = [
+        ps.date for ps in athlete.planned_sessions
+        if ps.date >= date.today() and not ps.completed
+    ]
+    horizon_days = 35
+    if future_planned_dates:
+        horizon_days = max(horizon_days, (max(future_planned_dates) - date.today()).days + 1)
+    all_upcoming_sessions = athlete.get_upcoming_sessions(horizon_days)
     todays_session = athlete.get_todays_session()
     calendar_context = _build_calendar_context_for_sessions(
         all_upcoming_sessions,
