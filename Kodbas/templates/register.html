@@ -74,7 +74,6 @@
                     <div class="form-group">
                         <label for="discipline">Friidrottsgren</label>
                         <select id="discipline" name="discipline">
-                            <option value="sprint" {% if request.form.get('discipline') == 'sprint' %}selected{% endif %}>Sprint</option>
                             <option value="medel" {% if request.form.get('discipline') == 'medel' %}selected{% endif %}>Medeldistans</option>
                             <option value="distans" {% if request.form.get('discipline') == 'distans' %}selected{% endif %}>Långdistans</option>
                             <option value="hopp" {% if request.form.get('discipline') == 'hopp' %}selected{% endif %}>Hopp</option>
@@ -155,7 +154,6 @@
                             <label for="running_focus">Vilken löpgren tränar du främst? (frivilligt men rekommenderat)</label>
                             <select id="running_focus" name="running_focus">
                                 <option value="">Välj löpgren</option>
-                                <option value="sprint" {% if request.form.get('running_focus') == 'sprint' %}selected{% endif %}>Sprint</option>
                                 <option value="medel" {% if request.form.get('running_focus') == 'medel' %}selected{% endif %}>Medeldistans</option>
                                 <option value="distans" {% if request.form.get('running_focus') == 'distans' %}selected{% endif %}>Distans</option>
                             </select>
@@ -206,36 +204,6 @@
                                 <input type="text" id="best_result_time" name="best_result_time"
                                        placeholder="T.ex. 2:05, 17:45, 1:32:10"
                                        value="{{ request.form.get('best_result_time', '') }}">
-                            </div>
-                        </div>
-
-                        <div id="sprintFields" style="display:none;">
-                            <div class="form-group">
-                                <label for="best_60m_time">Bästa tid på 60 m (frivilligt)</label>
-                                <input type="text" id="best_60m_time" name="best_60m_time"
-                                       placeholder="T.ex. 7.55"
-                                       value="{{ request.form.get('best_60m_time', '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="best_100m_time">Bästa tid på 100 m (frivilligt)</label>
-                                <input type="text" id="best_100m_time" name="best_100m_time"
-                                       placeholder="T.ex. 11.84"
-                                       value="{{ request.form.get('best_100m_time', '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="best_200m_time">Bästa tid på 200 m (frivilligt)</label>
-                                <input type="text" id="best_200m_time" name="best_200m_time"
-                                       placeholder="T.ex. 24.10"
-                                       value="{{ request.form.get('best_200m_time', '') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="primary_sprint_event">Vilken sprintdistans är din huvuddistans? (frivilligt)</label>
-                                <select id="primary_sprint_event" name="primary_sprint_event">
-                                    <option value="">Välj distans</option>
-                                    <option value="60 m" {% if request.form.get('primary_sprint_event') == '60 m' %}selected{% endif %}>60 m</option>
-                                    <option value="100 m" {% if request.form.get('primary_sprint_event') == '100 m' %}selected{% endif %}>100 m</option>
-                                    <option value="200 m" {% if request.form.get('primary_sprint_event') == '200 m' %}selected{% endif %}>200 m</option>
-                                </select>
                             </div>
                         </div>
 
@@ -311,7 +279,6 @@
         const aiFields = document.getElementById('aiFields');
         const runningFocus = document.getElementById('running_focus');
         const distanceFields = document.getElementById('distanceFields');
-        const sprintFields = document.getElementById('sprintFields');
         const birthYearInput = document.getElementById('birth_year');
         const experienceInput = document.getElementById('training_experience_level');
         const bestResultDistanceSelects = document.querySelectorAll('.best-result-distance-select');
@@ -334,7 +301,6 @@
         function updateRunningFocusFields() {
             const focus = runningFocus.value;
             distanceFields.style.display = (focus === 'medel' || focus === 'distans') ? 'block' : 'none';
-            sprintFields.style.display = focus === 'sprint' ? 'block' : 'none';
         }
 
         function updateBestResultCustomFields() {

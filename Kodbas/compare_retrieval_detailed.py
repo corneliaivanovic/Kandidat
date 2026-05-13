@@ -17,11 +17,11 @@ KNOWLEDGE_BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "k
 CHUNK_SIZE    = 800
 CHUNK_OVERLAP = 150
 TOP_K         = 8
-DISCIPLINE = "sprint"
+DISCIPLINE = "medeldistans"
 PHASE      = "uppbyggnad"
 QUERIES = [
     f"{DISCIPLINE} {PHASE} träningsplanering veckoschema",
-    f"{DISCIPLINE} intervallträning uthållighet nyckelpass",
+    f"{DISCIPLINE} tröskelpass uthållighet nyckelpass",
     "återhämtning vilodag hard easy polariserad löpning",
     f"{PHASE} intensitetszoner 80 20 tröskelträning",
 ]
@@ -232,15 +232,17 @@ def main():
             total_only_tfidf  += len(t_texts - e_texts)
             total_only_emb    += len(e_texts - t_texts)
 
-        out.write(f"Totalt unika chunks TF-IDF valde:      {total_shared + total_only_tfidf}\n")
-        out.write(f"Totalt unika chunks Embeddings valde: {total_shared + total_only_emb}\n")
-        out.write(f"Gemensamt valda chunks:               {total_shared}\n")
-        out.write(f"Chunks enbart TF-IDF hittade:         {total_only_tfidf}\n")
-        out.write(f"Chunks enbart Embeddings hittade:     {total_only_emb}\n\n")
+        union_total = total_shared + total_only_tfidf + total_only_emb
+        out.write(f"Totalt antal distinkta chunks TF-IDF valde:     {total_shared + total_only_tfidf}\n")
+        out.write(f"Totalt antal distinkta chunks Embeddings valde: {total_shared + total_only_emb}\n")
+        out.write(f"Chunks valda av båda metoderna:                 {total_shared}\n")
+        out.write(f"Chunks valda enbart av TF-IDF:                  {total_only_tfidf}\n")
+        out.write(f"Chunks valda enbart av Embeddings:              {total_only_emb}\n")
+        out.write(f"Union av valda chunks (totalt antal segment):   {union_total}\n\n")
 
-        if total_shared + total_only_tfidf + total_only_emb > 0:
-            overlap_pct = total_shared / (total_shared + total_only_tfidf + total_only_emb) * 100
-            out.write(f"Överlapp: {overlap_pct:.0f}% av alla valda chunks är identiska mellan metoderna.\n\n")
+        if union_total > 0:
+            overlap_pct = total_shared / union_total * 100
+            out.write(f"Överlapp: {overlap_pct:.0f}% av unionen av valda chunks är gemensamma mellan metoderna.\n\n")
             if overlap_pct >= 70:
                 out.write("→ Metoderna är mycket lika — liten praktisk skillnad.\n")
             elif overlap_pct >= 40:

@@ -55,10 +55,6 @@ AI_PROFILE_FIELDS = [
     "training_surface",
     "tempo_model_runner_key",
     "response_notes",
-    "best_60m_time",
-    "best_100m_time",
-    "best_200m_time",
-    "primary_sprint_event",
 ]
 
 BEST_RESULT_DISTANCE_OPTIONS = [
@@ -552,11 +548,11 @@ def init_demo_data():
             "hugo@demo.se",
             "Hugo Kündig",
             2006,
-            "sprint",
+            "medel",
             "Örgryte IS",
             "ai",
             {
-                "running_focus": "sprint",
+                "running_focus": "medel",
                 "training_experience_level": "1–3 år",
                 "weekly_training_amount": "4 pass",
                 "training_surface": "bana",
@@ -711,7 +707,7 @@ def register():
                     # Om idrottare, skapa athlete-profil
                     if role == 'athlete':
                         birth_year = _parse_birth_year_value(request.form.get('birth_year', '')) or 2000
-                        discipline = request.form.get('discipline', 'sprint')
+                        discipline = request.form.get('discipline', 'medel')
                         club = request.form.get('club', '').strip()
                         training_mode = request.form.get('training_mode', 'coach')
                         training_days_str = request.form.get('training_days', '').strip()
@@ -2216,12 +2212,8 @@ def generate_ai_schedule(athlete_id: int):
         if use_rag:
             from rag_knowledge import resolve_allowed_doc_keys
             running_type = {
-                "sprint": "sprint",
                 "medel": "medel",
                 "distans": "distans",
-                "hopp": "sprint",
-                "kast": "sprint",
-                "mangkamp": "medel",
             }.get(getattr(athlete, 'discipline', ''), "medel")
             athlete.rag_documents = resolve_allowed_doc_keys(selected_docs or getattr(athlete, 'rag_documents', None), running_type)
 
@@ -2365,6 +2357,29 @@ def short_weekday_filter(d):
     """Kort veckodagsnamn."""
     weekdays = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön']
     return weekdays[d.weekday()]
+
+
+@app.template_filter('date_sv')
+def date_sv_filter(d, with_year=False):
+    """Formatera datum på svenska, t.ex. 'Måndag 01 juni' eller 'Måndag 01 juni 2026'."""
+    weekdays = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag']
+    months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni',
+              'juli', 'augusti', 'september', 'oktober', 'november', 'december']
+    base = f"{weekdays[d.weekday()]} {d.day:02d} {months[d.month - 1]}"
+    if with_year:
+        return f"{base} {d.year}"
+    return base
+
+
+@app.template_filter('date_short_sv')
+def date_short_sv_filter(d, with_year=False):
+    """Kort svenskt datumformat, t.ex. '01 jun' eller '01 jun 2026'."""
+    months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun',
+              'jul', 'aug', 'sep', 'okt', 'nov', 'dec']
+    base = f"{d.day:02d} {months[d.month - 1]}"
+    if with_year:
+        return f"{base} {d.year}"
+    return base
 
 
 # ============================================================

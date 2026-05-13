@@ -43,7 +43,7 @@ EXERCISES = {
         duration_minutes=30,
         intensity="låg",
         equipment=[],
-        disciplines=["sprint", "medel", "distans", "hopp", "kast", "mångkamp"]
+        disciplines=["medel", "distans", "hopp", "kast", "mångkamp"]
     ),
     "uv02": Exercise(
         id="uv02",
@@ -63,7 +63,7 @@ EXERCISES = {
         duration_minutes=40,
         intensity="medel",
         equipment=[],
-        disciplines=["sprint", "medel", "distans", "mångkamp"]
+        disciplines=["medel", "distans", "mångkamp"]
     ),
 
     # Styrka
@@ -75,7 +75,7 @@ EXERCISES = {
         duration_minutes=15,
         intensity="medel",
         equipment=["matta"],
-        disciplines=["sprint", "medel", "distans", "hopp", "kast", "mångkamp"]
+        disciplines=["medel", "distans", "hopp", "kast", "mångkamp"]
     ),
     "st02": Exercise(
         id="st02",
@@ -85,7 +85,7 @@ EXERCISES = {
         duration_minutes=30,
         intensity="hög",
         equipment=["skivstång", "rack"],
-        disciplines=["sprint", "hopp", "kast", "mångkamp"]
+        disciplines=["hopp", "kast", "mångkamp"]
     ),
     "st03": Exercise(
         id="st03",
@@ -95,7 +95,7 @@ EXERCISES = {
         duration_minutes=20,
         intensity="hög",
         equipment=["medicinboll"],
-        disciplines=["kast", "mångkamp", "sprint"]
+        disciplines=["kast", "mångkamp"]
     ),
     "st04": Exercise(
         id="st04",
@@ -105,7 +105,7 @@ EXERCISES = {
         duration_minutes=25,
         intensity="medel",
         equipment=[],
-        disciplines=["sprint", "medel", "distans", "hopp", "kast", "mångkamp"]
+        disciplines=["medel", "distans", "hopp", "kast", "mångkamp"]
     ),
 
     # Teknik
@@ -117,7 +117,7 @@ EXERCISES = {
         duration_minutes=20,
         intensity="låg",
         equipment=[],
-        disciplines=["sprint", "medel", "distans", "mångkamp"]
+        disciplines=["medel", "distans", "mångkamp"]
     ),
     "te02": Exercise(
         id="te02",
@@ -147,7 +147,7 @@ EXERCISES = {
         duration_minutes=25,
         intensity="medel",
         equipment=["startblock"],
-        disciplines=["sprint", "mångkamp"]
+        disciplines=["mångkamp"]
     ),
 
     # Snabbhet
@@ -159,7 +159,7 @@ EXERCISES = {
         duration_minutes=20,
         intensity="hög",
         equipment=[],
-        disciplines=["sprint", "hopp", "mångkamp"]
+        disciplines=["hopp", "mångkamp"]
     ),
     "sn02": Exercise(
         id="sn02",
@@ -169,7 +169,7 @@ EXERCISES = {
         duration_minutes=25,
         intensity="hög",
         equipment=["startblock"],
-        disciplines=["sprint", "mångkamp"]
+        disciplines=["mångkamp"]
     ),
     "sn03": Exercise(
         id="sn03",
@@ -179,7 +179,7 @@ EXERCISES = {
         duration_minutes=35,
         intensity="hög",
         equipment=[],
-        disciplines=["sprint", "medel", "mångkamp"]
+        disciplines=["medel", "mångkamp"]
     ),
 
     # Rörlighet
@@ -191,7 +191,7 @@ EXERCISES = {
         duration_minutes=15,
         intensity="låg",
         equipment=[],
-        disciplines=["sprint", "medel", "distans", "hopp", "kast", "mångkamp"]
+        disciplines=["medel", "distans", "hopp", "kast", "mångkamp"]
     ),
     "ro02": Exercise(
         id="ro02",
@@ -201,7 +201,7 @@ EXERCISES = {
         duration_minutes=30,
         intensity="låg",
         equipment=["matta"],
-        disciplines=["sprint", "medel", "distans", "hopp", "kast", "mångkamp"]
+        disciplines=["medel", "distans", "hopp", "kast", "mångkamp"]
     ),
 }
 

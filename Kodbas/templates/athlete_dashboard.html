@@ -33,9 +33,9 @@
         <header class="page-header">
             <h1>Hej, {{ athlete.name.split()[0] }}!</h1>
             {% if coach %}
-                <p class="subtitle">Coach: {{ coach.name }} · {{ today.strftime('%A %d %B') }}</p>
+                <p class="subtitle">Coach: {{ coach.name }} · {{ today|date_sv }}</p>
             {% else %}
-                <p class="subtitle">{{ today.strftime('%A %d %B') }} · <a href="{{ url_for('connect_coach') }}">Koppla dig till en coach</a></p>
+                <p class="subtitle">{{ today|date_sv }} · <a href="{{ url_for('connect_coach') }}">Koppla dig till en coach</a></p>
             {% endif %}
         </header>
 
@@ -150,7 +150,7 @@
                     </p>
                     {% if last_planned_date %}
                     <p style="margin: 3px 0 0; color: #888; font-size: 0.82em;">
-                        Schema planerat till: {{ last_planned_date.strftime('%d %b %Y') }}
+                        Schema planerat till: {{ last_planned_date|date_short_sv(with_year=True) }}
                     </p>
                     {% endif %}
                 </div>
@@ -198,7 +198,6 @@
                                 <label for="ai_running_focus">Vilken löpgren tränar du främst? (frivilligt)</label>
                                 <select id="ai_running_focus" name="running_focus">
                                     <option value="">Välj löpgren</option>
-                                    <option value="sprint" {% if athlete.running_focus == 'sprint' %}selected{% endif %}>Sprint</option>
                                     <option value="medel" {% if athlete.running_focus == 'medel' %}selected{% endif %}>Medeldistans</option>
                                     <option value="distans" {% if athlete.running_focus == 'distans' %}selected{% endif %}>Distans</option>
                                 </select>
@@ -247,31 +246,6 @@
                         <div class="form-group">
                             <label for="ai_best_result_time">Bästa tid (frivilligt)</label>
                             <input type="text" id="ai_best_result_time" name="best_result_time" value="{{ current_best_time }}" placeholder="T.ex. 2:05, 17:45, 1:32:10">
-                        </div>
-                        </div>
-                    </div>
-                    <div id="aiSprintFields" class="full-width" style="display:none;">
-                        <div class="ai-profile-grid">
-                        <div class="form-group">
-                            <label for="ai_best_60m_time">Bästa 60 m-tid (frivilligt)</label>
-                            <input type="text" id="ai_best_60m_time" name="best_60m_time" value="{{ athlete.best_60m_time or '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="ai_best_100m_time">Bästa 100 m-tid (frivilligt)</label>
-                            <input type="text" id="ai_best_100m_time" name="best_100m_time" value="{{ athlete.best_100m_time or '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="ai_best_200m_time">Bästa 200 m-tid (frivilligt)</label>
-                            <input type="text" id="ai_best_200m_time" name="best_200m_time" value="{{ athlete.best_200m_time or '' }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="ai_primary_sprint_event">Huvudsprintdistans (frivilligt)</label>
-                            <select id="ai_primary_sprint_event" name="primary_sprint_event">
-                                <option value="">Välj distans</option>
-                                <option value="60 m" {% if athlete.primary_sprint_event == '60 m' %}selected{% endif %}>60 m</option>
-                                <option value="100 m" {% if athlete.primary_sprint_event == '100 m' %}selected{% endif %}>100 m</option>
-                                <option value="200 m" {% if athlete.primary_sprint_event == '200 m' %}selected{% endif %}>200 m</option>
-                            </select>
                         </div>
                         </div>
                     </div>
@@ -416,13 +390,11 @@
                     (function() {
                         const runningFocus = document.getElementById('ai_running_focus');
                         const distanceFields = document.getElementById('aiDistanceFields');
-                        const sprintFields = document.getElementById('aiSprintFields');
                         const bestResultSelect = document.getElementById('ai_best_result_distance');
                         const externalDataCheckbox = document.querySelector('#aiProfileModal .external-data-checkbox');
                         function updateAiProfileFields() {
                             const value = runningFocus.value;
                             distanceFields.style.display = (value === 'medel' || value === 'distans') ? 'block' : 'none';
-                            sprintFields.style.display = value === 'sprint' ? 'block' : 'none';
                         }
                         function updateBestResultCustomField() {
                             const customField = document.querySelector('#aiDistanceFields .best-result-custom-distance');
@@ -514,14 +486,16 @@
                 <div class="session-modal-header">
                     <div>
                         <div class="session-modal-badges">
-                            <span class="session-status-badge {{ session.status }}">{{ session.status_label }}</span>
-                            <span class="week-badge neutral">{{ session.planned_intensity }}</span>
                             {% if session.is_key_session %}
                             <span class="week-badge key">★ Nyckelpass</span>
                             {% endif %}
+                            <span class="week-badge intensity-badge intensity-badge-{{ session.planned_intensity }}">Intensitet: {{ session.planned_intensity }}</span>
+                            {% if session.training_phase or athlete.training_phase %}
+                            <span class="week-badge phase">Fas: {{ session.training_phase or athlete.training_phase }}</span>
+                            {% endif %}
                         </div>
                         <h2 id="dashboard-session-title-{{ session.id }}">{{ session.session_name }}</h2>
-                        <p class="session-modal-meta">{{ session.date.strftime('%A %d %B') }} · {{ session.planned_duration }} min · {{ session.session_type }}</p>
+                        <p class="session-modal-meta">{{ session.date|date_sv }} · {{ session.planned_duration }} min · {{ session.session_type }}</p>
                     </div>
                 </div>
                 <div class="session-modal-content">
@@ -536,14 +510,16 @@
                         {% endif %}
                     </section>
                     <section class="modal-info-grid">
-                        <div class="modal-info-card">
-                            <span class="modal-info-label">Veckofokus</span>
-                            <strong>{{ session.week_theme or athlete.training_phase }}</strong>
+                        {% if session.tempo_surface_options %}
+                        <div class="modal-info-card modal-info-card-full">
+                            <span class="modal-info-label">Alternativa tempon för andra underlag</span>
+                            <div class="surface-tempo-list">
+                                {% for option in session.tempo_surface_options %}
+                                <div><strong>{{ option.label }}</strong>: {{ option.pace_text }}</div>
+                                {% endfor %}
+                            </div>
                         </div>
-                        <div class="modal-info-card">
-                            <span class="modal-info-label">Fas</span>
-                            <strong>{{ session.training_phase or athlete.training_phase }}</strong>
-                        </div>
+                        {% endif %}
                         <div class="modal-info-card">
                             <span class="modal-info-label">Planstatus</span>
                             <strong>{{ session.plan_status }}</strong>
@@ -564,16 +540,10 @@
                             <strong>{{ session.tempo_assumptions }}</strong>
                         </div>
                         {% endif %}
-                        {% if session.tempo_surface_options %}
                         <div class="modal-info-card">
-                            <span class="modal-info-label">Alternativa tempon för andra underlag</span>
-                            <div class="surface-tempo-list">
-                                {% for option in session.tempo_surface_options %}
-                                <div><strong>{{ option.label }}</strong>: {{ option.pace_text }}</div>
-                                {% endfor %}
-                            </div>
+                            <span class="modal-info-label">Veckofokus</span>
+                            <strong>{{ session.week_theme or athlete.training_phase }}</strong>
                         </div>
-                        {% endif %}
                     </section>
                     {% if session.coach_explanation %}
                     <section class="modal-info-block">
@@ -748,7 +718,7 @@
     </main>
 
     <footer>
-        <p>Prototyp - Kandidatarbete Svensk Friidrott</p>
+        <p>Prototyp - Kandidatarbete</p>
     </footer>
 </body>
 </html>

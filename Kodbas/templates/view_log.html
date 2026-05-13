@@ -12,7 +12,7 @@
         <div class="log-header">
             <div>
                 <h1>{{ log.session_type|capitalize }}</h1>
-                <p class="log-date">{{ log.date.strftime('%A %d %B %Y') }}</p>
+                <p class="log-date">{{ log.date|date_sv(with_year=True) }}</p>
             </div>
             <div class="log-load-badge">
                 <span class="load-value">{{ log.load }}</span>

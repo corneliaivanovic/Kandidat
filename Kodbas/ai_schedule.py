@@ -23,114 +23,6 @@ from tempo_model import TEMPO_SURFACE_CHOICES, get_surface_profile, predict_sess
 
 # Varje pass definieras som: (namn, typ, duration_min, intensitet, beskrivning)
 RUNNING_WORKOUTS = {
-    # --- SPRINT (100m-200m) ---
-    "sprint": {
-        "grundträning": {
-            "hard": [
-                ("Accelerationsträning", "snabbhet", 60, "hög",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch + 4x80m stigande\n"
-                 "Huvudpass: 6x30m acceleration från block (vila 3 min)\n"
-                 "4x60m med flygande start (vila 4 min)\n"
-                 "Nedjogg: 10 min + stretch"),
-                ("Fartträning 150m", "snabbhet", 50, "hög",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: 5x150m på 90% (vila 5 min)\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "medium": [
-                ("Teknikpass sprint", "teknik", 60, "medel",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: Löpsteg A-skip, B-skip, high knees (4x30m vardera)\n"
-                 "6x80m med fokus på avslappnad sprintteknik\n"
-                 "Nedjogg: 10 min + stretch"),
-                ("Löpskola & koordination", "teknik", 55, "medel",
-                 "Uppvärmning: 10 min jogg + dynamisk stretch\n"
-                 "Huvudpass: A-skip, B-skip, sidestepp 4x30m vardera\n"
-                 "Ankelpendel och häl-tå-rullning 3x20m\n"
-                 "4x60m med fokus på högt knälyft och aktiv fotisättning\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "easy": [
-                ("Lugn löpning", "uthållighet", 35, "låg",
-                 "35 min lugn löpning i zon 2 (puls under 150)\n"
-                 "Fokus: avslappnad löpstil, jämn andning"),
-                ("Återhämtning & rörlighet", "återhämtning", 40, "låg",
-                 "15 min lätt jogg\n"
-                 "25 min stretch och rörlighetsövningar\n"
-                 "Fokus: höftrörlighet, hamstrings, vader"),
-            ],
-        },
-        "uppbyggnad": {
-            "hard": [
-                ("Maxfart 60m", "snabbhet", 50, "hög",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch + 4x80m stigande\n"
-                 "Huvudpass: 5x60m på 95% (vila 5 min)\n"
-                 "3x30m från block på maxfart (vila 4 min)\n"
-                 "Nedjogg: 10 min + stretch"),
-                ("Fartuthållighet sprint", "snabbhet", 55, "hög",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: 3x200m på 95% (vila 8 min)\n"
-                 "4x80m stigande till max (vila 3 min)\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "medium": [
-                ("Teknik & starts", "teknik", 55, "medel",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: Blockstarter 6x20m (fokus teknik)\n"
-                 "Löpsteg och koordination 4x40m\n"
-                 "Nedjogg: 10 min + stretch"),
-                ("Startteknik och acceleration", "teknik", 55, "medel",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: Blockstarter 6x20m (fokus teknik och reaktion)\n"
-                 "Acceleration 4x40m med stigande fart\n"
-                 "Flyvande löpningar 3x30m med fokus på hög frekvens\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "easy": [
-                ("Lätt jogg", "uthållighet", 30, "låg",
-                 "30 min lugn löpning\nFokus: återhämtning"),
-                ("Aktiv vila", "återhämtning", 30, "låg",
-                 "15 min promenad/lätt jogg\n15 min stretch och foam rolling"),
-            ],
-        },
-        "tävling": {
-            "hard": [
-                ("Tävlingsförberedelse", "snabbhet", 40, "hög",
-                 "Uppvärmning: 15 min jogg + dynamisk stretch\n"
-                 "Huvudpass: 3x30m på max (vila 4 min)\n"
-                 "2x60m på 95% (vila 5 min)\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "medium": [
-                ("Aktivering", "teknik", 40, "medel",
-                 "Uppvärmning: 10 min jogg + dynamisk stretch\n"
-                 "Huvudpass: Löpsteg 4x60m, 3x30m stigande\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "easy": [
-                ("Lätt löpning", "uthållighet", 25, "låg",
-                 "25 min lugn jogg\nFokus: håll kroppen lös inför tävling"),
-                ("Vila + stretch", "återhämtning", 20, "låg",
-                 "20 min stretch och mental förberedelse"),
-            ],
-        },
-        "återhämtning": {
-            "hard": [],
-            "medium": [
-                ("Lätt teknik", "teknik", 40, "låg",
-                 "Uppvärmning: 10 min jogg\n"
-                 "Huvudpass: Löpsteg i lugnt tempo 6x50m\n"
-                 "Nedjogg: 10 min + stretch"),
-            ],
-            "easy": [
-                ("Lätt jogg", "uthållighet", 25, "låg",
-                 "25 min lugn löpning i zon 1-2"),
-                ("Stretch & rörlighet", "återhämtning", 30, "låg",
-                 "30 min stretch, foam rolling, rörlighetsövningar"),
-            ],
-        },
-    },
-
     # --- MEDELDISTANS (400m-1500m) ---
     "medel": {
         "grundträning": {
@@ -325,11 +217,10 @@ RUNNING_WORKOUTS = {
 # Fallback: om grenen inte matchar sprint/medel/distans
 # Mappa discipline till löpkategori
 DISCIPLINE_TO_RUNNING = {
-    "sprint": "sprint",
     "medel": "medel",
     "distans": "distans",
-    "hopp": "sprint",       # Hoppare tränar ofta som sprinters
-    "kast": "sprint",       # Kastare gör ofta sprintliknande
+    "hopp": "medel",        # Hoppare faller tillbaka på medel
+    "kast": "medel",        # Kastare faller tillbaka på medel
     "mangkamp": "medel",    # Mångkamp = blandning
 }
 
@@ -372,16 +263,16 @@ def get_week_template(days_per_week: int) -> list[dict]:
             {"day": 2, "difficulty": "medium"},     # Onsdag
             {"day": 3, "difficulty": "rest"},       # Torsdag
             {"day": 4, "difficulty": "hard"},       # Fredag
-            {"day": 5, "difficulty": "easy"},       # Lördag
+            {"day": 5, "difficulty": "rest"},       # Lördag
             {"day": 6, "difficulty": "rest"},       # Söndag
         ],
         5: [
             {"day": 0, "difficulty": "hard"},      # Måndag
             {"day": 1, "difficulty": "easy"},       # Tisdag
             {"day": 2, "difficulty": "medium"},     # Onsdag
-            {"day": 3, "difficulty": "easy"},       # Torsdag
+            {"day": 3, "difficulty": "rest"},       # Torsdag
             {"day": 4, "difficulty": "hard"},       # Fredag
-            {"day": 5, "difficulty": "medium"},     # Lördag
+            {"day": 5, "difficulty": "easy"},       # Lördag
             {"day": 6, "difficulty": "rest"},       # Söndag
         ],
         6: [
@@ -1310,10 +1201,6 @@ def _build_athlete_info(athlete: object) -> dict:
         "tempo_model_personal_offset_seconds",
         "tempo_model_offset_samples",
         "response_notes",
-        "best_60m_time",
-        "best_100m_time",
-        "best_200m_time",
-        "primary_sprint_event",
     ]:
         value = getattr(athlete, field, None)
         if value:

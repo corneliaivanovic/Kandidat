@@ -2845,7 +2845,7 @@ footer {
     gap: 0;
     margin-bottom: 8px;
     color: var(--text-muted);
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
@@ -2865,9 +2865,9 @@ footer {
 }
 
 .month-day-cell {
-    min-height: 140px;
+    min-height: 150px;
     background: var(--bg-card);
-    padding: 10px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -2886,7 +2886,7 @@ footer {
 .month-day-number {
     align-self: flex-end;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.92rem;
+    font-size: 1.05rem;
     font-weight: 700;
 }
 
@@ -2902,14 +2902,14 @@ footer {
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
+    padding: 9px 11px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     text-align: left;
     color: #fff;
     font-weight: 700;
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
@@ -3046,6 +3046,26 @@ footer {
 .session-card-key {
     background: rgba(16, 185, 129, 0.12);
     color: #047857;
+}
+
+.week-badge.intensity-badge-låg {
+    background: rgba(15, 159, 110, 0.16);
+    color: #0f9f6e;
+}
+
+.week-badge.intensity-badge-medel {
+    background: rgba(217, 119, 6, 0.16);
+    color: #d97706;
+}
+
+.week-badge.intensity-badge-hög {
+    background: rgba(220, 38, 38, 0.16);
+    color: #dc2626;
+}
+
+.week-badge.phase {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
 }
 
 .week-summary-grid {
@@ -3393,6 +3413,7 @@ footer {
 .session-modal-meta {
     color: var(--text-secondary);
     margin-top: var(--space-xs);
+    font-size: 1.02rem;
 }
 
 .session-modal-content {
@@ -3418,6 +3439,7 @@ footer {
 .modal-info-block p {
     margin: 0 0 var(--space-xs);
     line-height: 1.55;
+    font-size: 1.02rem;
 }
 
 .modal-info-grid,
@@ -3435,9 +3457,13 @@ footer {
     color: var(--text-primary);
 }
 
+.modal-info-card.modal-info-card-full {
+    grid-column: 1 / -1;
+}
+
 .modal-info-label {
     display: block;
-    font-size: 0.76rem;
+    font-size: 0.88rem;
     text-transform: uppercase;
     margin-bottom: 6px;
     color: var(--text-secondary);
@@ -3446,7 +3472,7 @@ footer {
 .modal-info-card strong {
     display: block;
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 1.12rem;
     line-height: 1.4;
 }
 
@@ -3455,11 +3481,12 @@ footer {
     gap: 6px;
     color: var(--text-primary);
     line-height: 1.45;
+    font-size: 1.02rem;
 }
 
 .surface-tempo-list strong {
     display: inline;
-    font-size: 0.95rem;
+    font-size: 1.05rem;
 }
 
 .modal-edit-form .full-width,

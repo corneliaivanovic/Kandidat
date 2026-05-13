@@ -68,10 +68,6 @@ def init_db() -> None:
             tempo_model_offset_samples INTEGER DEFAULT 0,
             response_notes TEXT DEFAULT '',
             has_external_training_data INTEGER DEFAULT 0,
-            best_60m_time TEXT DEFAULT '',
-            best_100m_time TEXT DEFAULT '',
-            best_200m_time TEXT DEFAULT '',
-            primary_sprint_event TEXT DEFAULT '',
             rag_documents TEXT DEFAULT '[]',
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         )

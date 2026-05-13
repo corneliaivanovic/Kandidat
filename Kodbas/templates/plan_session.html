@@ -11,17 +11,6 @@
     <h1>Planera träningspass</h1>
     <p class="subtitle">{{ athlete.name }} · {{ athlete.discipline }}</p>
 
-    <!-- Readiness info -->
-    <div class="readiness-summary readiness-{{ readiness.level }}">
-        <div class="readiness-info">
-            <span class="readiness-score-small">{{ readiness.score }}</span>
-            <span class="readiness-text">{{ readiness.message }}</span>
-        </div>
-        <div class="readiness-rec">
-            <strong>Rekommendation:</strong> {{ readiness.recommendation }}
-        </div>
-    </div>
-
     <!-- Välj typ av planering -->
     <div class="plan-type-selector">
         <button type="button" class="plan-type-btn active" data-type="template">

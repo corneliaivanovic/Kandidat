@@ -38,7 +38,7 @@
                 </p>
                 {% if last_planned_date %}
                 <p style="margin:4px 0 0; color:#64748b; font-size:0.82em;">
-                    Schema planerat till: {{ last_planned_date.strftime('%d %b %Y') }}
+                    Schema planerat till: {{ last_planned_date|date_short_sv(with_year=True) }}
                 </p>
                 {% endif %}
             </div>
@@ -91,7 +91,6 @@
                             <label for="coach_ai_running_focus">Vilken löpgren tränar du främst? (frivilligt)</label>
                             <select id="coach_ai_running_focus" name="running_focus">
                                 <option value="">Välj löpgren</option>
-                                <option value="sprint" {% if athlete.running_focus == 'sprint' %}selected{% endif %}>Sprint</option>
                                 <option value="medel" {% if athlete.running_focus == 'medel' %}selected{% endif %}>Medeldistans</option>
                                 <option value="distans" {% if athlete.running_focus == 'distans' %}selected{% endif %}>Distans</option>
                             </select>
@@ -140,31 +139,6 @@
                     <div class="form-group">
                         <label for="coach_ai_best_result_time">Bästa tid (frivilligt)</label>
                         <input type="text" id="coach_ai_best_result_time" name="best_result_time" value="{{ current_best_time }}" placeholder="T.ex. 2:05, 17:45, 1:32:10">
-                    </div>
-                    </div>
-                </div>
-                <div id="coachAiSprintFields" class="full-width" style="display:none;">
-                    <div class="ai-profile-grid">
-                    <div class="form-group">
-                        <label for="coach_ai_best_60m_time">Bästa 60 m-tid (frivilligt)</label>
-                        <input type="text" id="coach_ai_best_60m_time" name="best_60m_time" value="{{ athlete.best_60m_time or '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="coach_ai_best_100m_time">Bästa 100 m-tid (frivilligt)</label>
-                        <input type="text" id="coach_ai_best_100m_time" name="best_100m_time" value="{{ athlete.best_100m_time or '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="coach_ai_best_200m_time">Bästa 200 m-tid (frivilligt)</label>
-                        <input type="text" id="coach_ai_best_200m_time" name="best_200m_time" value="{{ athlete.best_200m_time or '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="coach_ai_primary_sprint_event">Huvudsprintdistans (frivilligt)</label>
-                        <select id="coach_ai_primary_sprint_event" name="primary_sprint_event">
-                            <option value="">Välj distans</option>
-                            <option value="60 m" {% if athlete.primary_sprint_event == '60 m' %}selected{% endif %}>60 m</option>
-                            <option value="100 m" {% if athlete.primary_sprint_event == '100 m' %}selected{% endif %}>100 m</option>
-                            <option value="200 m" {% if athlete.primary_sprint_event == '200 m' %}selected{% endif %}>200 m</option>
-                        </select>
                     </div>
                     </div>
                 </div>
@@ -326,12 +300,6 @@
             <span class="nav-icon">🏆</span>
             <span>Tävlingsresultat</span>
         </a>
-        {% if current_user and current_user.is_coach() %}
-        <a href="{{ url_for('athlete_ai_chat', athlete_id=athlete.id) }}" class="quick-nav-link ai-chat-link">
-            <span class="nav-icon">🤖</span>
-            <span>AI-assistent</span>
-        </a>
-        {% endif %}
     </div>
 
     {% if athlete.training_mode == 'ai' %}
@@ -399,7 +367,7 @@
                         {% endif %}
                     </div>
                     <h2 id="coach-calendar-session-title-{{ session.id }}">{{ session.session_name }}</h2>
-                    <p class="session-modal-meta">{{ session.date.strftime('%A %d %B') }} · {{ session.planned_duration }} min · {{ session.session_type }}</p>
+                    <p class="session-modal-meta">{{ session.date|date_sv }} · {{ session.planned_duration }} min · {{ session.session_type }}</p>
                 </div>
             </div>
             <div class="session-modal-content">
@@ -475,15 +443,13 @@
         (function() {
             const runningFocus = document.getElementById('coach_ai_running_focus');
             const distanceFields = document.getElementById('coachAiDistanceFields');
-            const sprintFields = document.getElementById('coachAiSprintFields');
             const bestResultSelect = document.getElementById('coach_ai_best_result_distance');
             const externalDataCheckbox = document.querySelector('#coachAiProfileModal .external-data-checkbox');
-            if (!runningFocus || !distanceFields || !sprintFields) return;
+            if (!runningFocus || !distanceFields) return;
 
             function updateCoachAiProfileFields() {
                 const value = runningFocus.value;
                 distanceFields.style.display = (value === 'medel' || value === 'distans') ? 'block' : 'none';
-                sprintFields.style.display = value === 'sprint' ? 'block' : 'none';
             }
 
             function updateBestResultCustomField() {
@@ -588,7 +554,7 @@
         <div class="log-list">
             {% for log in recent_logs %}
             <a href="{{ url_for('view_log', log_id=log.id) }}" class="log-item log-item-link">
-                <div class="log-date">{{ log.date.strftime('%d %b') }}</div>
+                <div class="log-date">{{ log.date|date_short_sv }}</div>
                 <div class="log-details">
                     <span class="log-type">{{ log.session_type | capitalize }}</span>
                     <span class="log-duration">{{ log.duration_minutes }} min</span>

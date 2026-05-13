@@ -56,7 +56,6 @@ DOCUMENT_REGISTRY = {
 DEFAULT_DOCUMENTS = list(DOCUMENT_REGISTRY.keys())
 
 DISCIPLINE_DEFAULT_DOCUMENTS = {
-    "sprint": ["loptranare", "friidrottslara"],
     "medel": ["loptranare", "friidrottslara", "uppbyggnad"],
     "distans": ["loptranare", "friidrottslara", "uppbyggnad"],
 }
@@ -664,6 +663,76 @@ def _compact_ai_response_snippet(text: str, pos: int, radius: int = 220) -> str:
     return snippet
 
 
+def _dump_failed_ai_response(text: str, label: str = "ai_response") -> Optional[str]:
+    """Spara ett misslyckat AI-svar till /tmp för felsökning. Returnerar sökvägen."""
+    try:
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        path = Path("/tmp") / f"idrottsapp_{label}_{timestamp}.txt"
+        path.write_text(text or "", encoding="utf-8")
+        print(f"💾 Sparade AI-svar till {path} ({len(text or '')} tecken)")
+        return str(path)
+    except Exception as exc:
+        print(f"⚠️ Kunde inte spara AI-svar för felsökning: {exc}")
+        return None
+
+
+def _escape_raw_newlines_in_json_strings(text: str) -> str:
+    """
+    Ersätt råa radbrytningar som ligger inuti JSON-strängar med \\n.
+    Modellen följer inte alltid prompten om att escapa \\n i description-fält.
+    """
+    result = []
+    in_string = False
+    escape_next = False
+    for ch in text:
+        if escape_next:
+            result.append(ch)
+            escape_next = False
+            continue
+        if ch == "\\":
+            result.append(ch)
+            escape_next = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+            result.append(ch)
+            continue
+        if in_string and ch == "\n":
+            result.append("\\n")
+            continue
+        if in_string and ch == "\r":
+            result.append("\\r")
+            continue
+        if in_string and ch == "\t":
+            result.append("\\t")
+            continue
+        result.append(ch)
+    return "".join(result)
+
+
+def _safe_json_loads_month_plan(text: str):
+    """
+    Tolka månadsplan-JSON robust. Försök först rakt av; vid fel, försök sanera
+    oescapade radbrytningar/control-tecken inuti strängar och försök igen.
+    Vid fortsatt fel: dumpa svaret till /tmp och kasta ursprungsfelet vidare.
+    """
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as first_error:
+        try:
+            sanitized = _escape_raw_newlines_in_json_strings(text)
+            parsed = json.loads(sanitized)
+            print(
+                f"ℹ️ Månadsplan-JSON tolkades efter sanering av oescapade radbrytningar "
+                f"(ursprungsfel: {first_error.msg} vid tecken {first_error.pos})"
+            )
+            return parsed
+        except json.JSONDecodeError:
+            _dump_failed_ai_response(text, label="month_plan_invalid_json")
+            raise first_error
+
+
 def _format_json_decode_failure(error: json.JSONDecodeError, text: str, plan_label: str) -> str:
     """
     Bygg ett felsvar som är användbart vid felsökning av Claude/RAG-output.
@@ -985,10 +1054,6 @@ def _format_athlete_context(athlete_info: dict) -> str:
         "threshold_pace": "Ungefärligt tröskeltempo",
         "training_surface": "Vanlig träningsmiljö",
         "response_notes": "Övrig respons/kommentar",
-        "best_60m_time": "Bästa 60 m-tid",
-        "best_100m_time": "Bästa 100 m-tid",
-        "best_200m_time": "Bästa 200 m-tid",
-        "primary_sprint_event": "Huvudsprintdistans",
     }
     for field, label in field_labels.items():
         if athlete_info.get(field):
@@ -1402,7 +1467,7 @@ KRITISKA regler för description-fältet:
     try:
         response = client.messages.create(
             model="claude-sonnet-4-5-20250929",
-            max_tokens=6000,
+            max_tokens=16000,
             messages=[{"role": "user", "content": prompt}]
         )
         text = response.content[0].text.strip()
@@ -1410,7 +1475,17 @@ KRITISKA regler för description-fältet:
             text = re.sub(r'^```(?:json)?\n?', '', text)
             text = re.sub(r'\n?```$', '', text)
 
-        month_plan = json.loads(text)
+        stop_reason = getattr(response, "stop_reason", None)
+        if stop_reason == "max_tokens":
+            print(f"⚠️ Månadsplan-svar trunkerat (max_tokens nått, längd={len(text)} tecken)")
+            _dump_failed_ai_response(text, label="month_plan_truncated")
+            return _build_failed_plan_result(
+                "AI-svaret blev avhugget innan månadsplanen var komplett (max_tokens nått). "
+                "Höj max_tokens i rag_knowledge.py eller korta ner description-kraven i prompten.",
+                used_chunks=used_chunks,
+            )
+
+        month_plan = _safe_json_loads_month_plan(text)
         month_review_rows = []
         repaired_month_plan = []
         month_repaired = False

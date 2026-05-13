@@ -21,7 +21,6 @@
     <!-- Testkategorier -->
     <div class="test-categories">
         <button class="filter-btn active" data-filter="all">Alla</button>
-        <button class="filter-btn" data-filter="sprint">Sprint</button>
         <button class="filter-btn" data-filter="hopp">Hopp</button>
         <button class="filter-btn" data-filter="styrka">Styrka</button>
         <button class="filter-btn" data-filter="uthållighet">Uthållighet</button>
@@ -34,7 +33,7 @@
         {% set latest = tests[0] %}
         <div class="test-summary-card" data-category="{{ latest.test_type }}">
             <div class="test-type-icon">
-                {% if latest.test_type == 'sprint' %}🏃{% elif latest.test_type == 'hopp' %}🦘{% elif latest.test_type == 'styrka' %}💪{% elif latest.test_type == 'uthållighet' %}❤️{% else %}📊{% endif %}
+                {% if latest.test_type == 'hopp' %}🦘{% elif latest.test_type == 'styrka' %}💪{% elif latest.test_type == 'uthållighet' %}❤️{% else %}📊{% endif %}
             </div>
             <div class="test-info">
                 <h3>{{ latest.test_name }}</h3>

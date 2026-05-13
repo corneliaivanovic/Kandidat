@@ -149,8 +149,8 @@ class TestResult:
     id: int
     athlete_id: int
     test_date: date
-    test_type: str  # "sprint_30m", "sprint_60m", "standing_jump", "strength", etc.
-    test_name: str  # Visningsnamn, t.ex. "30m sprint"
+    test_type: str  # "standing_jump", "strength", etc.
+    test_name: str  # Visningsnamn
     value: float
     unit: str  # "s", "m", "kg", "reps", etc.
     notes: str = ""
@@ -172,7 +172,6 @@ class TestResult:
 
 # Fördefinierade testkategorier (för dropdown i formulär)
 TEST_TYPES = {
-    "sprint": "Sprint & Snabbhet",
     "hopp": "Hopp & Explosivitet",
     "styrka": "Styrka",
     "uthållighet": "Uthållighet & Kondition",
@@ -287,13 +286,13 @@ class Athlete:
     user_id: int  # Koppling till User
     name: str
     birth_year: int
-    discipline: str  # "sprint", "medel", "distans", "hopp", "kast", "mångkamp"
+    discipline: str  # "medel", "distans", "hopp", "kast", "mångkamp"
     club: str = ""  # Klubbtillhörighet för matchning med tävlingsresultat
     training_mode: str = "coach"  # "coach" = tränare lägger in pass, "ai" = AI genererar schema
     training_days_per_week: int = 4  # Antal träningsdagar per vecka (för AI-schema)
     training_phase: str = "grundträning"  # "grundträning", "uppbyggnad", "tävling", "återhämtning"
     rag_documents: list = field(default_factory=lambda: ["loptranare", "friidrottslara", "uppbyggnad"])
-    running_focus: str = ""  # "sprint", "medel", "distans" - separat från friidrottsgren
+    running_focus: str = ""  # "medel", "distans" - separat från friidrottsgren
     training_experience_level: str = ""  # nivå för träningsvana
     weekly_training_amount: str = ""
     primary_goal: str = ""
@@ -309,10 +308,6 @@ class Athlete:
     tempo_model_offset_samples: int = 0
     response_notes: str = ""
     has_external_training_data: bool = False
-    best_60m_time: str = ""
-    best_100m_time: str = ""
-    best_200m_time: str = ""
-    primary_sprint_event: str = ""
     # Vilka PDF-dokument som används i RAG-sökningen (se DOCUMENT_REGISTRY i rag_knowledge.py)
     logs: list[TrainingLog] = field(default_factory=list)
     planned_sessions: list[PlannedSession] = field(default_factory=list)
@@ -436,10 +431,6 @@ class Athlete:
             "tempo_model_offset_samples": self.tempo_model_offset_samples,
             "response_notes": self.response_notes,
             "has_external_training_data": self.has_external_training_data,
-            "best_60m_time": self.best_60m_time,
-            "best_100m_time": self.best_100m_time,
-            "best_200m_time": self.best_200m_time,
-            "primary_sprint_event": self.primary_sprint_event,
             "total_logs": len(self.logs)
         }
 
@@ -538,10 +529,6 @@ class DataStore:
             tempo_model_offset_samples=row["tempo_model_offset_samples"] or 0,
             response_notes=row["response_notes"] or "",
             has_external_training_data=bool(row["has_external_training_data"]),
-            best_60m_time=row["best_60m_time"] or "",
-            best_100m_time=row["best_100m_time"] or "",
-            best_200m_time=row["best_200m_time"] or "",
-            primary_sprint_event=row["primary_sprint_event"] or "",
             logs=[],
             planned_sessions=[],
             week_programs=cached.week_programs[:] if cached else [],
@@ -587,9 +574,8 @@ class DataStore:
                 injury_constraints, best_5k_time, best_alt_distance, best_alt_time,
                 easy_pace, threshold_pace, training_surface, tempo_model_runner_key,
                 tempo_model_personal_offset_seconds, tempo_model_offset_samples,
-                response_notes, has_external_training_data, best_60m_time,
-                best_100m_time, best_200m_time, primary_sprint_event, rag_documents
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                response_notes, has_external_training_data, rag_documents
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 user_id, name, birth_year, discipline, club, training_mode,
@@ -604,8 +590,6 @@ class DataStore:
                 int(ai_profile.get("tempo_model_offset_samples", 0) or 0),
                 ai_profile.get("response_notes", ""),
                 1 if ai_profile.get("has_external_training_data", False) else 0,
-                ai_profile.get("best_60m_time", ""), ai_profile.get("best_100m_time", ""),
-                ai_profile.get("best_200m_time", ""), ai_profile.get("primary_sprint_event", ""),
                 json.dumps(ai_profile.get("rag_documents", ["loptranare", "friidrottslara", "uppbyggnad"])),
             ),
         )
@@ -664,8 +648,7 @@ class DataStore:
                 injury_constraints = ?, best_5k_time = ?, best_alt_distance = ?, best_alt_time = ?,
                 easy_pace = ?, threshold_pace = ?, training_surface = ?, tempo_model_runner_key = ?,
                 tempo_model_personal_offset_seconds = ?, tempo_model_offset_samples = ?, response_notes = ?,
-                has_external_training_data = ?, best_60m_time = ?, best_100m_time = ?,
-                best_200m_time = ?, primary_sprint_event = ?, rag_documents = ?
+                has_external_training_data = ?, rag_documents = ?
             WHERE id = ?
             """,
             (
@@ -692,10 +675,6 @@ class DataStore:
                 athlete.tempo_model_offset_samples,
                 athlete.response_notes,
                 1 if athlete.has_external_training_data else 0,
-                athlete.best_60m_time,
-                athlete.best_100m_time,
-                athlete.best_200m_time,
-                athlete.primary_sprint_event,
                 json.dumps(athlete.rag_documents or []),
                 athlete.id,
             ),

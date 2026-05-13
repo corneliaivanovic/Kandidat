@@ -31,7 +31,7 @@
 
         <header class="page-header">
             <h1>Välkommen, {{ user.name }}!</h1>
-            <p class="subtitle">{{ today.strftime('%A %d %B') }} · Din coach-kod: <code class="coach-code">{{ user.coach_code }}</code></p>
+            <p class="subtitle">{{ today|date_sv }} · Din coach-kod: <code class="coach-code">{{ user.coach_code }}</code></p>
         </header>
 
         <!-- Action Items - Vad behöver din uppmärksamhet? -->
@@ -116,19 +116,10 @@
                                 </div>
                             </div>
 
-                            <div class="readiness-display readiness-{{ data.readiness.level }}">
-                                <span class="readiness-score">{{ data.readiness.score }}</span>
-                                <span class="readiness-label">Dagsform</span>
-                            </div>
-
                             <div class="athlete-stats">
                                 <div class="stat">
                                     <span class="stat-value">{{ data.logs_7d }}</span>
                                     <span class="stat-label">pass / 7d</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">{{ data.readiness.acwr }}</span>
-                                    <span class="stat-label">ACWR</span>
                                 </div>
                                 <div class="stat">
                                     <span class="stat-value">{{ data.upcoming_sessions }}</span>
@@ -142,8 +133,6 @@
                                 <span class="session-name">{{ data.todays_session.session_name }}</span>
                             </div>
                             {% endif %}
-
-                            <p class="readiness-message">{{ data.readiness.message }}</p>
 
                             <div class="card-actions">
                                 <span class="action-link">Visa detaljer →</span>
@@ -164,7 +153,7 @@
     </main>
 
     <footer>
-        <p>Prototyp - Kandidatarbete Svensk Friidrott</p>
+        <p>Prototyp - Kandidatarbete</p>
     </footer>
 </body>
 </html>

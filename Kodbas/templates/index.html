@@ -15,27 +15,12 @@
                 <span class="discipline-badge">{{ item.athlete.discipline }}</span>
             </div>
 
-            <div class="readiness-display readiness-{{ item.readiness.level }}">
-                <div class="readiness-score">{{ item.readiness.score }}</div>
-                <div class="readiness-label">Readiness</div>
-            </div>
-
             <div class="athlete-stats">
                 <div class="stat">
                     <span class="stat-value">{{ item.logs_7d }}</span>
                     <span class="stat-label">Pass (7d)</span>
                 </div>
-                <div class="stat">
-                    <span class="stat-value">{{ item.readiness.acute_load }}</span>
-                    <span class="stat-label">Belastning</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value">{{ item.readiness.acwr }}</span>
-                    <span class="stat-label">ACWR</span>
-                </div>
             </div>
-
-            <p class="readiness-message">{{ item.readiness.message }}</p>
 
             <div class="athlete-actions">
                 <a href="{{ url_for('athlete_detail', athlete_id=item.athlete.id) }}" class="btn btn-primary">

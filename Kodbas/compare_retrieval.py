@@ -30,12 +30,12 @@ TOP_K         = 8     # Antal chunks per metod
 # ── Sökfrågor (samma format som plattformens RAG-sökning) ───────
 # Discipline och phase är hårdkodade här för testet — ändra om du vill testa
 # en annan atlet.
-DISCIPLINE = "sprint"
+DISCIPLINE = "medeldistans"
 PHASE      = "uppbyggnad"
 
 QUERIES = [
     f"{DISCIPLINE} {PHASE} träningsplanering veckoschema",
-    f"{DISCIPLINE} intervallträning uthållighet nyckelpass",
+    f"{DISCIPLINE} tröskelpass uthållighet nyckelpass",
     "återhämtning vilodag hard easy polariserad löpning",
     f"{PHASE} intensitetszoner 80 20 tröskelträning",
 ]
@@ -223,9 +223,9 @@ def print_results_side_by_side(query: str, tfidf_res: list[dict], emb_res: list[
             print(f"  EMBED   — (färre än {i+1} resultat)")
 
     print(f"\n  {DIVIDER}")
-    print(f"  Gemensamma chunks: {len(shared)}/{TOP_K}  |  "
-          f"Unika TF-IDF: {len(only_tfidf)}  |  "
-          f"Unika Embeddings: {len(only_emb)}")
+    print(f"  Valda av båda: {len(shared)}/{TOP_K}  |  "
+          f"Enbart TF-IDF: {len(only_tfidf)}  |  "
+          f"Enbart Embeddings: {len(only_emb)}")
 
 
 def print_summary(all_tfidf: list[list[dict]], all_emb: list[list[dict]]):
@@ -244,17 +244,19 @@ def print_summary(all_tfidf: list[list[dict]], all_emb: list[list[dict]]):
         total_only_tfidf  += len(t_texts - e_texts)
         total_only_emb    += len(e_texts - t_texts)
 
-    print(f"\n  Totalt unika chunks TF-IDF valde:   "
+    union_total = total_shared + total_only_tfidf + total_only_emb
+    print(f"\n  Totalt antal distinkta chunks TF-IDF valde:     "
           f"{total_shared + total_only_tfidf}")
-    print(f"  Totalt unika chunks Embeddings valde:"
-          f" {total_shared + total_only_emb}")
-    print(f"  Gemensamt valda chunks:               {total_shared}")
-    print(f"  Chunks enbart TF-IDF hittade:         {total_only_tfidf}")
-    print(f"  Chunks enbart Embeddings hittade:     {total_only_emb}")
+    print(f"  Totalt antal distinkta chunks Embeddings valde: "
+          f"{total_shared + total_only_emb}")
+    print(f"  Chunks valda av båda metoderna:                 {total_shared}")
+    print(f"  Chunks valda enbart av TF-IDF:                  {total_only_tfidf}")
+    print(f"  Chunks valda enbart av Embeddings:              {total_only_emb}")
+    print(f"  Union av valda chunks (totalt antal segment):   {union_total}")
     print()
 
-    overlap_pct = total_shared / (total_shared + total_only_tfidf + total_only_emb) * 100
-    print(f"  Överlapp: {overlap_pct:.0f}% av alla valda chunks är identiska mellan metoderna.")
+    overlap_pct = total_shared / union_total * 100
+    print(f"  Överlapp: {overlap_pct:.0f}% av unionen av valda chunks är gemensamma mellan metoderna.")
     if overlap_pct >= 70:
         print("  → Metoderna är mycket lika — liten praktisk skillnad att vänta.")
     elif overlap_pct >= 40:
