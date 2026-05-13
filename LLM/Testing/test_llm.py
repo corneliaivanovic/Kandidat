@@ -1,4 +1,5 @@
 import torch
+import json
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from peft import PeftModel
 
@@ -43,6 +44,19 @@ ft_base_model = AutoModelForCausalLM.from_pretrained(
 model = PeftModel.from_pretrained(ft_base_model, adapter_path)
 model.config.use_cache = True
 model.eval()
+
+test_path = "/cephyr/NOBACKUP/courses/TIFX11VT2602A/filer/data/processed/llm/test.jsonl"
+
+user_inputs = []
+
+with open(test_path, "r", encoding="utf-8") as f:
+    for line in f:
+        example = json.loads(line)
+
+        for message in example["messages"]:
+            if message["role"] == "user":
+                user_inputs.append(message["content"])
+                break
 
 user_inputs = [
     "Jag är 42 år och har tidigare varit elitmotionär. Just nu tränar jag 5–6 pass i veckan. Idag har jag ett tröskelpass med 3×10 minuter planerat. Jag känner mig ovanligt stel i vaderna, min vilopuls är cirka 8 slag högre än normalt och jag har haft en stressig vecka. Hur bör jag göra med dagens pass?",
