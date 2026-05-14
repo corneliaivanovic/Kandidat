@@ -526,7 +526,6 @@ def init_demo_data():
     """Initiera demo-data och koppla till users."""
     # Demo-data för idrottare:
     # - Ebba 3 och Daniel visar Garmin-baserad tempomodell
-    # - Hugo Kündig visar automatisk matchning mot tävlingsresultat
     athletes_info = [
         (
             "ebba@demo.se",
@@ -542,20 +541,6 @@ def init_demo_data():
                 "training_surface": "plan_vag",
                 "tempo_model_runner_key": "Ebba 3",
                 "has_external_training_data": True,
-            },
-        ),
-        (
-            "hugo@demo.se",
-            "Hugo Kündig",
-            2006,
-            "medel",
-            "Örgryte IS",
-            "ai",
-            {
-                "running_focus": "medel",
-                "training_experience_level": "1–3 år",
-                "weekly_training_amount": "4 pass",
-                "training_surface": "bana",
             },
         ),
         (

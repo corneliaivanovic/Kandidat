@@ -91,8 +91,7 @@ class AuthStore:
         # Ordningen matchar user_ids i app.py init_demo_data
         athletes_data = [
             ("ebba@demo.se", "Ebba 3"),              # user_id 2 - demo för Garmin-tempomodell
-            ("hugo@demo.se", "Hugo Kündig"),         # user_id 3 - demo för tävlingsresultat
-            ("daniel@demo.se", "Daniel"),            # user_id 4 - demo för Garmin-tempomodell
+            ("daniel@demo.se", "Daniel"),            # user_id 3 - demo för Garmin-tempomodell
         ]
 
         for email, name in athletes_data:
