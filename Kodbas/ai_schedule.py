@@ -281,7 +281,7 @@ def get_week_template(days_per_week: int) -> list[dict]:
             {"day": 2, "difficulty": "medium"},     # Onsdag
             {"day": 3, "difficulty": "easy"},       # Torsdag
             {"day": 4, "difficulty": "hard"},       # Fredag
-            {"day": 5, "difficulty": "medium"},     # Lördag
+            {"day": 5, "difficulty": "easy"},       # Lördag
             {"day": 6, "difficulty": "rest"},       # Söndag
         ],
     }
