@@ -72,10 +72,9 @@
                 </div>
                 {% endif %}
 
-                {% if todays_session.coach_notes %}
+                {% if todays_session.coach_notes and 'Planstatus:' in todays_session.coach_notes %}
                 <div class="coach-note">
-                    <span class="note-label">💬 Från coachen:</span>
-                    <p>{{ todays_session.coach_notes }}</p>
+                    <p>Planstatus: {{ todays_session.coach_notes.split('Planstatus:')[1].split('\n')[0].strip() }}</p>
                 </div>
                 {% endif %}
             </div>
@@ -121,6 +120,26 @@
             <a href="{{ url_for('add_log', athlete_id=athlete.id) }}" class="btn btn-primary">
                 + Logga träningspass
             </a>
+        </section>
+        {% endif %}
+
+        <!-- För coach-mode användare: möjlighet att byta till AI-schema -->
+        {% if athlete.training_mode != 'ai' %}
+        <section class="card" style="background: linear-gradient(135deg, #f0f9ff, #e0f2fe); border-left: 4px solid #0ea5e9;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <div>
+                    <h2 style="margin:0;">🤖 Ångrade dig?</h2>
+                    <p style="margin:5px 0 0; color:#555; font-size:0.9em;">
+                        Du har valt coach-läge. Klicka för att istället få ett AI-genererat månadsschema.
+                    </p>
+                </div>
+                <form action="{{ url_for('generate_ai_schedule', athlete_id=athlete.id) }}" method="POST" style="margin:0;">
+                    <input type="hidden" name="switch_to_ai" value="1">
+                    <button type="submit" class="btn btn-primary" style="font-size:0.9em; white-space:nowrap;">
+                        🔄 Generera AI-månadsschema
+                    </button>
+                </form>
+            </div>
         </section>
         {% endif %}
 
@@ -316,9 +335,6 @@
                             value="{{ today.isoformat() }}"
                             required
                         >
-                        <p style="font-size:0.78em; color:#6b7280; margin-top:6px;">
-                            Planen startar från valt datum i stället för att alltid börja kommande måndag.
-                        </p>
                     </div>
                     <div class="form-group">
                         <label for="modal_phase">Träningsfas</label>
@@ -358,7 +374,6 @@
                                 style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                             <span>
                                 <strong style="font-size:0.82em;">Löptränare (2025)</strong>
-                                <span style="display:block; font-size:0.75em; color:#6b7280;">80/20-regeln, nyckelpass, intensitetszoner — primär löpkälla</span>
                                 <code style="display:inline-block; margin-top:3px; font-size:0.72em; color:#6366f1; background:#ede9fe; border-radius:4px; padding:1px 5px; font-family:monospace;">loptranare_2025.txt</code>
                             </span>
                         </label>
@@ -368,7 +383,6 @@
                                 style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                             <span>
                                 <strong style="font-size:0.82em;">Friidrottens träningslära (2017)</strong>
-                                <span style="display:block; font-size:0.75em; color:#6b7280;">Allmän träningsteori, belastningsprinciper</span>
                                 <code style="display:inline-block; margin-top:3px; font-size:0.72em; color:#6366f1; background:#ede9fe; border-radius:4px; padding:1px 5px; font-family:monospace;">friidrottens_tranlara.txt</code>
                             </span>
                         </label>
@@ -378,7 +392,6 @@
                                 style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                             <span>
                                 <strong style="font-size:0.82em;">Träning i uppbyggnadsstadiet</strong>
-                                <span style="display:block; font-size:0.75em; color:#6b7280;">Medel- och långdistans, uppbyggnadsfas</span>
                                 <code style="display:inline-block; margin-top:3px; font-size:0.72em; color:#6366f1; background:#ede9fe; border-radius:4px; padding:1px 5px; font-family:monospace;">uppbyggnad_medel_lang.txt</code>
                             </span>
                         </label>
@@ -592,26 +605,7 @@
         {% endfor %}
         {% endif %}
 
-        <!-- Trendgraf -->
-        {% if trend_data and trend_data.weeks %}
-        <section class="card trend-section">
-            <h2>Belastning över tid</h2>
-            <div class="trend-chart">
-                {% set max_load = trend_data.weeks|map(attribute='total_load')|max %}
-                {% for week in trend_data.weeks %}
-                <div class="trend-bar-container">
-                    <div class="trend-bar" style="height: {{ (week.total_load / max_load * 150) if max_load > 0 else 20 }}px;">
-                        <span class="trend-value">{{ week.total_load }}</span>
-                    </div>
-                    <span class="trend-label {% if week.is_current %}current-week{% endif %}">{{ week.week_label }}</span>
-                </div>
-                {% endfor %}
-            </div>
-            <p class="trend-legend">Total veckobelastning (session-RPE load)</p>
-        </section>
-        {% endif %}
-
-        <!-- Senaste loggar -->
+<!-- Senaste loggar -->
         <section class="card">
             <h2>Senaste träningspass</h2>
 
@@ -628,7 +622,6 @@
                                 <span class="log-duration">{{ format_pace_seconds_per_km(log.actual_pace_seconds_per_km) }}</span>
                                 {% endif %}
                             </div>
-                            <div class="log-load">{{ log.load }} load</div>
                         </div>
                         {% if log.comment %}
                         <div class="log-comment-row">

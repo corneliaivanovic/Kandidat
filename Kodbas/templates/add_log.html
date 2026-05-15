@@ -49,13 +49,8 @@
 
         <div class="form-group">
             <label for="session_type">Passtyp</label>
-            <select id="session_type" name="session_type" required>
-                <option value="uthållighet" {% if planned_session and planned_session.session_type == 'uthållighet' %}selected{% endif %}>Uthållighet</option>
-                <option value="styrka" {% if planned_session and planned_session.session_type == 'styrka' %}selected{% endif %}>Styrka</option>
-                <option value="teknik" {% if planned_session and planned_session.session_type == 'teknik' %}selected{% endif %}>Teknik</option>
-                <option value="snabbhet" {% if planned_session and planned_session.session_type == 'snabbhet' %}selected{% endif %}>Snabbhet</option>
-                <option value="vila" {% if planned_session and planned_session.session_type == 'vila' %}selected{% endif %}>Vila / Återhämtning</option>
-            </select>
+            <input type="text" id="session_type" name="session_type"
+                   value="{{ planned_session.session_type if planned_session else '' }}" required>
         </div>
 
         <div class="form-group">

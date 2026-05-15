@@ -296,68 +296,6 @@ body::before {
     letter-spacing: 0.05em;
 }
 
-/* ===== READINESS DISPLAY - THE HERO ELEMENT ===== */
-.readiness-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-lg);
-    position: relative;
-}
-
-.readiness-grön {
-    background: var(--status-green-bg);
-}
-
-.readiness-gul {
-    background: var(--status-yellow-bg);
-}
-
-.readiness-röd {
-    background: var(--status-red-bg);
-}
-
-.readiness-score {
-    font-size: 4rem;
-    font-weight: 800;
-    line-height: 1;
-    font-family: 'JetBrains Mono', monospace;
-    position: relative;
-}
-
-.readiness-grön .readiness-score {
-    color: var(--status-green);
-    text-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
-}
-
-.readiness-gul .readiness-score {
-    color: var(--status-yellow);
-    text-shadow: 0 0 40px rgba(245, 158, 11, 0.5);
-}
-
-.readiness-röd .readiness-score {
-    color: var(--status-red);
-    text-shadow: 0 0 40px rgba(239, 68, 68, 0.5);
-}
-
-.readiness-label {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: var(--space-sm);
-}
-
-.readiness-message {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-bottom: var(--space-lg);
-    line-height: 1.6;
-}
-
 /* ===== ATHLETE STATS ===== */
 .athlete-stats {
     display: grid;
@@ -462,90 +400,6 @@ body::before {
     letter-spacing: 0.1em;
     color: var(--text-muted);
     margin-bottom: var(--space-lg);
-}
-
-.readiness-card {
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.readiness-card::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-.readiness-card.readiness-grön::after {
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
-}
-
-.readiness-card.readiness-gul::after {
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.15) 0%, transparent 70%);
-}
-
-.readiness-card.readiness-röd::after {
-    background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
-}
-
-.big-score {
-    font-size: 5rem;
-    font-weight: 800;
-    font-family: 'JetBrains Mono', monospace;
-    line-height: 1;
-    margin: var(--space-lg) 0;
-    position: relative;
-    z-index: 1;
-}
-
-.readiness-grön .big-score {
-    color: var(--status-green);
-    text-shadow: 0 0 60px rgba(16, 185, 129, 0.6);
-}
-
-.readiness-gul .big-score {
-    color: var(--status-yellow);
-    text-shadow: 0 0 60px rgba(245, 158, 11, 0.6);
-}
-
-.readiness-röd .big-score {
-    color: var(--status-red);
-    text-shadow: 0 0 60px rgba(239, 68, 68, 0.6);
-}
-
-.readiness-level-text {
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: var(--space-md);
-    position: relative;
-    z-index: 1;
-}
-
-.readiness-grön .readiness-level-text { color: var(--status-green); }
-.readiness-gul .readiness-level-text { color: var(--status-yellow); }
-.readiness-röd .readiness-level-text { color: var(--status-red); }
-
-.acwr-display {
-    margin-top: var(--space-lg);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--border-subtle);
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    font-family: 'JetBrains Mono', monospace;
-    position: relative;
-    z-index: 1;
-}
-
-.acwr-display span {
-    margin: 0 var(--space-sm);
 }
 
 .summary-text {
@@ -860,13 +714,6 @@ body::before {
     color: var(--status-red);
 }
 
-.log-load {
-    text-align: right;
-    font-weight: 600;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--text-muted);
-}
-
 .log-comment {
     grid-column: 2 / -1;
     font-size: 0.9rem;
@@ -875,76 +722,6 @@ body::before {
     padding-top: var(--space-sm);
     border-top: 1px dashed var(--border-subtle);
     margin-top: var(--space-sm);
-}
-
-/* ===== TREND CHART ===== */
-.trend-section {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-xl);
-    padding: var(--space-xl);
-}
-
-.trend-section h2 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: var(--space-lg);
-}
-
-.trend-chart {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    height: 220px;
-    padding: var(--space-lg) 0;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.trend-bar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-}
-
-.trend-bar {
-    width: 60px;
-    background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-    min-height: 24px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: var(--space-sm);
-    box-shadow: 0 0 20px var(--accent-glow);
-    transition: all var(--transition-base);
-}
-
-.trend-bar:hover {
-    transform: scaleY(1.05);
-    box-shadow: 0 0 30px var(--accent-glow);
-}
-
-.trend-value {
-    color: var(--text-inverse);
-    font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-}
-
-.trend-label {
-    margin-top: var(--space-md);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.trend-legend {
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.8rem;
-    margin-top: var(--space-lg);
 }
 
 /* ===== ADD LOG FORM ===== */
@@ -1531,72 +1308,6 @@ footer {
     margin: var(--space-lg) 0 var(--space-sm);
 }
 
-/* Readiness Hero */
-.readiness-hero {
-    text-align: center;
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-lg);
-}
-
-.readiness-score-large {
-    display: block;
-    font-size: 4.5rem;
-    font-weight: 800;
-    font-family: 'JetBrains Mono', monospace;
-    line-height: 1;
-}
-
-.readiness-level {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-top: var(--space-sm);
-}
-
-.readiness-hero.readiness-grön {
-    background: var(--status-green-bg);
-}
-.readiness-hero.readiness-grön .readiness-score-large {
-    color: var(--status-green);
-    text-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
-}
-.readiness-hero.readiness-grön .readiness-level {
-    color: var(--status-green);
-}
-
-.readiness-hero.readiness-gul {
-    background: var(--status-yellow-bg);
-}
-.readiness-hero.readiness-gul .readiness-score-large {
-    color: var(--status-yellow);
-    text-shadow: 0 0 50px rgba(245, 158, 11, 0.5);
-}
-.readiness-hero.readiness-gul .readiness-level {
-    color: var(--status-yellow);
-}
-
-.readiness-hero.readiness-röd {
-    background: var(--status-red-bg);
-}
-.readiness-hero.readiness-röd .readiness-score-large {
-    color: var(--status-red);
-    text-shadow: 0 0 50px rgba(239, 68, 68, 0.5);
-}
-.readiness-hero.readiness-röd .readiness-level {
-    color: var(--status-red);
-}
-
-.readiness-recommendation {
-    padding: var(--space-md);
-    background: var(--bg-elevated);
-    border-radius: var(--radius-md);
-    font-size: 0.9rem;
-    margin-bottom: var(--space-lg);
-}
-
 /* Summary Stats */
 .summary-stats {
     display: grid;
@@ -1939,30 +1650,6 @@ footer {
     color: var(--text-secondary);
 }
 
-/* ===== ATTENTION BADGE ===== */
-.attention-badge {
-    position: absolute;
-    top: var(--space-md);
-    right: var(--space-md);
-    padding: var(--space-xs) var(--space-sm);
-    background: var(--status-red-bg);
-    color: var(--status-red);
-    font-size: 0.7rem;
-    font-weight: 700;
-    border-radius: var(--radius-full);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.athlete-card.needs-attention {
-    border-color: rgba(239, 68, 68, 0.3);
-}
-
-.athlete-card.needs-attention::before {
-    opacity: 1;
-    background: linear-gradient(90deg, var(--status-red), transparent);
-}
-
 /* ===== TODAY'S SESSION (Athlete Card) ===== */
 .todays-session {
     display: flex;
@@ -2187,13 +1874,6 @@ footer {
     border-color: var(--accent-primary);
 }
 
-/* ===== READINESS DETAILS ===== */
-.readiness-details {
-    margin-top: var(--space-lg);
-    padding-top: var(--space-lg);
-    border-top: 1px solid var(--border-subtle);
-}
-
 .detail-row {
     display: flex;
     justify-content: space-between;
@@ -2313,12 +1993,6 @@ footer {
     font-size: 0.65rem;
     font-weight: 700;
     text-transform: uppercase;
-}
-
-/* ===== CURRENT WEEK INDICATOR ===== */
-.current-week {
-    color: var(--accent-primary) !important;
-    font-weight: 700;
 }
 
 /* ===== LOG COMMENT ROW ===== */
@@ -2595,51 +2269,6 @@ footer {
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: var(--space-sm);
-}
-
-.readiness-summary {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--space-xl);
-}
-
-.readiness-summary.readiness-grön {
-    background: var(--status-green-bg);
-}
-.readiness-summary.readiness-gul {
-    background: var(--status-yellow-bg);
-}
-.readiness-summary.readiness-röd {
-    background: var(--status-red-bg);
-}
-
-.readiness-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
-}
-
-.readiness-score-small {
-    font-size: 1.5rem;
-    font-weight: 800;
-    font-family: 'JetBrains Mono', monospace;
-}
-
-.readiness-summary.readiness-grön .readiness-score-small { color: var(--status-green); }
-.readiness-summary.readiness-gul .readiness-score-small { color: var(--status-yellow); }
-.readiness-summary.readiness-röd .readiness-score-small { color: var(--status-red); }
-
-.readiness-text {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
-
-.readiness-rec {
-    font-size: 0.85rem;
-    color: var(--text-muted);
 }
 
 .plan-form {
@@ -3659,27 +3288,6 @@ body.modal-open {
 .log-date {
     color: var(--text-secondary);
     font-size: 0.95rem;
-}
-
-.log-load-badge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: var(--accent-primary);
-    color: var(--text-inverse);
-    padding: var(--space-md) var(--space-lg);
-    border-radius: var(--radius-md);
-}
-
-.log-load-badge .load-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-}
-
-.log-load-badge .load-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    opacity: 0.8;
 }
 
 .log-stats {

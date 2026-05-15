@@ -34,38 +34,11 @@
             <p class="subtitle">{{ today|date_sv }} · Din coach-kod: <code class="coach-code">{{ user.coach_code }}</code></p>
         </header>
 
-        <!-- Action Items - Vad behöver din uppmärksamhet? -->
-        {% if action_items %}
-        <section class="action-items-section">
-            <h2>⚡ Att göra idag</h2>
-            <div class="action-items-list">
-                {% for item in action_items %}
-                <div class="action-item priority-{{ item.priority }}">
-                    <div class="action-priority">
-                        {% if item.priority == 'hög' %}🔴{% elif item.priority == 'medium' %}🟡{% else %}🟢{% endif %}
-                    </div>
-                    <div class="action-content">
-                        <div class="action-main">{{ item.action }}</div>
-                        <div class="action-reason">{{ item.reason }}</div>
-                    </div>
-                    <a href="{{ url_for('athlete_detail', athlete_id=item.athlete.id) }}" class="btn btn-small btn-secondary">
-                        Se detaljer →
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% endif %}
-
-        <!-- Snabböversikt -->
+<!-- Snabböversikt -->
         <section class="quick-stats">
             <div class="stat-card">
                 <span class="stat-number">{{ athletes|length }}</span>
                 <span class="stat-text">idrottare</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number">{{ attention_needed|length }}</span>
-                <span class="stat-text">behöver uppmärksamhet</span>
             </div>
             <div class="stat-card">
                 <span class="stat-number">{{ athletes|selectattr('todays_session')|list|length }}</span>
@@ -79,35 +52,17 @@
                 <span class="action-icon">👥</span>
                 <span class="action-text">Massplanera pass</span>
             </a>
-            <a href="{{ url_for('session_library') }}" class="quick-action-btn">
-                <span class="action-icon">📚</span>
-                <span class="action-text">Träningsbanken</span>
-            </a>
-            <a href="{{ url_for('create_template') }}" class="quick-action-btn">
-                <span class="action-icon">➕</span>
-                <span class="action-text">Skapa ny mall</span>
-            </a>
         </section>
 
         <section class="dashboard-section">
             <div class="section-header">
                 <h2>Dina idrottare</h2>
-                <div class="section-filter">
-                    <span class="filter-label">Visar:</span>
-                    <span class="filter-badge">Prioriterade först</span>
-                </div>
             </div>
 
             {% if athletes %}
                 <div class="athletes-grid">
                     {% for data in athletes %}
-                        <a href="{{ url_for('athlete_detail', athlete_id=data.athlete.id) }}" class="athlete-card {% if data.needs_attention %}needs-attention{% endif %}">
-
-                            {% if data.needs_attention %}
-                            <div class="attention-badge">
-                                {{ data.attention_reason }}
-                            </div>
-                            {% endif %}
+                        <a href="{{ url_for('athlete_detail', athlete_id=data.athlete.id) }}" class="athlete-card">
 
                             <div class="athlete-header">
                                 <div>

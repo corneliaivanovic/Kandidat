@@ -24,11 +24,6 @@ class TrainingLog:
     planned_session_id: Optional[int] = None  # Koppling till planerat pass
     actual_pace_seconds_per_km: Optional[float] = None
 
-    @property
-    def load(self) -> int:
-        """Session-RPE load = duration × RPE"""
-        return self.duration_minutes * self.rpe
-
     def to_dict(self):
         return {
             "id": self.id,
@@ -38,7 +33,6 @@ class TrainingLog:
             "duration_minutes": self.duration_minutes,
             "rpe": self.rpe,
             "comment": self.comment,
-            "load": self.load,
             "planned_session_id": self.planned_session_id,
             "actual_pace_seconds_per_km": self.actual_pace_seconds_per_km,
         }
@@ -50,7 +44,7 @@ class PlannedSession:
     id: int
     athlete_id: int
     date: date
-    template_id: str  # Referens till SESSION_TEMPLATES
+    template_id: str  # Identifierare/tagg för passet (t.ex. "custom", "ai_generated")
     session_name: str
     session_type: str
     planned_duration: int
@@ -100,27 +94,6 @@ class PlannedSession:
 
 
 @dataclass
-class WeekProgram:
-    """Ett veckoprogram för en idrottare."""
-    id: int
-    athlete_id: int
-    week_start: date  # Måndag i veckan
-    focus: str  # "uthållighet", "styrka", "teknik", etc.
-    coach_summary: str = ""
-    created_by_coach_id: Optional[int] = None
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "athlete_id": self.athlete_id,
-            "week_start": self.week_start.isoformat(),
-            "focus": self.focus,
-            "coach_summary": self.coach_summary,
-            "created_by_coach_id": self.created_by_coach_id
-        }
-
-
-@dataclass
 class LogComment:
     """En kommentar på ett loggat pass - för coach-idrottare kommunikation."""
     id: int
@@ -129,7 +102,7 @@ class LogComment:
     author_name: str
     author_role: str  # "coach" eller "athlete"
     content: str
-    created_at: datetime = field(default_factory=datetime.now)
+    created_at: str = field(default_factory=lambda: datetime.now().isoformat())
 
     def to_dict(self):
         return {
@@ -139,7 +112,7 @@ class LogComment:
             "author_name": self.author_name,
             "author_role": self.author_role,
             "content": self.content,
-            "created_at": self.created_at.isoformat()
+            "created_at": self.created_at
         }
 
 
@@ -172,45 +145,9 @@ class TestResult:
 
 # Fördefinierade testkategorier (för dropdown i formulär)
 TEST_TYPES = {
-    "hopp": "Hopp & Explosivitet",
-    "styrka": "Styrka",
     "uthållighet": "Uthållighet & Kondition",
-    "rörlighet": "Rörlighet & Mobilitet",
     "annat": "Annat"
 }
-
-
-@dataclass
-class CustomSessionTemplate:
-    """En coach-skapad passmall som kan återanvändas."""
-    id: int
-    coach_id: int
-    coach_name: str
-    name: str
-    session_type: str  # "uthållighet", "styrka", "teknik", "snabbhet", "återhämtning"
-    duration: int  # minuter
-    intensity: str  # "låg", "medel", "hög"
-    description: str
-    exercises: list[dict] = field(default_factory=list)
-    is_public: bool = True  # Synlig för idrottare
-    created_at: datetime = field(default_factory=datetime.now)
-    use_count: int = 0  # Antal gånger passet har använts
-
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "coach_id": self.coach_id,
-            "coach_name": self.coach_name,
-            "name": self.name,
-            "session_type": self.session_type,
-            "duration": self.duration,
-            "intensity": self.intensity,
-            "description": self.description,
-            "exercises": self.exercises,
-            "is_public": self.is_public,
-            "created_at": self.created_at.isoformat(),
-            "use_count": self.use_count
-        }
 
 
 @dataclass
@@ -286,7 +223,7 @@ class Athlete:
     user_id: int  # Koppling till User
     name: str
     birth_year: int
-    discipline: str  # "medel", "distans", "hopp", "kast", "mångkamp"
+    discipline: str  # "medel" eller "distans"
     club: str = ""  # Klubbtillhörighet för matchning med tävlingsresultat
     training_mode: str = "coach"  # "coach" = tränare lägger in pass, "ai" = AI genererar schema
     training_days_per_week: int = 4  # Antal träningsdagar per vecka (för AI-schema)
@@ -311,7 +248,6 @@ class Athlete:
     # Vilka PDF-dokument som används i RAG-sökningen (se DOCUMENT_REGISTRY i rag_knowledge.py)
     logs: list[TrainingLog] = field(default_factory=list)
     planned_sessions: list[PlannedSession] = field(default_factory=list)
-    week_programs: list[WeekProgram] = field(default_factory=list)
     test_results: list = field(default_factory=list)  # list[TestResult]
     injuries: list = field(default_factory=list)  # list[InjuryRecord]
 
@@ -322,18 +258,6 @@ class Athlete:
         """Hämta loggposter från de senaste N dagarna."""
         cutoff = date.today() - timedelta(days=days)
         return [log for log in self.logs if log.date >= cutoff]
-
-    def get_total_load_last_n_days(self, days: int) -> int:
-        """Total belastning (session-RPE load) senaste N dagarna."""
-        return sum(log.load for log in self.get_logs_last_n_days(days))
-
-    def get_session_count_by_type(self, days: int) -> dict[str, int]:
-        """Antal pass per typ de senaste N dagarna."""
-        logs = self.get_logs_last_n_days(days)
-        counts = {}
-        for log in logs:
-            counts[log.session_type] = counts.get(log.session_type, 0) + 1
-        return counts
 
     def get_planned_sessions_for_week(self, week_start: date) -> list[PlannedSession]:
         """Hämta planerade pass för en specifik vecka."""
@@ -364,21 +288,22 @@ class Athlete:
             key=lambda x: x.date
         )
 
+    def get_calendar_sessions(self, days_past: int = 60, days_future: int = 90) -> list[PlannedSession]:
+        """Hämta alla planerade pass för kalendervisning (även genomförda och äldre)."""
+        today = date.today()
+        start = today - timedelta(days=days_past)
+        end = today + timedelta(days=days_future)
+        return sorted(
+            [ps for ps in self.planned_sessions if start <= ps.date <= end],
+            key=lambda x: x.date
+        )
+
     def get_days_since_last_log(self) -> int:
         """Antal dagar sedan senaste logg."""
         if not self.logs:
             return 999
         latest = max(log.date for log in self.logs)
         return (date.today() - latest).days
-
-    def get_completion_rate_last_n_days(self, days: int) -> float:
-        """Andel genomförda av planerade pass senaste N dagarna."""
-        cutoff = date.today() - timedelta(days=days)
-        planned = [ps for ps in self.planned_sessions if ps.date >= cutoff and ps.date <= date.today()]
-        if not planned:
-            return 1.0
-        completed = sum(1 for ps in planned if ps.completed)
-        return completed / len(planned)
 
     def get_test_history(self, test_type: str) -> list:
         """Hämta testhistorik för en specifik testtyp, sorterad efter datum."""
@@ -436,22 +361,12 @@ class Athlete:
 
 
 class DataStore:
-    """Enkel in-memory datalagring (för prototyp)."""
+    """Datalager byggt på SQLite — hanterar idrottare, pass, loggar, tester, skador och kommentarer."""
 
     def __init__(self):
         init_db()
         self.athletes: dict[int, Athlete] = {}
         self.athletes_by_user: dict[int, Athlete] = {}  # user_id -> Athlete
-        self.log_comments: dict[int, list[LogComment]] = {}  # log_id -> comments
-        self.next_athlete_id = 1
-        self.next_log_id = 1
-        self.next_planned_session_id = 1
-        self.next_week_program_id = 1
-        self.next_comment_id = 1
-        self.next_test_id = 1
-        self.next_injury_id = 1
-        self.next_custom_template_id = 1
-        self.custom_templates: dict[int, CustomSessionTemplate] = {}  # id -> template
 
     def _row_to_training_log(self, row) -> Optional[TrainingLog]:
         if not row:
@@ -497,11 +412,56 @@ class DataStore:
             tempo_surface_options=json.loads(row["tempo_surface_options_json"] or "[]"),
         )
 
+    def _row_to_log_comment(self, row) -> Optional[LogComment]:
+        if not row:
+            return None
+        return LogComment(
+            id=row["id"],
+            log_id=row["log_id"],
+            author_id=row["author_id"],
+            author_name=row["author_name"],
+            author_role=row["author_role"],
+            content=row["content"],
+            created_at=row["created_at"] or "",
+        )
+
+    def _row_to_test_result(self, row) -> Optional[TestResult]:
+        if not row:
+            return None
+        return TestResult(
+            id=row["id"],
+            athlete_id=row["athlete_id"],
+            test_date=date.fromisoformat(row["test_date"]),
+            test_type=row["test_type"],
+            test_name=row["test_name"],
+            value=row["value"],
+            unit=row["unit"] or "",
+            notes=row["notes"] or "",
+            recorded_by_id=row["recorded_by_id"],
+        )
+
+    def _row_to_injury(self, row) -> Optional[InjuryRecord]:
+        if not row:
+            return None
+        return InjuryRecord(
+            id=row["id"],
+            athlete_id=row["athlete_id"],
+            start_date=date.fromisoformat(row["start_date"]),
+            end_date=date.fromisoformat(row["end_date"]) if row["end_date"] else None,
+            injury_type=row["injury_type"],
+            body_part=row["body_part"] or "",
+            severity=row["severity"],
+            description=row["description"] or "",
+            treatment=row["treatment"] or "",
+            training_modifications=row["training_modifications"] or "",
+            recorded_by_id=row["recorded_by_id"],
+            is_active=bool(row["is_active"]),
+        )
+
     def _hydrate_athlete(self, row) -> Optional[Athlete]:
         if not row:
             return None
 
-        cached = self.athletes.get(row["id"])
         athlete = Athlete(
             id=row["id"],
             user_id=row["user_id"],
@@ -531,9 +491,8 @@ class DataStore:
             has_external_training_data=bool(row["has_external_training_data"]),
             logs=[],
             planned_sessions=[],
-            week_programs=cached.week_programs[:] if cached else [],
-            test_results=cached.test_results[:] if cached else [],
-            injuries=cached.injuries[:] if cached else [],
+            test_results=[],
+            injuries=[],
         )
 
         conn = get_connection()
@@ -548,6 +507,18 @@ class DataStore:
             (athlete.id,),
         ).fetchall()
         athlete.planned_sessions = [self._row_to_planned_session(session_row) for session_row in session_rows]
+
+        test_rows = conn.execute(
+            "SELECT * FROM test_results WHERE athlete_id = ? ORDER BY test_date DESC, id DESC",
+            (athlete.id,),
+        ).fetchall()
+        athlete.test_results = [self._row_to_test_result(r) for r in test_rows]
+
+        injury_rows = conn.execute(
+            "SELECT * FROM injuries WHERE athlete_id = ? ORDER BY start_date DESC, id DESC",
+            (athlete.id,),
+        ).fetchall()
+        athlete.injuries = [self._row_to_injury(r) for r in injury_rows]
         conn.close()
 
         self.athletes[athlete.id] = athlete
@@ -612,13 +583,6 @@ class DataStore:
         row = conn.execute("SELECT * FROM athletes WHERE user_id = ?", (user_id,)).fetchone()
         conn.close()
         return self._hydrate_athlete(row)
-
-    def get_all_athletes(self) -> list[Athlete]:
-        """Hämta alla idrottare."""
-        conn = get_connection()
-        rows = conn.execute("SELECT * FROM athletes ORDER BY name").fetchall()
-        conn.close()
-        return [self._hydrate_athlete(row) for row in rows]
 
     def get_athletes_for_coach(self, coach_user_id: int, auth_db) -> list[Athlete]:
         """Hämta alla idrottare kopplade till en coach."""
@@ -902,23 +866,31 @@ class DataStore:
     def add_comment(self, log_id: int, author_id: int, author_name: str,
                     author_role: str, content: str) -> Optional[LogComment]:
         """Lägg till en kommentar på ett loggat pass."""
-        comment = LogComment(
-            id=self.next_comment_id,
-            log_id=log_id,
-            author_id=author_id,
-            author_name=author_name,
-            author_role=author_role,
-            content=content
+        created_at = datetime.now().isoformat()
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO log_comments (log_id, author_id, author_name, author_role, content, created_at)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (log_id, author_id, author_name, author_role, content, created_at),
         )
-        if log_id not in self.log_comments:
-            self.log_comments[log_id] = []
-        self.log_comments[log_id].append(comment)
-        self.next_comment_id += 1
-        return comment
+        comment_id = cur.lastrowid
+        conn.commit()
+        row = conn.execute("SELECT * FROM log_comments WHERE id = ?", (comment_id,)).fetchone()
+        conn.close()
+        return self._row_to_log_comment(row)
 
     def get_comments_for_log(self, log_id: int) -> list[LogComment]:
         """Hämta alla kommentarer för ett loggat pass."""
-        return self.log_comments.get(log_id, [])
+        conn = get_connection()
+        rows = conn.execute(
+            "SELECT * FROM log_comments WHERE log_id = ? ORDER BY created_at ASC, id ASC",
+            (log_id,),
+        ).fetchall()
+        conn.close()
+        return [self._row_to_log_comment(r) for r in rows]
 
     def get_log_by_id(self, log_id: int) -> Optional[TrainingLog]:
         """Hämta en logg via ID."""
@@ -939,37 +911,23 @@ class DataStore:
         if not athlete:
             return None
 
-        test = TestResult(
-            id=self.next_test_id,
-            athlete_id=athlete_id,
-            test_date=test_date,
-            test_type=test_type,
-            test_name=test_name,
-            value=value,
-            unit=unit,
-            notes=notes,
-            recorded_by_id=recorded_by_id
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO test_results (athlete_id, test_date, test_type, test_name, value, unit, notes, recorded_by_id)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (athlete_id, test_date.isoformat(), test_type, test_name, value, unit, notes, recorded_by_id),
         )
-        athlete.test_results.append(test)
-        self.next_test_id += 1
+        test_id = cur.lastrowid
+        conn.commit()
+        row = conn.execute("SELECT * FROM test_results WHERE id = ?", (test_id,)).fetchone()
+        conn.close()
+        test = self._row_to_test_result(row)
+        if test:
+            athlete.test_results.insert(0, test)
         return test
-
-    def get_test_result(self, test_id: int) -> Optional[TestResult]:
-        """Hämta ett testresultat via ID."""
-        for athlete in self.athletes.values():
-            for test in athlete.test_results:
-                if test.id == test_id:
-                    return test
-        return None
-
-    def delete_test_result(self, test_id: int) -> bool:
-        """Ta bort ett testresultat."""
-        for athlete in self.athletes.values():
-            for i, test in enumerate(athlete.test_results):
-                if test.id == test_id:
-                    del athlete.test_results[i]
-                    return True
-        return False
 
     # ============================================================
     # SKADOR
@@ -984,199 +942,74 @@ class DataStore:
         if not athlete:
             return None
 
-        injury = InjuryRecord(
-            id=self.next_injury_id,
-            athlete_id=athlete_id,
-            start_date=start_date,
-            end_date=None,
-            injury_type=injury_type,
-            body_part=body_part,
-            severity=severity,
-            description=description,
-            treatment=treatment,
-            training_modifications=training_modifications,
-            recorded_by_id=recorded_by_id
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            """
+            INSERT INTO injuries (athlete_id, start_date, end_date, injury_type, body_part,
+                                  severity, description, treatment, training_modifications,
+                                  recorded_by_id, is_active)
+            VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, 1)
+            """,
+            (athlete_id, start_date.isoformat(), injury_type, body_part, severity,
+             description, treatment, training_modifications, recorded_by_id),
         )
-        athlete.injuries.append(injury)
-        self.next_injury_id += 1
+        injury_id = cur.lastrowid
+        conn.commit()
+        row = conn.execute("SELECT * FROM injuries WHERE id = ?", (injury_id,)).fetchone()
+        conn.close()
+        injury = self._row_to_injury(row)
+        if injury:
+            athlete.injuries.insert(0, injury)
         return injury
 
     def update_injury(self, injury_id: int, end_date: date = None,
                       is_active: bool = None, treatment: str = None,
                       training_modifications: str = None) -> Optional[InjuryRecord]:
         """Uppdatera en skaderegistrering."""
-        for athlete in self.athletes.values():
-            for injury in athlete.injuries:
-                if injury.id == injury_id:
-                    if end_date is not None:
-                        injury.end_date = end_date
-                    if is_active is not None:
-                        injury.is_active = is_active
-                    if treatment is not None:
-                        injury.treatment = treatment
-                    if training_modifications is not None:
-                        injury.training_modifications = training_modifications
-                    return injury
-        return None
+        conn = get_connection()
+        cur = conn.cursor()
+        updates = []
+        params = []
+        if end_date is not None:
+            updates.append("end_date = ?")
+            params.append(end_date.isoformat())
+        if is_active is not None:
+            updates.append("is_active = ?")
+            params.append(1 if is_active else 0)
+        if treatment is not None:
+            updates.append("treatment = ?")
+            params.append(treatment)
+        if training_modifications is not None:
+            updates.append("training_modifications = ?")
+            params.append(training_modifications)
+
+        if not updates:
+            conn.close()
+            return self.get_injury(injury_id)
+
+        params.append(injury_id)
+        cur.execute(f"UPDATE injuries SET {', '.join(updates)} WHERE id = ?", params)
+        conn.commit()
+        row = conn.execute("SELECT * FROM injuries WHERE id = ?", (injury_id,)).fetchone()
+        conn.close()
+        updated = self._row_to_injury(row)
+        # Uppdatera även in-memory athlete-objektet om det finns
+        if updated:
+            athlete = self.athletes.get(updated.athlete_id)
+            if athlete:
+                for i, inj in enumerate(athlete.injuries):
+                    if inj.id == injury_id:
+                        athlete.injuries[i] = updated
+                        break
+        return updated
 
     def get_injury(self, injury_id: int) -> Optional[InjuryRecord]:
         """Hämta en skaderegistrering via ID."""
-        for athlete in self.athletes.values():
-            for injury in athlete.injuries:
-                if injury.id == injury_id:
-                    return injury
-        return None
-
-    # ============================================================
-    # EGNA PASSMALLAR (TRÄNINGSBANKEN)
-    # ============================================================
-
-    def add_custom_template(self, coach_id: int, coach_name: str, name: str,
-                            session_type: str, duration: int, intensity: str,
-                            description: str, exercises: list[dict] = None,
-                            is_public: bool = True) -> CustomSessionTemplate:
-        """Lägg till en egen passmall i träningsbanken."""
-        template = CustomSessionTemplate(
-            id=self.next_custom_template_id,
-            coach_id=coach_id,
-            coach_name=coach_name,
-            name=name,
-            session_type=session_type,
-            duration=duration,
-            intensity=intensity,
-            description=description,
-            exercises=exercises or [],
-            is_public=is_public
-        )
-        self.custom_templates[template.id] = template
-        self.next_custom_template_id += 1
-        return template
-
-    def get_custom_template(self, template_id: int) -> Optional[CustomSessionTemplate]:
-        """Hämta en passmall via ID."""
-        return self.custom_templates.get(template_id)
-
-    def get_custom_templates_for_coach(self, coach_id: int) -> list[CustomSessionTemplate]:
-        """Hämta alla passmallar för en coach."""
-        return [t for t in self.custom_templates.values() if t.coach_id == coach_id]
-
-    def get_all_custom_templates(self) -> list[CustomSessionTemplate]:
-        """Hämta alla publika passmallar."""
-        return [t for t in self.custom_templates.values() if t.is_public]
-
-    def delete_custom_template(self, template_id: int) -> bool:
-        """Ta bort en passmall."""
-        if template_id in self.custom_templates:
-            del self.custom_templates[template_id]
-            return True
-        return False
-
-    def increment_template_use(self, template_id: int):
-        """Öka användningsräknaren för en mall."""
-        template = self.custom_templates.get(template_id)
-        if template:
-            template.use_count += 1
-
-    def generate_demo_logs(self, athlete: Athlete):
-        """Generera realistisk träningsdata för demo."""
-        today = date.today()
-        session_types = ["uthållighet", "styrka", "teknik", "snabbhet"]
-
-        # Generera 4 veckors data
-        for days_ago in range(28, -1, -1):
-            log_date = today - timedelta(days=days_ago)
-
-            # Träna 4-5 dagar per vecka (hoppa över vissa dagar)
-            if log_date.weekday() in [0, 2, 3, 5] or (days_ago % 3 == 0):
-                # Variera passtyp
-                session_type = session_types[days_ago % len(session_types)]
-
-                # Variera duration och RPE
-                if session_type == "uthållighet":
-                    duration = 45 + (days_ago % 30)
-                    rpe = 5 + (days_ago % 3)
-                elif session_type == "styrka":
-                    duration = 60
-                    rpe = 6 + (days_ago % 4)
-                elif session_type == "snabbhet":
-                    duration = 30 + (days_ago % 15)
-                    rpe = 7 + (days_ago % 3)
-                else:
-                    duration = 40
-                    rpe = 4 + (days_ago % 3)
-
-                # Begränsa RPE till 1-10
-                rpe = min(10, max(1, rpe))
-
-                comments = [
-                    "Bra pass!",
-                    "Kände mig trött idag",
-                    "Fokus på teknik",
-                    "Högt tempo",
-                    "Återhämtningspass",
-                    ""
-                ]
-                comment = comments[days_ago % len(comments)]
-
-                self.add_log(
-                    athlete.id,
-                    log_date,
-                    session_type,
-                    duration,
-                    rpe,
-                    comment
-                )
-
-    def generate_demo_planned_sessions(self, athlete: Athlete):
-        """Generera planerade pass för kommande vecka."""
-        from exercise_bank import SESSION_TEMPLATES, get_exercise
-
-        today = date.today()
-
-        # Hitta måndag denna vecka
-        monday = today - timedelta(days=today.weekday())
-
-        # Skapa ett veckoprogram
-        templates_to_use = [
-            ("end01", 0),   # Måndag: Uthållighet
-            ("str01", 1),   # Tisdag: Styrka
-            ("tec01", 2),   # Onsdag: Teknik
-            ("rec01", 3),   # Torsdag: Återhämtning
-            ("spd01", 4),   # Fredag: Snabbhet
-            ("end02", 5),   # Lördag: Fartlek
-        ]
-
-        for template_id, day_offset in templates_to_use:
-            session_date = monday + timedelta(days=day_offset)
-
-            # Hoppa över pass som redan är i det förflutna
-            if session_date < today - timedelta(days=1):
-                continue
-
-            template = SESSION_TEMPLATES.get(template_id)
-            if template:
-                exercises = []
-                for ex_id in template.exercises:
-                    ex = get_exercise(ex_id)
-                    if ex:
-                        exercises.append({
-                            "id": ex.id,
-                            "name": ex.name,
-                            "duration": ex.duration_minutes,
-                            "description": ex.description
-                        })
-
-                self.add_planned_session(
-                    athlete.id,
-                    session_date,
-                    template_id,
-                    template.name,
-                    template.category,
-                    template.total_duration,
-                    template.intensity,
-                    exercises
-                )
-
+        conn = get_connection()
+        row = conn.execute("SELECT * FROM injuries WHERE id = ?", (injury_id,)).fetchone()
+        conn.close()
+        return self._row_to_injury(row)
 
 # Global datastore instance
 db = DataStore()

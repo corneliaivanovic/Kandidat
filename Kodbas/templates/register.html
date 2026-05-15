@@ -76,9 +76,6 @@
                         <select id="discipline" name="discipline">
                             <option value="medel" {% if request.form.get('discipline') == 'medel' %}selected{% endif %}>Medeldistans</option>
                             <option value="distans" {% if request.form.get('discipline') == 'distans' %}selected{% endif %}>Långdistans</option>
-                            <option value="hopp" {% if request.form.get('discipline') == 'hopp' %}selected{% endif %}>Hopp</option>
-                            <option value="kast" {% if request.form.get('discipline') == 'kast' %}selected{% endif %}>Kast</option>
-                            <option value="mangkamp" {% if request.form.get('discipline') == 'mangkamp' %}selected{% endif %}>Mångkamp</option>
                         </select>
                     </div>
 
@@ -112,7 +109,7 @@
                         </div>
                     </div>
 
-                    <div id="aiFields" style="display:none; border:1px solid #dbeafe; background:#f8fbff; border-radius:12px; padding:18px; margin:18px 0;">
+                    <div id="aiFields" style="display:none; border:1px solid #dbeafe; background:#f8fbff; color:#1f2937; border-radius:12px; padding:18px; margin:18px 0;">
                         <h3 style="margin-top:0;">🤖 AI-underlag för planering och tempo</h3>
                         <p style="font-size:0.9em; color:#475569; margin-top:-6px;">
                             Endast födelseår och träningsvana är obligatoriska. Övriga svar är frivilliga, men fler svar ger bättre individanpassning och bättre tempouppskattning.
@@ -221,9 +218,9 @@
                         <div class="form-group full-width">
                             <label class="checkbox-label">
                                 <input type="checkbox" name="has_external_training_data" class="external-data-checkbox" {% if request.form.get('has_external_training_data') %}checked{% endif %}>
-                                <span class="checkbox-text">
-                                    Jag har extern träningsdata
-                                    <small>Visa tempo-profiler och CSV-uppladdning för personlig tempokalibrering.</small>
+                                <span class="checkbox-text" style="color:#1f2937;">
+                                    <strong>Extern Garmin-data</strong>
+                                    <small style="color:#6b7280;">Visa tempo-profiler och CSV-uppladdning för personlig tempokalibrering.</small>
                                 </span>
                             </label>
                         </div>

@@ -14,10 +14,6 @@
                 <h1>{{ log.session_type|capitalize }}</h1>
                 <p class="log-date">{{ log.date|date_sv(with_year=True) }}</p>
             </div>
-            <div class="log-load-badge">
-                <span class="load-value">{{ log.load }}</span>
-                <span class="load-label">load</span>
-            </div>
         </div>
 
         <div class="log-stats">
@@ -30,11 +26,6 @@
                 <span class="stat-icon">💪</span>
                 <span class="stat-value rpe-{{ log.rpe }}">RPE {{ log.rpe }}</span>
                 <span class="stat-label">Ansträngning</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-icon">📊</span>
-                <span class="stat-value">{{ log.load }}</span>
-                <span class="stat-label">Belastning</span>
             </div>
             {% if log.actual_pace_seconds_per_km %}
             <div class="stat-item">

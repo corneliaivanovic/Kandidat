@@ -210,9 +210,6 @@
                         value="{{ today.isoformat() }}"
                         required
                     >
-                    <p style="font-size:0.78em; color:#6b7280; margin-top:6px;">
-                        Planen startar från valt datum i stället för att alltid börja kommande måndag.
-                    </p>
                 </div>
                 <div class="form-group">
                     <label for="coach_modal_phase">Träningsfas</label>
@@ -247,7 +244,6 @@
                             style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                         <span>
                             <strong style="font-size:0.82em;">Löptränare (2025)</strong>
-                            <span style="display:block; font-size:0.75em; color:#6b7280;">80/20-regeln, nyckelpass, intensitetszoner</span>
                         </span>
                     </label>
                     <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer; margin-bottom:8px;">
@@ -256,7 +252,6 @@
                             style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                         <span>
                             <strong style="font-size:0.82em;">Friidrottens träningslära (2017)</strong>
-                            <span style="display:block; font-size:0.75em; color:#6b7280;">Allmän träningsteori och belastningsprinciper</span>
                         </span>
                     </label>
                     <label style="display:flex; align-items:flex-start; gap:8px; cursor:pointer;">
@@ -265,7 +260,6 @@
                             style="width:14px; height:14px; accent-color:#4f46e5; margin-top:2px;">
                         <span>
                             <strong style="font-size:0.82em;">Träning i uppbyggnadsstadiet</strong>
-                            <span style="display:block; font-size:0.75em; color:#6b7280;">Medel- och långdistans i uppbyggnadsfas</span>
                         </span>
                     </label>
                 </div>
@@ -563,7 +557,6 @@
                     <span class="log-duration">{{ format_pace_seconds_per_km(log.actual_pace_seconds_per_km) }}</span>
                     {% endif %}
                 </div>
-                <div class="log-load">{{ log.load }} load</div>
                 {% if log.comment %}
                 <div class="log-comment">{{ log.comment }}</div>
                 {% endif %}

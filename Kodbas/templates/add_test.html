@@ -33,15 +33,8 @@
 
             <div class="form-group">
                 <label for="test_name">Testnamn</label>
-                <input type="text" id="test_name" name="test_name"
-                       placeholder="T.ex. 30m flygande, Stående längd, Bänkpress 1RM..." required>
+                <input type="text" id="test_name" name="test_name" required>
                 <span class="form-hint">Var specifik så att du kan jämföra resultat över tid</span>
-            </div>
-
-            <!-- Vanliga tester som snabbval -->
-            <div class="quick-tests" id="quick-tests" style="display: none;">
-                <p class="hint">Snabbval:</p>
-                <div class="quick-test-buttons" id="quick-test-buttons"></div>
             </div>
         </div>
 
@@ -55,25 +48,14 @@
                 </div>
                 <div class="form-group">
                     <label for="unit">Enhet</label>
-                    <select id="unit" name="unit" required>
-                        <option value="sek">Sekunder (sek)</option>
-                        <option value="min">Minuter (min)</option>
-                        <option value="m">Meter (m)</option>
-                        <option value="cm">Centimeter (cm)</option>
-                        <option value="kg">Kilogram (kg)</option>
-                        <option value="rep">Repetitioner</option>
-                        <option value="st">Antal (st)</option>
-                        <option value="W">Watt (W)</option>
-                        <option value="km/h">Kilometer/timme</option>
-                        <option value="m/s">Meter/sekund</option>
-                    </select>
+                    <input type="text" id="unit" name="unit" required>
+                    <span class="form-hint">T.ex. sek, min, m, km/h, bpm</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="notes">Anteckningar (valfritt)</label>
-                <textarea id="notes" name="notes" rows="3"
-                          placeholder="T.ex. förutsättningar, väder, dagsform, jämförelsevärden..."></textarea>
+                <textarea id="notes" name="notes" rows="3"></textarea>
             </div>
         </div>
 
@@ -84,66 +66,4 @@
     </form>
 </div>
 
-<script>
-// Snabbval för vanliga tester baserat på kategori
-const quickTests = {
-    'hopp': [
-        { name: 'Stående längd', unit: 'cm' },
-        { name: 'Stående tresteg', unit: 'm' },
-        { name: '5-steg', unit: 'm' },
-        { name: 'Vertikalhopp (CMJ)', unit: 'cm' },
-        { name: 'Drop jump', unit: 'cm' }
-    ],
-    'styrka': [
-        { name: 'Knäböj 1RM', unit: 'kg' },
-        { name: 'Bänkpress 1RM', unit: 'kg' },
-        { name: 'Marklyft 1RM', unit: 'kg' },
-        { name: 'Frivändning 1RM', unit: 'kg' },
-        { name: 'Chins max', unit: 'rep' }
-    ],
-    'uthållighet': [
-        { name: 'Cooper-test', unit: 'm' },
-        { name: 'Bip-test (nivå)', unit: 'st' },
-        { name: '3000m', unit: 'min' },
-        { name: '1500m', unit: 'min' },
-        { name: 'Maxpuls', unit: 'st' }
-    ],
-    'rörlighet': [
-        { name: 'Sit and reach', unit: 'cm' },
-        { name: 'Höftrörlighet', unit: 'cm' },
-        { name: 'Axelrörlighet', unit: 'cm' }
-    ]
-};
-
-document.getElementById('test_type').addEventListener('change', function() {
-    const type = this.value;
-    const quickTestsDiv = document.getElementById('quick-tests');
-    const buttonsDiv = document.getElementById('quick-test-buttons');
-
-    if (quickTests[type]) {
-        buttonsDiv.innerHTML = '';
-        quickTests[type].forEach(test => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'quick-test-btn';
-            btn.textContent = test.name;
-            btn.addEventListener('click', function() {
-                document.getElementById('test_name').value = test.name;
-                // Sätt rätt enhet
-                const unitSelect = document.getElementById('unit');
-                for (let option of unitSelect.options) {
-                    if (option.value === test.unit) {
-                        option.selected = true;
-                        break;
-                    }
-                }
-            });
-            buttonsDiv.appendChild(btn);
-        });
-        quickTestsDiv.style.display = 'block';
-    } else {
-        quickTestsDiv.style.display = 'none';
-    }
-});
-</script>
 {% endblock %}

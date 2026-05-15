@@ -6,6 +6,9 @@ Håller kärndatan persistent mellan omstarter:
 - idrottarprofiler
 - loggade pass
 - planerade pass
+- kommentarer på loggar
+- testresultat
+- skador/frånvaro
 """
 
 from __future__ import annotations
@@ -117,10 +120,59 @@ def init_db() -> None:
         )
     """)
 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS log_comments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            log_id INTEGER NOT NULL,
+            author_id INTEGER NOT NULL,
+            author_name TEXT NOT NULL,
+            author_role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_at TEXT NOT NULL,
+            FOREIGN KEY (log_id) REFERENCES training_logs(id) ON DELETE CASCADE
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS test_results (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            athlete_id INTEGER NOT NULL,
+            test_date TEXT NOT NULL,
+            test_type TEXT NOT NULL,
+            test_name TEXT NOT NULL,
+            value REAL NOT NULL,
+            unit TEXT DEFAULT '',
+            notes TEXT DEFAULT '',
+            recorded_by_id INTEGER,
+            FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
+        )
+    """)
+
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS injuries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            athlete_id INTEGER NOT NULL,
+            start_date TEXT NOT NULL,
+            end_date TEXT,
+            injury_type TEXT NOT NULL,
+            body_part TEXT DEFAULT '',
+            severity TEXT NOT NULL,
+            description TEXT DEFAULT '',
+            treatment TEXT DEFAULT '',
+            training_modifications TEXT DEFAULT '',
+            recorded_by_id INTEGER,
+            is_active INTEGER DEFAULT 1,
+            FOREIGN KEY (athlete_id) REFERENCES athletes(id) ON DELETE CASCADE
+        )
+    """)
+
     cur.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_athletes_user_id ON athletes(user_id)")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_logs_athlete_id ON training_logs(athlete_id)")
     cur.execute("CREATE INDEX IF NOT EXISTS idx_sessions_athlete_id ON planned_sessions(athlete_id)")
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_comments_log_id ON log_comments(log_id)")
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_tests_athlete_id ON test_results(athlete_id)")
+    cur.execute("CREATE INDEX IF NOT EXISTS idx_injuries_athlete_id ON injuries(athlete_id)")
 
     conn.commit()
     conn.close()

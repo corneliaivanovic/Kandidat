@@ -12,106 +12,39 @@
     <p class="subtitle">Planera samma pass för flera idrottare med individuella datum</p>
 
     <form method="POST" class="mass-plan-form">
-        <!-- Steg 1: Välj pass -->
+        <!-- Steg 1: Skapa pass -->
         <div class="form-section">
-            <h2>1. Välj pass</h2>
+            <h2>1. Skapa pass</h2>
 
-            <div class="pass-source-selector">
-                <label class="source-option">
-                    <input type="radio" name="pass_source" value="template" checked>
-                    <span class="source-card">
-                        <span class="source-icon">📋</span>
-                        <span class="source-name">Från mall</span>
-                    </span>
-                </label>
-                <label class="source-option">
-                    <input type="radio" name="pass_source" value="custom">
-                    <span class="source-card">
-                        <span class="source-icon">✏️</span>
-                        <span class="source-name">Skapa nytt</span>
-                    </span>
-                </label>
-                {% if custom_templates %}
-                <label class="source-option">
-                    <input type="radio" name="pass_source" value="library">
-                    <span class="source-card">
-                        <span class="source-icon">📚</span>
-                        <span class="source-name">Träningsbanken</span>
-                    </span>
-                </label>
-                {% endif %}
-            </div>
-
-            <!-- Mall-val -->
-            <div id="template-select" class="pass-config">
+            <div class="form-row">
                 <div class="form-group">
-                    <label for="template_id">Välj fördefinierad mall</label>
-                    <select id="template_id" name="template_id">
-                        <option value="">-- Välj mall --</option>
-                        {% for id, template in builtin_templates.items() %}
-                        <option value="{{ id }}" data-name="{{ template.name }}" data-type="{{ template.category }}" data-duration="{{ template.total_duration }}" data-intensity="{{ template.intensity }}">
-                            {{ template.name }} ({{ template.total_duration }} min, {{ template.intensity }})
-                        </option>
-                        {% endfor %}
+                    <label for="custom_name">Passnamn</label>
+                    <input type="text" id="custom_name" name="session_name" placeholder="T.ex. Intervaller 6x400m" required>
+                </div>
+                <div class="form-group">
+                    <label for="custom_type">Passtyp</label>
+                    <select id="custom_type" name="session_type">
+                        <option value="uthållighet">Uthållighet</option>
+                        <option value="snabbhet">Snabbhet</option>
+                        <option value="teknik">Teknik</option>
+                        <option value="tävling">Tävling</option>
                     </select>
                 </div>
             </div>
-
-            <!-- Eget pass -->
-            <div id="custom-config" class="pass-config" style="display: none;">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="custom_name">Passnamn</label>
-                        <input type="text" id="custom_name" name="session_name" placeholder="T.ex. Intervaller 6x400m">
-                    </div>
-                    <div class="form-group">
-                        <label for="custom_type">Passtyp</label>
-                        <select id="custom_type" name="session_type">
-                            <option value="uthållighet">Uthållighet</option>
-                            <option value="styrka">Styrka</option>
-                            <option value="teknik">Teknik</option>
-                            <option value="snabbhet">Snabbhet</option>
-                            <option value="rörlighet">Rörlighet</option>
-                            <option value="kombinerat">Kombinerat</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="custom_duration">Varaktighet (min)</label>
-                        <input type="number" id="custom_duration" name="duration" value="60" min="10" max="300">
-                    </div>
-                    <div class="form-group">
-                        <label for="custom_intensity">Intensitet</label>
-                        <select id="custom_intensity" name="intensity">
-                            <option value="låg">Låg</option>
-                            <option value="medel" selected>Medel</option>
-                            <option value="hög">Hög</option>
-                        </select>
-                    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="custom_duration">Varaktighet (min)</label>
+                    <input type="number" id="custom_duration" name="duration" value="60" min="10" max="300">
                 </div>
                 <div class="form-group">
-                    <label for="custom_description">Beskrivning</label>
-                    <textarea id="custom_description" name="description" rows="3" placeholder="Beskriv passet..."></textarea>
-                </div>
-            </div>
-
-            <!-- Träningsbanken -->
-            {% if custom_templates %}
-            <div id="library-select" class="pass-config" style="display: none;">
-                <div class="form-group">
-                    <label for="library_template_id">Välj från dina sparade mallar</label>
-                    <select id="library_template_id" name="library_template_id">
-                        <option value="">-- Välj mall --</option>
-                        {% for template in custom_templates %}
-                        <option value="{{ template.id }}" data-name="{{ template.name }}" data-type="{{ template.session_type }}" data-duration="{{ template.duration }}" data-intensity="{{ template.intensity }}">
-                            {{ template.name }} ({{ template.duration }} min, {{ template.intensity }})
-                        </option>
-                        {% endfor %}
+                    <label for="custom_intensity">Intensitet</label>
+                    <select id="custom_intensity" name="intensity">
+                        <option value="låg">Låg</option>
+                        <option value="medel" selected>Medel</option>
+                        <option value="hög">Hög</option>
                     </select>
                 </div>
             </div>
-            {% endif %}
         </div>
 
         <!-- Steg 2: Välj idrottare och datum -->
@@ -157,17 +90,6 @@
             <div class="form-group">
                 <textarea name="coach_notes" rows="3" placeholder="Extra instruktioner som visas för alla idrottare..."></textarea>
             </div>
-
-            <!-- Spara till träningsbanken -->
-            <div class="save-option" id="save-to-library-option" style="display: none;">
-                <label class="checkbox-label">
-                    <input type="checkbox" name="save_to_library" value="1">
-                    <span class="checkbox-text">
-                        <strong>📚 Spara även till träningsbanken</strong>
-                        <span class="checkbox-hint">Så du kan återanvända passet senare</span>
-                    </span>
-                </label>
-            </div>
         </div>
 
         <div class="form-actions">
@@ -180,34 +102,10 @@
 </div>
 
 <script>
-// Växla mellan passkällor
-document.querySelectorAll('input[name="pass_source"]').forEach(radio => {
-    radio.addEventListener('change', function() {
-        document.getElementById('template-select').style.display = 'none';
-        document.getElementById('custom-config').style.display = 'none';
-        const librarySelect = document.getElementById('library-select');
-        if (librarySelect) librarySelect.style.display = 'none';
-
-        const saveOption = document.getElementById('save-to-library-option');
-
-        if (this.value === 'template') {
-            document.getElementById('template-select').style.display = 'block';
-            saveOption.style.display = 'none';
-        } else if (this.value === 'custom') {
-            document.getElementById('custom-config').style.display = 'block';
-            saveOption.style.display = 'block';
-        } else if (this.value === 'library' && librarySelect) {
-            librarySelect.style.display = 'block';
-            saveOption.style.display = 'none';
-        }
-    });
-});
-
 // Applicera bulk-datum
 document.getElementById('apply-bulk-date').addEventListener('click', function() {
     const bulkDate = document.getElementById('bulk-date').value;
     document.querySelectorAll('.athlete-date').forEach(input => {
-        // Endast för valda idrottare
         const row = input.closest('.athlete-date-row');
         const checkbox = row.querySelector('.athlete-select-cb');
         if (checkbox.checked) {

@@ -214,14 +214,10 @@ RUNNING_WORKOUTS = {
     },
 }
 
-# Fallback: om grenen inte matchar sprint/medel/distans
 # Mappa discipline till löpkategori
 DISCIPLINE_TO_RUNNING = {
     "medel": "medel",
     "distans": "distans",
-    "hopp": "medel",        # Hoppare faller tillbaka på medel
-    "kast": "medel",        # Kastare faller tillbaka på medel
-    "mangkamp": "medel",    # Mångkamp = blandning
 }
 
 PACE_DISTANCE_LABELS = {
@@ -1446,183 +1442,11 @@ def _next_monday(from_date: Optional[date] = None) -> date:
     return today + timedelta(days=days_until_monday if days_until_monday > 0 else 7)
 
 
-def _should_export_evaluation_plan(athlete) -> bool:
-    """Alla RAG-genererade planer ska kunna exporteras för utvärdering."""
-    return True
-
-
-def _slugify_filename(value: str) -> str:
-    normalized = re.sub(r"[^a-z0-9]+", "_", (value or "").lower())
-    return normalized.strip("_") or "athlete"
-
-
-_SWEDISH_WEEKDAYS = [
-    "Måndag",
-    "Tisdag",
-    "Onsdag",
-    "Torsdag",
-    "Fredag",
-    "Lördag",
-    "Söndag",
-]
-
-
-def _format_evaluation_date(session_date: date) -> str:
-    return f"{_SWEDISH_WEEKDAYS[session_date.weekday()]} {session_date.strftime('%Y-%m-%d')}"
-
-
-def _extract_recommended_surface_option(description: str) -> Optional[dict]:
-    text = description or ""
-    main_work_text = _extract_main_work_text(text)
-    surface_match = re.search(
-        r"(?:på|rekommenderat underlag:)\s*(Bana|Plan väg|Kuperat|Väldigt kuperat)",
-        text,
-        flags=re.IGNORECASE,
-    )
-    pace_match = re.search(
-        r"(\d+:\d{2})\s*(?:min/km)?\s*[–-]\s*(\d+:\d{2})\s*min/km",
-        main_work_text,
-        flags=re.IGNORECASE,
-    )
-    if not surface_match or not pace_match:
-        return None
-
-    label_lookup = {
-        "bana": "Bana",
-        "plan väg": "Plan väg",
-        "kuperat": "Kuperat",
-        "väldigt kuperat": "Väldigt kuperat",
-    }
-    label = label_lookup.get(surface_match.group(1).lower(), surface_match.group(1))
-    return {
-        "label": label,
-        "pace_text": f"{pace_match.group(1)} min/km–{pace_match.group(2)} min/km",
-        "is_recommended": True,
-    }
-
-
-def _surface_options_text(surface_options: list[dict], description: str = "") -> str:
-    combined_options: dict[str, str] = {}
-    recommended = _extract_recommended_surface_option(description)
-    if recommended:
-        combined_options[recommended["label"]] = recommended["pace_text"]
-
-    for option in surface_options or []:
-        label = option.get("label") or option.get("surface") or "Underlag"
-        pace = option.get("pace_text") or option.get("text") or ""
-        if pace:
-            combined_options[label] = pace
-
-    if not combined_options:
-        return ""
-
-    lines = ["Tempovarianter per underlag:"]
-    ordered_labels = [label for _key, label, _gradient in TEMPO_SURFACE_CHOICES]
-    for label in ordered_labels:
-        pace = combined_options.get(label)
-        if pace:
-            lines.append(f"- {label}: {pace}")
-    for label, pace in combined_options.items():
-        if label not in ordered_labels and pace:
-            lines.append(f"- {label}: {pace}")
-    return "\n".join(lines)
-
-
-def _session_description_text(session) -> str:
-    exercises = getattr(session, "exercises", []) or []
-    if exercises:
-        description = exercises[0].get("description", "")
-        if description:
-            return description.strip()
-    return ""
-
-
-def _format_evaluation_description(description: str) -> str:
-    lines = [line.strip() for line in (description or "").splitlines() if line.strip()]
-    return "\n\n".join(lines)
-
-
-def _is_rag_generated_plan(sessions: list) -> bool:
-    """Returnera True bara om hela upplägget faktiskt kommer från RAG."""
-    if not sessions:
-        return False
-
-    rag_statuses = ("Planstatus: RAG-genererad", "Planstatus: RAG-reparerad")
-    for session in sessions:
-        coach_notes = getattr(session, "coach_notes", "") or ""
-        if "Planstatus: Regelbaserad fallback" in coach_notes:
-            return False
-        if not any(status in coach_notes for status in rag_statuses):
-            return False
-    return True
-
-
-def _export_evaluation_plan_txt(athlete, sessions: list, start_date: date) -> Optional[Path]:
-    """
-    Skapa en lättläst txt-export för utvärdering av plan och tempo.
-    En ny fil skapas bara för RAG-genererade upplägg.
-    """
-    if not sessions or not _should_export_evaluation_plan(athlete) or not _is_rag_generated_plan(sessions):
-        return None
-
-    export_dir = Path(__file__).parent / "planutvarderingar"
-    export_dir.mkdir(exist_ok=True)
-
-    generated_at = datetime.now()
-    filename = (
-        f"{_slugify_filename(getattr(athlete, 'name', 'athlete'))}_"
-        f"{generated_at.strftime('%Y%m%d_%H%M%S')}.txt"
-    )
-    export_path = export_dir / filename
-
-    sessions_sorted = sorted(sessions, key=lambda item: (item.date, item.session_name))
-    phase = getattr(athlete, "training_phase", "") or "-"
-    running_focus = getattr(athlete, "running_focus", "") or getattr(athlete, "discipline", "") or "-"
-
-    lines = [
-        "UTVARDERING AV AI-GENERERAD TRANINGSPLAN",
-        "=" * 48,
-        f"Genererad: {generated_at.strftime('%Y-%m-%d %H:%M:%S')}",
-        f"Startdatum for planen: {start_date.strftime('%Y-%m-%d')}",
-        f"Fas: {phase}",
-        f"Löpinriktning: {running_focus}",
-        "",
-    ]
-
-    current_week_key = None
-    for session in sessions_sorted:
-        iso_year, iso_week, _ = session.date.isocalendar()
-        week_key = (iso_year, iso_week)
-        if week_key != current_week_key:
-            if current_week_key is not None:
-                lines.append("")
-            lines.extend([f"VECKA {iso_week}", "-" * 29])
-            current_week_key = week_key
-
-        lines.append(_format_evaluation_date(session.date))
-        lines.append(f"Pass: {session.session_name}")
-        lines.append(
-            f"Fokus: {session.session_type} | Intensitet: {session.planned_intensity} | "
-            f"Duration: {session.planned_duration} min"
-        )
-        description = _session_description_text(session)
-        if description:
-            lines.extend(["", "Passdetaljer:", _format_evaluation_description(description)])
-        surface_text = _surface_options_text(getattr(session, "tempo_surface_options", []) or [], description)
-        if surface_text:
-            lines.extend(["", surface_text])
-        lines.append("")
-
-    export_path.write_text("\n".join(lines).strip() + "\n", encoding="utf-8")
-    return export_path
-
-
 def generate_month_schedule(
     athlete,
     db,
     start_date: Optional[date] = None,
     use_rag: bool = True,
-    export_for_evaluation: bool = False,
 ) -> list:
     """
     Generera ett komplett månadsschema (4 veckor) för en atlet.
@@ -1745,10 +1569,6 @@ def generate_month_schedule(
                             if session:
                                 all_sessions.append(session)
 
-                    if export_for_evaluation:
-                        exported_path = _export_evaluation_plan_txt(athlete, all_sessions, start_date)
-                        if exported_path:
-                            print(f"📝 Utvarderingsfil skapad: {exported_path}")
                     return all_sessions or []
 
         except Exception as e:
