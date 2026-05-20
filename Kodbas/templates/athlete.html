@@ -353,11 +353,11 @@
             <button type="button" class="session-modal-close" data-close-modal="coach-calendar-session-modal-{{ session.id }}">×</button>
             <div class="session-modal-header">
                 <div>
-                    <div class="session-modal-badges">
-                        <span class="session-status-badge {{ session.status }}">{{ session.status_label }}</span>
-                        <span class="week-badge neutral">{{ session.planned_intensity }}</span>
+                    <div class="session-modal-badges" style="margin-bottom: 1.25em; gap: 0.6em;">
+                        <span class="session-status-badge {{ session.status }}" style="font-size: 1.35rem; padding: 8px 14px;">{{ session.status_label }}</span>
+                        <span class="week-badge neutral" style="font-size: 1.35rem; padding: 8px 14px;">{{ session.planned_intensity }}</span>
                         {% if session.is_key_session %}
-                        <span class="week-badge key">★ Nyckelpass</span>
+                        <span class="week-badge key" style="font-size: 1.35rem; padding: 8px 14px;">★ Nyckelpass</span>
                         {% endif %}
                     </div>
                     <h2 id="coach-calendar-session-title-{{ session.id }}">{{ session.session_name }}</h2>
@@ -365,60 +365,49 @@
                 </div>
             </div>
             <div class="session-modal-content">
+                {% set ns = namespace(forklaring='') %}
+                {% if session.description_lines %}
+                    {% for line in session.description_lines %}
+                        {% if line.startswith('Förklaring:') %}{% set ns.forklaring = line.split(':', 1)[1] %}{% endif %}
+                    {% endfor %}
+                {% endif %}
                 <section class="modal-info-block">
                     <h3>Passdetaljer</h3>
                     {% if session.description_lines %}
                         {% for line in session.description_lines %}
-                        <p>{{ line }}</p>
+                        {% if line.startswith('Förklaring:') %}
+                        {% elif line.startswith('Syfte:') or line.startswith('Uppvärmning:') or line.startswith('Huvudpass:') or line.startswith('Nedvarvning:') %}
+                        <p style="margin-top: 1em; font-size: 1.35em; line-height: 1.6;"><strong>{{ line.split(':', 1)[0] }}:</strong>{{ line.split(':', 1)[1] }}</p>
+                        {% else %}
+                        <p style="font-size: 1.35em; line-height: 1.6;">{{ line }}</p>
+                        {% endif %}
                         {% endfor %}
                     {% else %}
-                    <p>Ingen detaljerad passbeskrivning finns sparad ännu.</p>
+                    <p style="font-size: 1.35em; line-height: 1.6;">Ingen detaljerad passbeskrivning finns sparad ännu.</p>
                     {% endif %}
                 </section>
-                <section class="modal-info-grid">
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Veckofokus</span>
-                        <strong>{{ session.week_theme or athlete.training_phase }}</strong>
-                    </div>
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Fas</span>
-                        <strong>{{ session.training_phase or athlete.training_phase }}</strong>
-                    </div>
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Planstatus</span>
-                        <strong>{{ session.plan_status }}</strong>
-                    </div>
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Källor</span>
-                        <strong>{{ session.sources or 'Inga externa källor' }}</strong>
-                    </div>
-                    {% if session.tempo_source_label %}
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Tempo</span>
-                        <strong>{{ session.tempo_source_label }}</strong>
-                    </div>
-                    {% endif %}
-                    {% if session.tempo_assumptions %}
-                    <div class="modal-info-card">
-                        <span class="modal-info-label">Tempoantaganden</span>
-                        <strong>{{ session.tempo_assumptions }}</strong>
-                    </div>
-                    {% endif %}
+                {% if session.tempo_surface_options or ns.forklaring %}
+                <section class="modal-info-grid" style="margin-top: -0.75em; grid-template-columns: 2fr 3fr;">
                     {% if session.tempo_surface_options %}
                     <div class="modal-info-card">
                         <span class="modal-info-label">Alternativa tempon för andra underlag</span>
-                        <div class="surface-tempo-list">
+                        <div class="surface-tempo-list" style="font-size: 1.35em; line-height: 1.6;">
                             {% for option in session.tempo_surface_options %}
                             <div><strong>{{ option.label }}</strong>: {{ option.pace_text }}</div>
                             {% endfor %}
                         </div>
                     </div>
                     {% endif %}
-                </section>
-                {% if session.coach_explanation %}
-                <section class="modal-info-block">
-                    <h3>Coachförklaring</h3>
-                    <p>{{ session.coach_explanation }}</p>
+                    {% if ns.forklaring %}
+                    <div class="modal-info-card">
+                        <span class="modal-info-label">Förklaring</span>
+                        {% for part in ns.forklaring.strip().split('. ') %}
+                        {% if part.strip() %}
+                        <p style="font-size: 1.35em; line-height: 1.6; margin: 0 0 0.6em 0;">{{ part.strip().rstrip('.') }}.</p>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </section>
                 {% endif %}
                 <section class="modal-edit-block">
